@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Para mayra luz 🌻</title>
+    <title>Para Mayra Luz 🌻</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -31,8 +31,8 @@
 
     <!-- Cielo -->
 
-    <div class="moon">
-        <div class="moon-shadow"></div>
+    <div class="sun" aria-hidden="true">
+        <div class="sun-spot"></div>
     </div>
 
     <div class="cloud cloud1"></div>
@@ -42,7 +42,7 @@
 
     <!-- Efectos -->
 
-    <div class="fireflies" id="fireflies"></div>
+    <div class="insects" id="insects" aria-hidden="true"></div>
     <div class="petals" id="petals"></div>
 
     <!-- Mensaje -->
@@ -68,6 +68,10 @@
 
     <button class="hide-message-button" id="hideMessageButton" type="button" aria-controls="message" hidden>
         Ver el paisaje
+    </button>
+
+    <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false" hidden>
+        Ver versión nocturna 🌙
     </button>
 
     <!-- Campo -->

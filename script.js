@@ -3,9 +3,10 @@ const intro = document.querySelector(".intro");
 const garden = document.getElementById("garden");
 const field = document.getElementById("field");
 const petalsContainer = document.getElementById("petals");
-const firefliesContainer = document.getElementById("fireflies");
+const insectsContainer = document.getElementById("insects");
 const message = document.querySelector(".message");
 const hideMessageButton = document.getElementById("hideMessageButton");
+const themeToggle = document.getElementById("themeToggle");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let isOpen = false;
@@ -60,17 +61,17 @@ function createField() {
     field.replaceChildren(fragment);
 }
 
-function createFireflies() {
+function createInsects() {
     const fragment = document.createDocumentFragment();
 
     for (let index = 0; index < 16; index += 1) {
-        const firefly = document.createElement("i");
-        firefly.className = "firefly";
-        firefly.style.cssText = `left:${randomBetween(0, 100)}%;top:${randomBetween(15, 85)}%;animation-delay:${randomBetween(0, 5)}s;animation-duration:${randomBetween(5, 10)}s`;
-        fragment.appendChild(firefly);
+        const insect = document.createElement("i");
+        insect.className = `insect ${index % 2 === 0 ? "bee" : "butterfly"}`;
+        insect.style.cssText = `left:${randomBetween(0, 100)}%;top:${randomBetween(20, 82)}%;animation-delay:${randomBetween(0, 5)}s;animation-duration:${randomBetween(5, 10)}s`;
+        fragment.appendChild(insect);
     }
 
-    firefliesContainer.replaceChildren(fragment);
+    insectsContainer.replaceChildren(fragment);
 }
 
 function createPetal() {
@@ -134,6 +135,12 @@ function hideMessage() {
     hideMessageButton.hidden = true;
 }
 
+function toggleTheme() {
+    const isNightMode = garden.classList.toggle("night-mode");
+    themeToggle.setAttribute("aria-pressed", String(isNightMode));
+    themeToggle.textContent = isNightMode ? "Ver versión de día ☀️" : "Ver versión nocturna 🌙";
+}
+
 function openGarden() {
     if (isOpen) return;
     isOpen = true;
@@ -141,16 +148,18 @@ function openGarden() {
     intro.classList.add("is-hidden");
     garden.classList.add("show");
     createField();
-    createFireflies();
+    createInsects();
     startPetals();
     // Mantiene una salida visible mientras se escribe el mensaje, algo que en
     // pantallas pequeñas puede tardar varios segundos.
     hideMessageButton.hidden = false;
+    themeToggle.hidden = false;
     typeMessage();
     window.setTimeout(() => intro.remove(), 1200);
 }
 
 button.addEventListener("click", openGarden, { once: true });
 hideMessageButton.addEventListener("click", hideMessage, { once: true });
+themeToggle.addEventListener("click", toggleTheme);
 window.addEventListener("pagehide", () => window.clearInterval(petalsTimer), { once: true });
 createStars();
