@@ -1,360 +1,141 @@
 const button = document.getElementById("openButton");
-
 const intro = document.querySelector(".intro");
-
 const garden = document.getElementById("garden");
+const field = document.getElementById("field");
+const petalsContainer = document.getElementById("petals");
+const firefliesContainer = document.getElementById("fireflies");
+const message = document.querySelector(".message");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const starsContainer =
-    document.querySelector(".stars");
+let isOpen = false;
+let petalsTimer;
 
-const petalsContainer =
-    document.getElementById("petals");
+function randomBetween(min, max) {
+    return Math.random() * (max - min) + min;
+}
 
-const firefliesContainer =
-    document.getElementById("fireflies");
+function createStars() {
+    document.querySelectorAll(".stars").forEach((container) => {
+        const fragment = document.createDocumentFragment();
 
+        for (let index = 0; index < 60; index += 1) {
+            const star = document.createElement("i");
+            const size = randomBetween(1, 4);
+            star.className = "star";
+            star.style.cssText = `left:${randomBetween(0, 100)}%;top:${randomBetween(0, 100)}%;width:${size}px;height:${size}px;animation-delay:${randomBetween(0, 3)}s;animation-duration:${randomBetween(1, 3)}s`;
+            fragment.appendChild(star);
+        }
 
-// ============================
-// BOTÓN ABRIR
-// ============================
+        container.appendChild(fragment);
+    });
+}
 
-button.addEventListener("click", () => {
+function createFlower() {
+    const flower = document.createElement("div");
+    const scale = randomBetween(0.5, 1.2);
+    const delay = randomBetween(0, 4);
+    flower.className = "flower";
+    flower.style.cssText = `left:${randomBetween(-3, 98)}%;--scale:${scale};--layer:${Math.floor(scale * 10) + 10};--flower-bottom:${randomBetween(-12, 28)}px;--sway-duration:${randomBetween(3, 5)}s;--delay:${delay}s`;
 
-    intro.style.opacity = "0";
-
-    intro.style.transform =
-        "scale(1.1)";
-
-    intro.style.pointerEvents =
-        "none";
-
-
-    setTimeout(() => {
-
-        intro.style.display =
-            "none";
-
-    }, 1200);
-
-
-    garden.classList.add("show");
-
-
-    // Crear campo
-
-    createField();
-
-
-    // Pétalos
-
-    startPetals();
-
-
-    // Luciérnagas
-
-    createFireflies();
-
-});
-
+    flower.innerHTML = `
+        <div class="flower-stem"></div>
+        <div class="flower-leaf left"></div>
+        <div class="flower-leaf right"></div>
+        <div class="flower-head">
+            ${"<div class=\"flower-petal\"></div>".repeat(8)}
+            <div class="flower-center"></div>
+        </div>`;
+    return flower;
+}
 
 function createField() {
+    const fragment = document.createDocumentFragment();
+    const flowerCount = window.innerWidth < 700 ? 42 : 70;
 
-    const amount = 80;
-
-    for (let i = 0; i < amount; i++) {
-
-        createFlower(i);
-
+    for (let index = 0; index < flowerCount; index += 1) {
+        fragment.appendChild(createFlower());
     }
 
+    field.replaceChildren(fragment);
 }
-
-// ============================
-// ESTRELLAS
-// ============================
-
-for (let i = 0; i < 120; i++) {
-
-    const star =
-        document.createElement("div");
-
-    star.classList.add("star");
-
-    star.style.left =
-        Math.random() * 100 + "%";
-
-    star.style.top =
-        Math.random() * 100 + "%";
-
-    const size =
-        Math.random() * 3 + 1;
-
-    star.style.width =
-        size + "px";
-
-    star.style.height =
-        size + "px";
-
-    star.style.animationDelay =
-        Math.random() * 3 + "s";
-
-    star.style.animationDuration =
-        Math.random() * 2 + 1 + "s";
-
-    starsContainer.appendChild(star);
-
-}
-
-
-// ============================
-// PÉTALOS
-// ============================
-
-function createPetal() {
-
-    const petal =
-        document.createElement("div");
-
-    petal.classList.add("falling-petal");
-
-    petal.style.left =
-        Math.random() * 100 + "vw";
-
-    const duration =
-        Math.random() * 5 + 5;
-
-    petal.style.animationDuration =
-        duration + "s";
-
-    const size =
-        Math.random() * 12 + 8;
-
-    petal.style.width =
-        size + "px";
-
-    petal.style.height =
-        size * 1.5 + "px";
-
-    petalsContainer.appendChild(petal);
-
-    setTimeout(() => {
-
-        petal.remove();
-
-    }, duration * 1000);
-
-}
-
-
-function startPetals() {
-
-    setInterval(() => {
-
-        createPetal();
-
-    }, 500);
-
-}
-
-
-// ============================
-// LUCIÉRNAGAS
-// ============================
 
 function createFireflies() {
+    const fragment = document.createDocumentFragment();
 
-    for (let i = 0; i < 20; i++) {
-
-        const firefly =
-            document.createElement("div");
-
-        firefly.classList.add("firefly");
-
-        firefly.style.left =
-            Math.random() * 100 + "%";
-
-        firefly.style.top =
-            Math.random() * 100 + "%";
-
-        firefly.style.animationDelay =
-            Math.random() * 5 + "s";
-
-        firefly.style.animationDuration =
-            Math.random() * 5 + 5 + "s";
-
-        firefliesContainer.appendChild(
-            firefly
-        );
-
+    for (let index = 0; index < 16; index += 1) {
+        const firefly = document.createElement("i");
+        firefly.className = "firefly";
+        firefly.style.cssText = `left:${randomBetween(0, 100)}%;top:${randomBetween(15, 85)}%;animation-delay:${randomBetween(0, 5)}s;animation-duration:${randomBetween(5, 10)}s`;
+        fragment.appendChild(firefly);
     }
 
+    firefliesContainer.replaceChildren(fragment);
 }
 
-const field =
-    document.getElementById("field");
+function createPetal() {
+    const petal = document.createElement("i");
+    const duration = randomBetween(5, 10);
+    const size = randomBetween(8, 20);
+    petal.className = "falling-petal";
+    petal.style.cssText = `left:${randomBetween(0, 100)}%;width:${size}px;height:${size * 1.5}px;animation-duration:${duration}s`;
+    petal.addEventListener("animationend", () => petal.remove(), { once: true });
+    petalsContainer.appendChild(petal);
+}
 
+function startPetals() {
+    if (reduceMotion) return;
+    createPetal();
+    petalsTimer = window.setInterval(createPetal, 750);
+}
 
-function createFlower(index) {
+function wait(milliseconds) {
+    return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+}
 
-    const flower =
-        document.createElement("div");
+async function typeMessage() {
+    const lines = [...message.querySelectorAll("h2, p, span")].map((element) => ({
+        element,
+        text: element.textContent.trim(),
+    }));
 
-    flower.classList.add("flower");
+    lines.forEach(({ element }) => {
+        element.textContent = "";
+    });
 
-
-    // =========================
-    // POSICIÓN
-    // =========================
-
-    const x =
-        Math.random() * 100;
-
-    flower.style.left =
-        x + "%";
-
-
-    // =========================
-    // TAMAÑO
-    // =========================
-
-    const scale =
-        Math.random() * 0.7 + 0.5;
-
-    flower.style.transform =
-        `scale(${scale})`;
-
-
-    // =========================
-    // PROFUNDIDAD
-    // =========================
-
-    const layer =
-        Math.floor(scale * 10);
-
-    flower.style.setProperty(
-        "--layer",
-        layer
-    );
-
-
-    // =========================
-    // VELOCIDAD DEL VIENTO
-    // =========================
-
-    const swayDuration =
-        Math.random() * 2 + 3;
-
-    flower.style.setProperty(
-        "--sway-duration",
-        swayDuration + "s"
-    );
-
-
-    // =========================
-    // RETRASO
-    // =========================
-
-    const delay =
-        Math.random() * 4;
-
-    flower.style.setProperty(
-        "--delay",
-        delay + "s"
-    );
-
-
-    // =========================
-    // TALLO
-    // =========================
-
-    const stem =
-        document.createElement("div");
-
-    stem.classList.add(
-        "flower-stem"
-    );
-
-
-    // =========================
-    // HOJAS
-    // =========================
-
-    const leafLeft =
-        document.createElement("div");
-
-    leafLeft.classList.add(
-        "flower-leaf",
-        "left"
-    );
-
-
-    const leafRight =
-        document.createElement("div");
-
-    leafRight.classList.add(
-        "flower-leaf",
-        "right"
-    );
-
-
-    // =========================
-    // CABEZA
-    // =========================
-
-    const head =
-        document.createElement("div");
-
-    head.classList.add(
-        "flower-head"
-    );
-
-
-    // =========================
-    // PÉTALOS
-    // =========================
-
-    for (let i = 0; i < 8; i++) {
-
-        const petal =
-            document.createElement("div");
-
-        petal.classList.add(
-            "flower-petal"
-        );
-
-        head.appendChild(petal);
-
+    if (reduceMotion) {
+        lines.forEach(({ element, text }) => {
+            element.textContent = text;
+        });
+        return;
     }
 
+    await wait(700);
+    message.classList.add("is-typing");
 
-    // =========================
-    // CENTRO
-    // =========================
+    for (const { element, text } of lines) {
+        for (const character of text) {
+            element.textContent += character;
+            await wait(character === " " ? 18 : 32);
+        }
+        await wait(220);
+    }
 
-    const center =
-        document.createElement("div");
-
-    center.classList.add(
-        "flower-center"
-    );
-
-    head.appendChild(center);
-
-
-    // =========================
-    // ARMAR FLOR
-    // =========================
-
-    flower.appendChild(stem);
-
-    flower.appendChild(leafLeft);
-
-    flower.appendChild(leafRight);
-
-    flower.appendChild(head);
-
-
-    field.appendChild(flower);
-
-    
+    message.classList.remove("is-typing");
 }
+
+function openGarden() {
+    if (isOpen) return;
+    isOpen = true;
+    button.disabled = true;
+    intro.classList.add("is-hidden");
+    garden.classList.add("show");
+    createField();
+    createFireflies();
+    startPetals();
+    typeMessage();
+    window.setTimeout(() => intro.remove(), 1200);
+}
+
+button.addEventListener("click", openGarden, { once: true });
+window.addEventListener("pagehide", () => window.clearInterval(petalsTimer), { once: true });
+createStars();
