@@ -4,6 +4,7 @@ const garden = document.getElementById("garden");
 const field = document.getElementById("field");
 const petalsContainer = document.getElementById("petals");
 const firefliesContainer = document.getElementById("fireflies");
+const message = document.querySelector(".message");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let isOpen = false;
@@ -87,6 +88,41 @@ function startPetals() {
     petalsTimer = window.setInterval(createPetal, 750);
 }
 
+function wait(milliseconds) {
+    return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+}
+
+async function typeMessage() {
+    const lines = [...message.querySelectorAll("h2, p, span")].map((element) => ({
+        element,
+        text: element.textContent.trim(),
+    }));
+
+    lines.forEach(({ element }) => {
+        element.textContent = "";
+    });
+
+    if (reduceMotion) {
+        lines.forEach(({ element, text }) => {
+            element.textContent = text;
+        });
+        return;
+    }
+
+    await wait(700);
+    message.classList.add("is-typing");
+
+    for (const { element, text } of lines) {
+        for (const character of text) {
+            element.textContent += character;
+            await wait(character === " " ? 18 : 32);
+        }
+        await wait(220);
+    }
+
+    message.classList.remove("is-typing");
+}
+
 function openGarden() {
     if (isOpen) return;
     isOpen = true;
@@ -96,6 +132,7 @@ function openGarden() {
     createField();
     createFireflies();
     startPetals();
+    typeMessage();
     window.setTimeout(() => intro.remove(), 1200);
 }
 
