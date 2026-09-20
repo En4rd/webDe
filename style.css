@@ -1,7 +1,7 @@
 :root {
-    color-scheme: dark;
-    --night-top: #050719;
-    --night-bottom: #101b20;
+    color-scheme: light;
+    --sky-top: #fdfdf6;
+    --sky-bottom: #bde8f5;
     --gold: #f5c542;
 }
 
@@ -20,7 +20,7 @@ button { font: inherit; }
 .garden,
 .intro,
 .stars,
-.fireflies,
+.insects,
 .petals,
 .field {
     position: absolute;
@@ -31,7 +31,7 @@ button { font: inherit; }
     position: relative;
     min-height: 100dvh;
     overflow: hidden;
-    background: linear-gradient(to bottom, #05051a, #101044, #251c52);
+    background: linear-gradient(to bottom, #fdfdf6, #bde8f5, #8ed1a0);
 }
 
 .intro {
@@ -39,7 +39,7 @@ button { font: inherit; }
     display: grid;
     place-content: center;
     justify-items: center;
-    color: #fff;
+    color: #284344;
     text-align: center;
     transition: opacity 1.2s ease, transform 1.2s ease;
 }
@@ -74,7 +74,7 @@ button { font: inherit; }
     overflow: hidden;
     display: grid;
     place-items: center;
-    background: linear-gradient(to bottom, var(--night-top) 0%, #0b1030 40%, #171f45 70%, var(--night-bottom) 100%);
+    background: linear-gradient(to bottom, var(--sky-top) 0%, #e8f7fb 40%, #b4e3ee 70%, var(--sky-bottom) 100%);
     opacity: 0;
     pointer-events: none;
     transform: scale(1.05);
@@ -83,7 +83,7 @@ button { font: inherit; }
 
 .garden.show { opacity: 1; pointer-events: auto; transform: scale(1); }
 
-.stars { z-index: 1; height: 70%; pointer-events: none; }
+.stars { z-index: 1; height: 70%; pointer-events: none; opacity: 0; transition: opacity .45s ease; }
 .star {
     position: absolute;
     border-radius: 50%;
@@ -92,34 +92,34 @@ button { font: inherit; }
     animation: twinkle 2s ease-in-out infinite alternate;
 }
 
-.moon {
+.sun {
     position: absolute;
     z-index: 2;
     top: 9%; right: 12%;
     width: clamp(6rem, 15vw, 9.375rem);
     aspect-ratio: 1;
     border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, #fffde7, #fff9c4 45%, #f5e6a8 75%, #e8d48b);
-    box-shadow: 0 0 20px rgba(255, 248, 190, .6), 0 0 60px rgba(255, 245, 180, .35), 0 0 120px rgba(255, 245, 180, .15);
+    background: radial-gradient(circle at 35% 35%, #fffde7, #ffe978 48%, #f5bd2d 78%, #e5a21b);
+    box-shadow: 0 0 20px rgba(255, 211, 75, .7), 0 0 60px rgba(255, 211, 75, .45), 0 0 120px rgba(255, 211, 75, .2);
     animation: floating 6s ease-in-out infinite;
 }
 
-.moon::before, .moon::after {
+.sun::before, .sun::after {
     position: absolute;
     content: "";
     border-radius: 50%;
-    background: rgba(180, 160, 110, .15);
+    background: rgba(214, 149, 24, .2);
 }
-.moon::before { top: 23%; left: 20%; width: 17%; aspect-ratio: 1; }
-.moon::after { right: 17%; bottom: 20%; width: 27%; aspect-ratio: 1; }
-.moon-shadow { position: absolute; top: 17%; left: 50%; width: 13%; aspect-ratio: 1; border-radius: 50%; background: rgba(160, 140, 100, .12); }
+.sun::before { top: 23%; left: 20%; width: 17%; aspect-ratio: 1; }
+.sun::after { right: 17%; bottom: 20%; width: 27%; aspect-ratio: 1; }
+.sun-spot { position: absolute; top: 17%; left: 50%; width: 13%; aspect-ratio: 1; border-radius: 50%; background: rgba(214, 149, 24, .18); }
 
 .cloud {
     position: absolute;
     z-index: 2;
     width: 11.25rem; height: 3.125rem;
     border-radius: 3.125rem;
-    background: rgba(80, 90, 130, .12);
+    background: rgba(255, 255, 255, .58);
     filter: blur(3px);
     animation: cloud-move 30s linear infinite;
 }
@@ -138,14 +138,14 @@ button { font: inherit; }
     z-index: 6;
     width: min(37rem, calc(100% - 2rem));
     padding: .25rem;
-    color: #fff;
+    color: #284344;
     text-align: center;
-    text-shadow: 0 2px 10px rgba(1, 6, 20, .9);
+    text-shadow: 0 2px 10px rgba(255, 255, 255, .82);
     opacity: 0;
     transform: translate(-50%, -1rem);
     transition: opacity .45s ease, transform .45s ease, visibility .45s ease;
 }
-.message h2 { margin: 0 0 .8rem; color: #ffd83d; font-size: clamp(1.5rem, 4vw, 2rem); }
+.message h2 { margin: 0 0 .8rem; color: #a66a00; font-size: clamp(1.5rem, 4vw, 2rem); }
 .message p { margin: 0 0 .55rem; line-height: 1.6; font-size: clamp(.9375rem, 2.4vw, 1rem); }
 .message span { display: block; margin-top: .35rem; }
 .message.is-typing .typing-line::after {
@@ -174,32 +174,30 @@ button { font: inherit; }
     left: 50%;
     min-height: 2.75rem;
     padding: .65rem 1.1rem;
-    border: 1px solid rgba(255, 244, 173, .7);
+    border: 1px solid rgba(111, 94, 30, .4);
     border-radius: 2rem;
-    background: rgba(8, 18, 44, .72);
+    background: rgba(255, 255, 255, .82);
     box-shadow: 0 .25rem 1rem rgba(0, 0, 0, .26);
-    color: #fff8c9;
+    color: #60500e;
     cursor: pointer;
     font-weight: 700;
     transform: translateX(-50%);
 }
 .hide-message-button[hidden] { display: none; }
-.hide-message-button:hover { background: rgba(27, 45, 85, .88); }
+.hide-message-button:hover { background: #fffdf0; }
 .hide-message-button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 
 .field {
     top: auto;
     z-index: 5;
-    height: 26%;
+    height: 31%;
     overflow: visible;
     isolation: isolate;
-    background: linear-gradient(to bottom, #183c22 0%, #0d2816 45%, #07170d 100%);
+    background: linear-gradient(to bottom, #4d9c4c 0%, #2e7a39 52%, #195328 100%);
 }
 
-/* Colinas superpuestas: la capa frontal oculta la base de los tallos para que
-   las flores parezcan crecer desde el terreno, no estar colocadas encima. */
-.field::before,
-.field::after {
+/* Una sola colina mantiene el campo limpio, sin una capa frontal de profundidad. */
+.field::before {
     position: absolute;
     right: -8%;
     left: -8%;
@@ -219,39 +217,32 @@ button { font: inherit; }
     filter: drop-shadow(0 -2px 4px rgba(115, 179, 87, .12));
 }
 
-.field::after {
-    z-index: 30;
-    bottom: -8%;
-    height: 48%;
-    border-radius: 48% 52% 0 0 / 35% 38% 0 0;
-    background:
-        radial-gradient(ellipse 42% 100% at 8% 100%, #12381d 0 67%, transparent 68%),
-        radial-gradient(ellipse 46% 105% at 52% 100%, #0d2c16 0 68%, transparent 69%),
-        radial-gradient(ellipse 38% 110% at 95% 100%, #143b1e 0 68%, transparent 69%),
-        linear-gradient(to bottom, #194b26, #092012 72%);
-    box-shadow: inset 0 12px 20px rgba(104, 165, 76, .08);
-}
-
 .flower {
     position: absolute;
     bottom: var(--flower-bottom, -1.25rem);
-    width: 4.375rem; height: 11.25rem;
+    width: 5.75rem; height: 14.5rem;
     transform-origin: bottom center;
     z-index: var(--layer);
     animation: flower-sway var(--sway-duration) ease-in-out var(--delay) infinite;
 }
-.flower-stem { position: absolute; bottom: 0; left: 2.0625rem; width: .3125rem; height: 8.125rem; border-radius: .625rem; background: linear-gradient(to right, #164b25, #3c8d3f, #164b25); transform-origin: bottom; animation: stem-grow 1.5s ease-out var(--delay) both; }
-.flower-leaf { position: absolute; bottom: 3.125rem; width: 2.5rem; height: 1.125rem; border-radius: 100% 0 100% 0; background: #286b30; opacity: .9; }
+.flower-stem { position: absolute; bottom: 0; left: 2.7rem; width: .375rem; height: 10.5rem; border-radius: .625rem; background: linear-gradient(to right, #164b25, #3c8d3f, #164b25); transform-origin: bottom; animation: stem-grow 1.5s ease-out var(--delay) both; }
+.flower-leaf { position: absolute; bottom: 3.75rem; width: 3.25rem; height: 1.45rem; border-radius: 100% 0 100% 0; background: #286b30; opacity: .9; }
 .flower-leaf.left { left: 0; transform: rotate(-25deg); }
-.flower-leaf.right { right: 0; bottom: 5rem; transform: rotate(205deg); }
-.flower-head { position: absolute; top: .3125rem; left: 0; width: 4.375rem; aspect-ratio: 1; animation: flower-bloom 1.2s ease-out calc(var(--delay) + 1s) both; }
-.flower-petal { position: absolute; top: .875rem; left: 1.5625rem; width: 1.25rem; height: 2.625rem; border-radius: 50% 50% 45% 45%; background: linear-gradient(#fff176, #fbc02d); transform-origin: center 1.3125rem; }
-.flower-petal:nth-child(1) { transform: rotate(0deg) translateY(-1.125rem); } .flower-petal:nth-child(2) { transform: rotate(45deg) translateY(-1.125rem); } .flower-petal:nth-child(3) { transform: rotate(90deg) translateY(-1.125rem); } .flower-petal:nth-child(4) { transform: rotate(135deg) translateY(-1.125rem); }
-.flower-petal:nth-child(5) { transform: rotate(180deg) translateY(-1.125rem); } .flower-petal:nth-child(6) { transform: rotate(225deg) translateY(-1.125rem); } .flower-petal:nth-child(7) { transform: rotate(270deg) translateY(-1.125rem); } .flower-petal:nth-child(8) { transform: rotate(315deg) translateY(-1.125rem); }
-.flower-center { position: absolute; top: 1.125rem; left: 1.125rem; width: 2.125rem; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, #5d4037 10%, #321b15 80%); box-shadow: inset 0 0 8px #000; }
+.flower-leaf.right { right: 0; bottom: 6.25rem; transform: rotate(205deg); }
+.flower-head { position: absolute; top: .3125rem; left: 0; width: 5.75rem; aspect-ratio: 1; animation: flower-bloom 1.2s ease-out calc(var(--delay) + 1s) both; }
+.flower-petal { position: absolute; top: 1.15rem; left: 2.05rem; width: 1.65rem; height: 3.45rem; border-radius: 50% 50% 45% 45%; background: linear-gradient(#fff176, #fbc02d); transform-origin: center 1.72rem; }
+.flower-petal:nth-child(1) { transform: rotate(0deg) translateY(-1.48rem); } .flower-petal:nth-child(2) { transform: rotate(45deg) translateY(-1.48rem); } .flower-petal:nth-child(3) { transform: rotate(90deg) translateY(-1.48rem); } .flower-petal:nth-child(4) { transform: rotate(135deg) translateY(-1.48rem); }
+.flower-petal:nth-child(5) { transform: rotate(180deg) translateY(-1.48rem); } .flower-petal:nth-child(6) { transform: rotate(225deg) translateY(-1.48rem); } .flower-petal:nth-child(7) { transform: rotate(270deg) translateY(-1.48rem); } .flower-petal:nth-child(8) { transform: rotate(315deg) translateY(-1.48rem); }
+.flower-center { position: absolute; top: 1.48rem; left: 1.48rem; width: 2.8rem; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, #5d4037 10%, #321b15 80%); box-shadow: inset 0 0 8px #000; }
 
-.fireflies, .petals { z-index: 4; pointer-events: none; }
-.firefly { position: absolute; width: .3125rem; aspect-ratio: 1; border-radius: 50%; background: #fff59d; box-shadow: 0 0 8px #fff59d, 0 0 16px #fdd835; animation: fly 8s ease-in-out infinite, glow 1.5s ease-in-out infinite alternate; }
+.insects, .petals { z-index: 4; pointer-events: none; }
+.insect { position: absolute; width: 1.6rem; aspect-ratio: 1.3; animation: fly 8s ease-in-out infinite; }
+.insect::before, .insect::after { position: absolute; content: ""; }
+.bee { border-radius: 50%; background: repeating-linear-gradient(90deg, #f9c931 0 .28rem, #3c2b14 .29rem .44rem); box-shadow: inset -.22rem 0 rgba(0, 0, 0, .22); }
+.bee::before { top: -.35rem; left: .2rem; width: .75rem; height: .55rem; border-radius: 70% 30% 70% 30%; background: rgba(255,255,255,.76); transform: rotate(-28deg); box-shadow: .55rem .18rem 0 rgba(255,255,255,.76); }
+.bee::after { right: -.23rem; top: .45rem; border: .23rem solid transparent; border-left-color: #342312; }
+.butterfly::before { inset: 0; border-radius: 70% 30% 65% 35%; background: linear-gradient(135deg, #e85e9e, #8f55c7); box-shadow: .85rem .32rem 0 #ffad3d; transform: rotate(35deg); }
+.butterfly::after { top: .22rem; left: .68rem; width: .18rem; height: 1.1rem; border-radius: 1rem; background: #302d38; }
 .falling-petal { position: absolute; top: -3.125rem; border-radius: 70% 30% 70% 30%; background: #ffd54f; opacity: .85; animation: petal-fall linear forwards; }
 
 @keyframes floating { 50% { transform: translateY(-.7rem); } }
@@ -263,8 +254,36 @@ button { font: inherit; }
 @keyframes flower-bloom { from { opacity: 0; transform: scale(0) rotate(-20deg); } 70% { transform: scale(1.15) rotate(5deg); } to { opacity: 1; transform: scale(1); } }
 @keyframes flower-sway { 0%, 100% { transform: scale(var(--scale)) rotate(-2deg); } 50% { transform: scale(var(--scale)) rotate(3deg); } }
 @keyframes fly { 25% { transform: translate(3.125rem, -1.875rem); } 50% { transform: translate(-1.25rem, -5rem); } 75% { transform: translate(4.375rem, -2.5rem); } }
-@keyframes glow { from { opacity: .2; } to { opacity: 1; } }
 @keyframes petal-fall { 50% { transform: translate(2.5rem, 50vh) rotate(180deg); } to { transform: translate(-2.5rem, 110vh) rotate(360deg); } }
+
+.theme-toggle {
+    position: absolute;
+    z-index: 8;
+    top: max(1rem, env(safe-area-inset-top));
+    left: max(1rem, env(safe-area-inset-left));
+    min-height: 2.75rem;
+    padding: .6rem 1rem;
+    border: 1px solid rgba(111, 94, 30, .4);
+    border-radius: 2rem;
+    background: rgba(255, 255, 255, .82);
+    color: #60500e;
+    cursor: pointer;
+    font-weight: 700;
+}
+.theme-toggle[hidden] { display: none; }
+.theme-toggle:hover { background: #fffdf0; }
+.theme-toggle:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+.garden.night-mode { background: linear-gradient(to bottom, #050719 0%, #0b1030 40%, #171f45 70%, #101b20 100%); }
+.garden.night-mode .stars { opacity: 1; }
+.garden.night-mode .sun { background: radial-gradient(circle at 35% 35%, #fffde7, #fff9c4 45%, #f5e6a8 75%, #e8d48b); box-shadow: 0 0 20px rgba(255, 248, 190, .6), 0 0 60px rgba(255, 245, 180, .35), 0 0 120px rgba(255, 245, 180, .15); }
+.garden.night-mode .sun::before, .garden.night-mode .sun::after, .garden.night-mode .sun-spot { background: rgba(180, 160, 110, .15); }
+.garden.night-mode .cloud { background: rgba(80, 90, 130, .12); }
+.garden.night-mode .message { color: #fff; text-shadow: 0 2px 10px rgba(1, 6, 20, .9); }
+.garden.night-mode .message h2 { color: #ffd83d; }
+.garden.night-mode .hide-message-button, .garden.night-mode .theme-toggle { border-color: rgba(255, 244, 173, .7); background: rgba(8, 18, 44, .72); color: #fff8c9; }
+.garden.night-mode .hide-message-button:hover, .garden.night-mode .theme-toggle:hover { background: rgba(27, 45, 85, .88); }
+.garden.night-mode .field { background: linear-gradient(to bottom, #183c22 0%, #0d2816 45%, #07170d 100%); }
 
 @media (max-width: 43.75rem) {
     .scene { min-height: 100svh; }
@@ -277,7 +296,7 @@ button { font: inherit; }
     .message p { margin-bottom: .4rem; line-height: 1.45; font-size: .9rem; }
     .field { height: 34%; }
     .flower { scale: .68; }
-    .moon { top: 7%; right: 5%; width: clamp(4.5rem, 20vw, 6rem); }
+    .sun { top: 7%; right: 5%; width: clamp(4.5rem, 20vw, 6rem); }
     .cloud1 { top: 20%; }
     .cloud2 { top: 35%; }
 }
