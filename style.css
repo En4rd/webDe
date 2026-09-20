@@ -168,8 +168,11 @@ button { font: inherit; }
 }
 
 .hide-message-button {
-    display: block;
-    margin: 1rem auto 0;
+    position: absolute;
+    z-index: 7;
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    left: 50%;
+    min-height: 2.75rem;
     padding: .65rem 1.1rem;
     border: 1px solid rgba(255, 244, 173, .7);
     border-radius: 2rem;
@@ -178,7 +181,9 @@ button { font: inherit; }
     color: #fff8c9;
     cursor: pointer;
     font-weight: 700;
+    transform: translateX(-50%);
 }
+.hide-message-button[hidden] { display: none; }
 .hide-message-button:hover { background: rgba(27, 45, 85, .88); }
 .hide-message-button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 
@@ -270,7 +275,6 @@ button { font: inherit; }
     .message { top: max(.75rem, env(safe-area-inset-top)); width: calc(100% - 1.25rem); }
     .message h2 { margin-bottom: .45rem; font-size: 1.45rem; }
     .message p { margin-bottom: .4rem; line-height: 1.45; font-size: .9rem; }
-    .hide-message-button { margin-top: .65rem; }
     .field { height: 34%; }
     .flower { scale: .68; }
     .moon { top: 7%; right: 5%; width: clamp(4.5rem, 20vw, 6rem); }
@@ -283,7 +287,7 @@ button { font: inherit; }
     .message h2 { margin-bottom: .25rem; font-size: 1.25rem; }
     .message p { margin-bottom: .2rem; line-height: 1.35; font-size: .8rem; }
     .message span { margin-top: .1rem; }
-    .hide-message-button { margin-top: .4rem; padding: .5rem .9rem; }
+    .hide-message-button { bottom: max(.5rem, env(safe-area-inset-bottom)); padding: .5rem .9rem; }
     .field { height: 30%; }
 }
 

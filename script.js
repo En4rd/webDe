@@ -131,6 +131,7 @@ async function typeMessage() {
 
 function hideMessage() {
     message.classList.add("is-hidden");
+    hideMessageButton.hidden = true;
 }
 
 function openGarden() {
