@@ -53,8 +53,8 @@ function createFlower(isOnMountain = false) {
 
 function createField() {
     const fragment = document.createDocumentFragment();
-    const flowerCount = window.innerWidth < 700 ? 34 : 52;
-    const mountainFlowerCount = window.innerWidth < 700 ? 16 : 28;
+    const flowerCount = window.innerWidth < 700 ? 46 : 72;
+    const mountainFlowerCount = window.innerWidth < 700 ? 24 : 40;
 
     for (let index = 0; index < flowerCount; index += 1) {
         fragment.appendChild(createFlower());
@@ -144,7 +144,8 @@ function hideMessage() {
 function toggleTheme() {
     const isNightMode = garden.classList.toggle("night-mode");
     themeToggle.setAttribute("aria-pressed", String(isNightMode));
-    themeToggle.textContent = isNightMode ? "Ver versión de día ☀️" : "Ver versión nocturna 🌙";
+    themeToggle.setAttribute("aria-label", isNightMode ? "Activar versión de día" : "Activar versión nocturna");
+    themeToggle.textContent = isNightMode ? "☀️" : "🌙";
 }
 
 function openGarden() {
