@@ -5,6 +5,7 @@ const field = document.getElementById("field");
 const petalsContainer = document.getElementById("petals");
 const firefliesContainer = document.getElementById("fireflies");
 const message = document.querySelector(".message");
+const hideMessageButton = document.getElementById("hideMessageButton");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let isOpen = false;
@@ -100,12 +101,14 @@ async function typeMessage() {
 
     lines.forEach(({ element }) => {
         element.textContent = "";
+        element.classList.remove("typing-line");
     });
 
     if (reduceMotion) {
         lines.forEach(({ element, text }) => {
             element.textContent = text;
         });
+        hideMessageButton.hidden = false;
         return;
     }
 
@@ -113,14 +116,21 @@ async function typeMessage() {
     message.classList.add("is-typing");
 
     for (const { element, text } of lines) {
+        element.classList.add("typing-line");
         for (const character of text) {
             element.textContent += character;
             await wait(character === " " ? 18 : 32);
         }
+        element.classList.remove("typing-line");
         await wait(220);
     }
 
     message.classList.remove("is-typing");
+    hideMessageButton.hidden = false;
+}
+
+function hideMessage() {
+    message.classList.add("is-hidden");
 }
 
 function openGarden() {
@@ -137,5 +147,6 @@ function openGarden() {
 }
 
 button.addEventListener("click", openGarden, { once: true });
+hideMessageButton.addEventListener("click", hideMessage, { once: true });
 window.addEventListener("pagehide", () => window.clearInterval(petalsTimer), { once: true });
 createStars();

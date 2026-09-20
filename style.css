@@ -11,6 +11,7 @@ body {
     margin: 0;
     overflow: hidden;
     font-family: Arial, sans-serif;
+    min-width: 20rem;
 }
 
 button { font: inherit; }
@@ -135,18 +136,19 @@ button { font: inherit; }
     right: auto;
     bottom: auto;
     z-index: 6;
-    width: min(37rem, 90%);
-    padding: 0;
+    width: min(37rem, calc(100% - 2rem));
+    padding: .25rem;
     color: #fff;
     text-align: center;
     text-shadow: 0 2px 10px rgba(1, 6, 20, .9);
     opacity: 0;
     transform: translate(-50%, -1rem);
+    transition: opacity .45s ease, transform .45s ease, visibility .45s ease;
 }
 .message h2 { margin: 0 0 .8rem; color: #ffd83d; font-size: clamp(1.5rem, 4vw, 2rem); }
-.message p { margin: 0 0 .55rem; line-height: 1.6; }
+.message p { margin: 0 0 .55rem; line-height: 1.6; font-size: clamp(.9375rem, 2.4vw, 1rem); }
 .message span { display: block; margin-top: .35rem; }
-.message.is-typing > :last-child::after {
+.message.is-typing .typing-line::after {
     display: inline-block;
     width: .08em;
     height: 1.1em;
@@ -157,6 +159,28 @@ button { font: inherit; }
     animation: cursor-blink .8s steps(1) infinite;
 }
 .garden.show .message { animation: show-message .6s ease .2s forwards; }
+.message.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(-50%, -1rem);
+    animation: none;
+}
+
+.hide-message-button {
+    display: block;
+    margin: 1rem auto 0;
+    padding: .65rem 1.1rem;
+    border: 1px solid rgba(255, 244, 173, .7);
+    border-radius: 2rem;
+    background: rgba(8, 18, 44, .72);
+    box-shadow: 0 .25rem 1rem rgba(0, 0, 0, .26);
+    color: #fff8c9;
+    cursor: pointer;
+    font-weight: 700;
+}
+.hide-message-button:hover { background: rgba(27, 45, 85, .88); }
+.hide-message-button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 
 .field {
     top: auto;
@@ -238,9 +262,29 @@ button { font: inherit; }
 @keyframes petal-fall { 50% { transform: translate(2.5rem, 50vh) rotate(180deg); } to { transform: translate(-2.5rem, 110vh) rotate(360deg); } }
 
 @media (max-width: 43.75rem) {
-    .message { top: 1rem; width: 92%; }
-    .flower { scale: .72; }
-    .moon { right: 6%; }
+    .scene { min-height: 100svh; }
+    .intro { padding: 1.5rem; }
+    .small-text { margin: 0 0 .5rem; font-size: 1rem; }
+    .intro h2 { margin-bottom: 1.5rem; }
+    #openButton { min-height: 2.75rem; padding: .7rem 1.6rem; }
+    .message { top: max(.75rem, env(safe-area-inset-top)); width: calc(100% - 1.25rem); }
+    .message h2 { margin-bottom: .45rem; font-size: 1.45rem; }
+    .message p { margin-bottom: .4rem; line-height: 1.45; font-size: .9rem; }
+    .hide-message-button { margin-top: .65rem; }
+    .field { height: 34%; }
+    .flower { scale: .68; }
+    .moon { top: 7%; right: 5%; width: clamp(4.5rem, 20vw, 6rem); }
+    .cloud1 { top: 20%; }
+    .cloud2 { top: 35%; }
+}
+
+@media (max-width: 23.4375rem), (max-height: 43.75rem) {
+    .message { top: .4rem; }
+    .message h2 { margin-bottom: .25rem; font-size: 1.25rem; }
+    .message p { margin-bottom: .2rem; line-height: 1.35; font-size: .8rem; }
+    .message span { margin-top: .1rem; }
+    .hide-message-button { margin-top: .4rem; padding: .5rem .9rem; }
+    .field { height: 30%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
