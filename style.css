@@ -272,6 +272,8 @@ button { font: inherit; }
     .flower { scale: .58; }
     .moon { right: 6%; }
     .message-toggle { bottom: max(1rem, env(safe-area-inset-bottom)); }
+    .flower { scale: .72; }
+    .moon { right: 6%; }
 }
 
 @media (prefers-reduced-motion: reduce) {

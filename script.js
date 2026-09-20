@@ -63,6 +63,10 @@ function createField() {
         }
 
         fragment.appendChild(flower);
+    const flowerCount = window.innerWidth < 700 ? 42 : 70;
+
+    for (let index = 0; index < flowerCount; index += 1) {
+        fragment.appendChild(createFlower());
     }
 
     field.replaceChildren(fragment);
@@ -153,5 +157,6 @@ function toggleMessage() {
 
 button.addEventListener("click", openGarden, { once: true });
 messageToggle.addEventListener("click", toggleMessage);
+button.addEventListener("click", openGarden, { once: true });
 window.addEventListener("pagehide", () => window.clearInterval(petalsTimer), { once: true });
 createStars();
