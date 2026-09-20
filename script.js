@@ -10,6 +10,7 @@ const themeToggle = document.getElementById("themeToggle");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let isOpen = false;
+let isMessageHidden = false;
 let petalsTimer;
 
 function randomBetween(min, max) {
@@ -136,16 +137,18 @@ async function typeMessage() {
     hideMessageButton.hidden = false;
 }
 
-function hideMessage() {
-    message.classList.add("is-hidden");
-    hideMessageButton.hidden = true;
+function toggleMessage() {
+    isMessageHidden = !isMessageHidden;
+    message.classList.toggle("is-hidden", isMessageHidden);
+    hideMessageButton.setAttribute("aria-pressed", String(isMessageHidden));
+    hideMessageButton.textContent = isMessageHidden ? "Mostrar mensaje" : "Ocultar mensaje";
 }
 
 function toggleTheme() {
     const isNightMode = garden.classList.toggle("night-mode");
     themeToggle.setAttribute("aria-pressed", String(isNightMode));
     themeToggle.setAttribute("aria-label", isNightMode ? "Activar versión de día" : "Activar versión nocturna");
-    themeToggle.textContent = isNightMode ? "☀️" : "🌙";
+    themeToggle.style.setProperty("--theme-icon", isNightMode ? '"☀️"' : '"🌙"');
 }
 
 function openGarden() {
@@ -166,7 +169,7 @@ function openGarden() {
 }
 
 button.addEventListener("click", openGarden, { once: true });
-hideMessageButton.addEventListener("click", hideMessage, { once: true });
+hideMessageButton.addEventListener("click", toggleMessage);
 themeToggle.addEventListener("click", toggleTheme);
 window.addEventListener("pagehide", () => window.clearInterval(petalsTimer), { once: true });
 createStars();

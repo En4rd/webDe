@@ -299,6 +299,11 @@ button { font: inherit; }
     color: #60500e;
     cursor: pointer;
     font-weight: 700;
+    font-size: 0;
+}
+.theme-toggle::before {
+    content: var(--theme-icon, "🌙");
+    font-size: 1.25rem;
 }
 .theme-toggle[hidden] { display: none; }
 .theme-toggle:hover { background: #fffdf0; }
