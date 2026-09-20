@@ -1,0 +1,1282 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+.scene {
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(
+        to bottom,
+        #05051a,
+        #101044,
+        #251c52
+    );
+
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* INTRO */
+
+.intro {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+
+    z-index: 10;
+
+    transition: 1.5s;
+}
+
+.intro h1 {
+    font-size: 100px;
+
+    animation: floating 3s ease-in-out infinite;
+}
+
+.intro h2 {
+    margin: 10px 0 30px;
+
+    font-size: 32px;
+}
+
+.small-text {
+    color: #f5d76e;
+    font-size: 18px;
+}
+
+
+/* BOTÓN */
+
+button {
+    border: none;
+
+    padding: 14px 35px;
+
+    border-radius: 30px;
+
+    background: #f5c542;
+
+    color: #332500;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.1);
+
+    box-shadow:
+        0 0 20px #f5c542;
+}
+
+
+/* JARDÍN */
+
+.garden {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+
+    transform: scale(1.2);
+
+    transition: 2s;
+}
+
+.garden.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+
+/* MENSAJE */
+
+.message {
+    width: min(500px, 80%);
+
+    padding: 35px;
+
+    text-align: center;
+
+    color: white;
+
+    background: rgba(255,255,255,0.08);
+
+    border: 1px solid rgba(255,255,255,0.15);
+
+    border-radius: 20px;
+
+    backdrop-filter: blur(10px);
+
+    z-index: 5;
+}
+
+.message h2 {
+    color: #ffd83d;
+
+    margin-bottom: 20px;
+}
+
+.message p {
+    line-height: 1.7;
+
+    margin-bottom: 15px;
+}
+
+
+/* FLORES */
+
+.flower {
+    position: absolute;
+
+    font-size: 70px;
+
+    animation: floating 4s ease-in-out infinite;
+}
+
+.flower1 {
+    left: 10%;
+    bottom: 10%;
+}
+
+.flower2 {
+    left: 25%;
+    top: 15%;
+}
+
+.flower3 {
+    right: 15%;
+    bottom: 15%;
+}
+
+.flower4 {
+    right: 25%;
+    top: 20%;
+}
+
+.flower5 {
+    left: 45%;
+    bottom: 5%;
+}
+
+
+/* ANIMACIONES */
+
+@keyframes floating {
+
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+
+}
+
+
+/* ESTRELLAS */
+
+.stars {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+}
+
+.star {
+    position: absolute;
+
+    width: 3px;
+    height: 3px;
+
+    background: white;
+
+    border-radius: 50%;
+
+    animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+
+    from {
+        opacity: 0.2;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+}
+
+
+/* =========================
+   FLORES ANIMADAS
+========================= */
+
+.flower-wrapper {
+    position: absolute;
+    bottom: 0;
+
+    width: 130px;
+    height: 320px;
+
+    transform-origin: bottom center;
+}
+
+.flower1 {
+    left: 8%;
+}
+
+.flower2 {
+    right: 10%;
+    transform: scale(0.85);
+}
+
+.flower3 {
+    left: 22%;
+    transform: scale(0.7);
+}
+
+
+/* TALLO */
+
+.stem {
+    position: absolute;
+
+    width: 10px;
+    height: 200px;
+
+    bottom: 0;
+    left: 60px;
+
+    background: linear-gradient(
+        to right,
+        #1b5e20,
+        #4caf50,
+        #1b5e20
+    );
+
+    border-radius: 20px;
+
+    transform-origin: bottom;
+
+    transform: scaleY(0);
+}
+
+
+/* HOJAS */
+
+.leaf {
+    position: absolute;
+
+    width: 70px;
+    height: 35px;
+
+    background: #388e3c;
+
+    bottom: 70px;
+
+    opacity: 0;
+
+    transform: scale(0);
+}
+
+.leaf-left {
+    left: 5px;
+
+    border-radius: 70% 0 70% 0;
+
+    transform-origin: right center;
+}
+
+.leaf-right {
+    right: 0;
+
+    bottom: 110px;
+
+    border-radius: 0 70% 0 70%;
+
+    transform-origin: left center;
+}
+
+
+/* CABEZA DE LA FLOR */
+
+.sunflower {
+    position: absolute;
+
+    width: 130px;
+    height: 130px;
+
+    top: 0;
+    left: 0;
+
+    opacity: 0;
+
+    transform: scale(0) rotate(-20deg);
+}
+
+
+/* PÉTALOS */
+
+.petal {
+    position: absolute;
+
+    width: 35px;
+    height: 75px;
+
+    left: 47px;
+    top: 27px;
+
+    background: linear-gradient(
+        #fff176,
+        #fbc02d
+    );
+
+    border-radius: 50% 50% 45% 45%;
+
+    transform-origin: 50% 38px;
+
+    box-shadow:
+        0 0 10px rgba(255, 215, 0, 0.25);
+}
+
+.p1 {
+    transform: rotate(0deg) translateY(-35px);
+}
+
+.p2 {
+    transform: rotate(45deg) translateY(-35px);
+}
+
+.p3 {
+    transform: rotate(90deg) translateY(-35px);
+}
+
+.p4 {
+    transform: rotate(135deg) translateY(-35px);
+}
+
+.p5 {
+    transform: rotate(180deg) translateY(-35px);
+}
+
+.p6 {
+    transform: rotate(225deg) translateY(-35px);
+}
+
+.p7 {
+    transform: rotate(270deg) translateY(-35px);
+}
+
+.p8 {
+    transform: rotate(315deg) translateY(-35px);
+}
+
+
+/* CENTRO */
+
+.center {
+    position: absolute;
+
+    width: 65px;
+    height: 65px;
+
+    left: 32px;
+    top: 32px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #5d4037 10%,
+            #3e2723 70%
+        );
+
+    box-shadow:
+        inset 0 0 10px black,
+        0 0 12px rgba(255, 193, 7, 0.3);
+}
+
+
+/* =========================
+   ANIMACIONES DE CRECIMIENTO
+========================= */
+
+.garden.show .stem {
+    animation: growStem 1.6s ease-out forwards;
+}
+
+.garden.show .leaf-left {
+    animation: growLeaf 0.8s ease-out forwards;
+    animation-delay: 1s;
+}
+
+.garden.show .leaf-right {
+    animation: growLeaf 0.8s ease-out forwards;
+    animation-delay: 1.3s;
+}
+
+.garden.show .sunflower {
+    animation:
+        bloom 1.2s ease-out forwards,
+        sway 4s ease-in-out infinite;
+
+    animation-delay:
+        1.5s,
+        2.7s;
+}
+
+
+/* flores con retrasos diferentes */
+
+.garden.show .flower2 .stem {
+    animation-delay: 0.5s;
+}
+
+.garden.show .flower2 .leaf-left {
+    animation-delay: 1.4s;
+}
+
+.garden.show .flower2 .leaf-right {
+    animation-delay: 1.7s;
+}
+
+.garden.show .flower2 .sunflower {
+    animation-delay:
+        2s,
+        3.2s;
+}
+
+
+.garden.show .flower3 .stem {
+    animation-delay: 0.8s;
+}
+
+.garden.show .flower3 .leaf-left {
+    animation-delay: 1.6s;
+}
+
+.garden.show .flower3 .leaf-right {
+    animation-delay: 1.9s;
+}
+
+.garden.show .flower3 .sunflower {
+    animation-delay:
+        2.3s,
+        3.5s;
+}
+
+
+/* KEYFRAMES */
+
+@keyframes growStem {
+    from {
+        transform: scaleY(0);
+    }
+
+    to {
+        transform: scaleY(1);
+    }
+}
+
+@keyframes growLeaf {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes bloom {
+    from {
+        opacity: 0;
+        transform: scale(0) rotate(-20deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+@keyframes sway {
+    0%,
+    100% {
+        transform: rotate(-2deg);
+    }
+
+    50% {
+        transform: rotate(2deg);
+    }
+}
+
+
+/* =========================
+   MENSAJE ANIMADO
+========================= */
+
+.message {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+}
+
+.garden.show .message {
+    animation: showMessage 1.5s ease forwards;
+    animation-delay: 2.5s;
+}
+
+@keyframes showMessage {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* =========================
+   PÉTALOS QUE CAEN
+========================= */
+
+.falling-petal {
+    position: absolute;
+
+    top: -50px;
+
+    width: 18px;
+    height: 30px;
+
+    background: #ffd54f;
+
+    border-radius: 70% 30% 70% 30%;
+
+    opacity: 0.85;
+
+    animation:
+        petalFall linear forwards;
+}
+
+@keyframes petalFall {
+    0% {
+        transform:
+            translateY(-50px)
+            translateX(0)
+            rotate(0deg);
+    }
+
+    50% {
+        transform:
+            translateY(50vh)
+            translateX(40px)
+            rotate(180deg);
+    }
+
+    100% {
+        transform:
+            translateY(110vh)
+            translateX(-40px)
+            rotate(360deg);
+    }
+}
+
+
+/* =========================
+   LUCIÉRNAGAS
+========================= */
+
+.firefly {
+    position: absolute;
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #fff59d;
+
+    box-shadow:
+        0 0 8px #fff59d,
+        0 0 16px #fdd835;
+
+    animation:
+        fly 8s ease-in-out infinite,
+        glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        opacity: 0.2;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fly {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(50px, -30px);
+    }
+
+    50% {
+        transform: translate(-20px, -80px);
+    }
+
+    75% {
+        transform: translate(70px, -40px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 700px) {
+
+    .message {
+        width: 85%;
+        padding: 25px;
+
+        z-index: 20;
+    }
+
+    .flower-wrapper {
+        transform: scale(0.65);
+    }
+
+    .flower1 {
+        left: -20px;
+    }
+
+    .flower2 {
+        right: -25px;
+    }
+
+    .flower3 {
+        left: 30%;
+    }
+}
+
+/* =================================
+   ESCENA
+================================= */
+
+.garden {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #050719 0%,
+            #0b1030 40%,
+            #171f45 70%,
+            #101b20 100%
+        );
+
+    opacity: 0;
+
+    transform: scale(1.05);
+
+    transition:
+        opacity 2s ease,
+        transform 2s ease;
+}
+
+.garden.show {
+    opacity: 1;
+
+    transform: scale(1);
+}
+
+
+/* =================================
+   LUNA
+================================= */
+
+.moon {
+    position: absolute;
+
+    width: 150px;
+    height: 150px;
+
+    top: 9%;
+    right: 12%;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle at 35% 35%,
+            #fffde7,
+            #fff9c4 45%,
+            #f5e6a8 75%,
+            #e8d48b
+        );
+
+    box-shadow:
+        0 0 20px rgba(255, 248, 190, 0.6),
+        0 0 60px rgba(255, 245, 180, 0.35),
+        0 0 120px rgba(255, 245, 180, 0.15);
+
+    animation: moonFloat 6s ease-in-out infinite;
+
+    z-index: 2;
+}
+
+
+/* Cráteres */
+
+.moon::before,
+.moon::after {
+    content: "";
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    background: rgba(180, 160, 110, 0.15);
+}
+
+.moon::before {
+    width: 25px;
+    height: 25px;
+
+    left: 30px;
+    top: 35px;
+}
+
+.moon::after {
+    width: 40px;
+    height: 40px;
+
+    right: 25px;
+    bottom: 30px;
+}
+
+
+.moon-shadow {
+    position: absolute;
+
+    width: 20px;
+    height: 20px;
+
+    left: 75px;
+    top: 25px;
+
+    border-radius: 50%;
+
+    background: rgba(160, 140, 100, 0.12);
+}
+
+
+@keyframes moonFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+
+}
+
+
+/* =================================
+   ESTRELLAS
+================================= */
+
+.stars {
+    position: absolute;
+
+    width: 100%;
+    height: 70%;
+
+    z-index: 1;
+}
+
+.star {
+    position: absolute;
+
+    background: white;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 5px white;
+
+    animation:
+        twinkle 2s ease-in-out infinite alternate;
+}
+
+
+@keyframes twinkle {
+
+    from {
+        opacity: 0.2;
+        transform: scale(0.7);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1.3);
+    }
+
+}
+
+
+/* =================================
+   NUBES
+================================= */
+
+.cloud {
+    position: absolute;
+
+    width: 180px;
+    height: 50px;
+
+    background:
+        rgba(80, 90, 130, 0.12);
+
+    border-radius: 50px;
+
+    filter: blur(3px);
+
+    z-index: 2;
+
+    animation:
+        cloudMove 30s linear infinite;
+}
+
+.cloud::before,
+.cloud::after {
+    content: "";
+
+    position: absolute;
+
+    background: inherit;
+
+    border-radius: 50%;
+}
+
+.cloud::before {
+    width: 80px;
+    height: 80px;
+
+    left: 30px;
+    bottom: 0;
+}
+
+.cloud::after {
+    width: 60px;
+    height: 60px;
+
+    right: 30px;
+    bottom: 0;
+}
+
+
+.cloud1 {
+    top: 25%;
+    left: -200px;
+}
+
+.cloud2 {
+    top: 40%;
+    left: -400px;
+
+    transform: scale(0.7);
+
+    animation-delay: -15s;
+}
+
+
+@keyframes cloudMove {
+
+    from {
+        transform: translateX(-200px);
+    }
+
+    to {
+        transform: translateX(calc(100vw + 400px));
+    }
+
+}
+
+/* =================================
+   CAMPO
+================================= */
+
+.field {
+    position: absolute;
+
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 20%;
+
+    z-index: 5;
+
+    overflow: visible;
+
+    /*
+       Campo plano.
+       Ya no usamos degradado transparente.
+    */
+
+    background:
+        linear-gradient(
+            to bottom,
+            #102d19 0%,
+            #0d2816 35%,
+            #092012 100%
+        );
+
+    /*
+       Línea suave que separa
+       cielo y campo.
+    */
+
+    border-top:
+        2px solid rgba(70, 120, 65, 0.25);
+}
+
+
+/* =================================
+   FLOR
+================================= */
+
+.flower {
+    position: absolute;
+
+    bottom: -20px;
+
+    width: 70px;
+    height: 180px;
+
+    transform-origin: bottom center;
+
+    animation:
+        flowerSway
+        var(--sway-duration)
+        ease-in-out
+        infinite;
+
+    animation-delay:
+        var(--delay);
+
+    z-index: var(--layer);
+}
+
+
+/* =================================
+   TALLO
+================================= */
+
+.flower-stem {
+    position: absolute;
+
+    width: 5px;
+    height: 130px;
+
+    bottom: 0;
+
+    left: 33px;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            to right,
+            #164b25,
+            #3c8d3f,
+            #164b25
+        );
+
+    transform-origin: bottom;
+
+    animation:
+        stemGrow 1.5s ease-out forwards;
+
+    animation-delay:
+        var(--delay);
+}
+
+
+/* =================================
+   HOJAS
+================================= */
+
+.flower-leaf {
+    position: absolute;
+
+    width: 40px;
+    height: 18px;
+
+    background: #286b30;
+
+    bottom: 50px;
+
+    border-radius:
+        100% 0 100% 0;
+
+    opacity: 0.9;
+}
+
+.flower-leaf.left {
+    left: 0;
+
+    transform:
+        rotate(-25deg);
+}
+
+.flower-leaf.right {
+    right: 0;
+
+    bottom: 80px;
+
+    transform:
+        rotate(205deg);
+}
+
+
+/* =================================
+   CABEZA
+================================= */
+
+.flower-head {
+    position: absolute;
+
+    width: 70px;
+    height: 70px;
+
+    top: 5px;
+    left: 0;
+
+    transform:
+        scale(0);
+
+    animation:
+        flowerBloom 1.2s ease-out forwards;
+
+    animation-delay:
+        calc(var(--delay) + 1s);
+}
+
+
+/* =================================
+   PÉTALOS
+================================= */
+
+.flower-petal {
+    position: absolute;
+
+    width: 20px;
+    height: 42px;
+
+    left: 25px;
+    top: 14px;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #fff176,
+            #fbc02d
+        );
+
+    border-radius:
+        50% 50% 45% 45%;
+
+    transform-origin:
+        center 21px;
+}
+
+
+/* 8 pétalos */
+
+.flower-petal:nth-child(1) {
+    transform:
+        rotate(0deg)
+        translateY(-18px);
+}
+
+.flower-petal:nth-child(2) {
+    transform:
+        rotate(45deg)
+        translateY(-18px);
+}
+
+.flower-petal:nth-child(3) {
+    transform:
+        rotate(90deg)
+        translateY(-18px);
+}
+
+.flower-petal:nth-child(4) {
+    transform:
+        rotate(135deg)
+        translateY(-18px);
+}
+
+.flower-petal:nth-child(5) {
+    transform:
+        rotate(180deg)
+        translateY(-18px);
+}
+
+.flower-petal:nth-child(6) {
+    transform:
+        rotate(225deg)
+        translateY(-18px);
+}
+
+.flower-petal:nth-child(7) {
+    transform:
+        rotate(270deg)
+        translateY(-18px);
+}
+
+.flower-petal:nth-child(8) {
+    transform:
+        rotate(315deg)
+        translateY(-18px);
+}
+
+
+/* =================================
+   CENTRO
+================================= */
+
+.flower-center {
+    position: absolute;
+
+    width: 34px;
+    height: 34px;
+
+    left: 18px;
+    top: 18px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #5d4037 10%,
+            #321b15 80%
+        );
+
+    box-shadow:
+        inset 0 0 8px black;
+}
+
+
+/* =================================
+   ANIMACIONES
+================================= */
+
+@keyframes stemGrow {
+
+    from {
+        transform: scaleY(0);
+    }
+
+    to {
+        transform: scaleY(1);
+    }
+
+}
+
+
+@keyframes flowerBloom {
+
+    0% {
+        transform:
+            scale(0)
+            rotate(-20deg);
+
+        opacity: 0;
+    }
+
+    70% {
+        transform:
+            scale(1.15)
+            rotate(5deg);
+
+        opacity: 1;
+    }
+
+    100% {
+        transform:
+            scale(1)
+            rotate(0deg);
+
+        opacity: 1;
+    }
+
+}
+
+
+@keyframes flowerSway {
+
+    0%,
+    100% {
+        transform:
+            rotate(-2deg);
+    }
+
+    50% {
+        transform:
+            rotate(3deg);
+    }
+
+}
