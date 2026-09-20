@@ -225,6 +225,10 @@ button { font: inherit; }
     z-index: var(--layer);
     animation: flower-sway var(--sway-duration) ease-in-out var(--delay) infinite;
 }
+.flower-on-mountain {
+    opacity: .9;
+    filter: saturate(.85) brightness(.9);
+}
 .flower-stem { position: absolute; bottom: 0; left: 2.7rem; width: .375rem; height: 10.5rem; border-radius: .625rem; background: linear-gradient(to right, #164b25, #3c8d3f, #164b25); transform-origin: bottom; animation: stem-grow 1.5s ease-out var(--delay) both; }
 .flower-leaf { position: absolute; bottom: 3.75rem; width: 3.25rem; height: 1.45rem; border-radius: 100% 0 100% 0; background: #286b30; opacity: .9; }
 .flower-leaf.left { left: 0; transform: rotate(-25deg); }
@@ -284,6 +288,7 @@ button { font: inherit; }
 .garden.night-mode .hide-message-button, .garden.night-mode .theme-toggle { border-color: rgba(255, 244, 173, .7); background: rgba(8, 18, 44, .72); color: #fff8c9; }
 .garden.night-mode .hide-message-button:hover, .garden.night-mode .theme-toggle:hover { background: rgba(27, 45, 85, .88); }
 .garden.night-mode .field { background: linear-gradient(to bottom, #183c22 0%, #0d2816 45%, #07170d 100%); }
+.garden.night-mode .bee { display: none; }
 
 @media (max-width: 43.75rem) {
     .scene { min-height: 100svh; }

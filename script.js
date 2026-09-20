@@ -32,12 +32,13 @@ function createStars() {
     });
 }
 
-function createFlower() {
+function createFlower(isOnMountain = false) {
     const flower = document.createElement("div");
-    const scale = randomBetween(0.5, 1.2);
+    const scale = isOnMountain ? randomBetween(0.28, 0.52) : randomBetween(0.5, 1.2);
     const delay = randomBetween(0, 4);
-    flower.className = "flower";
-    flower.style.cssText = `left:${randomBetween(-3, 98)}%;--scale:${scale};--layer:${Math.floor(scale * 10) + 10};--flower-bottom:${randomBetween(-12, 28)}px;--sway-duration:${randomBetween(3, 5)}s;--delay:${delay}s`;
+    const mountainBottom = randomBetween(35, 68);
+    flower.className = `flower${isOnMountain ? " flower-on-mountain" : ""}`;
+    flower.style.cssText = `left:${randomBetween(-3, 98)}%;--scale:${scale};--layer:${isOnMountain ? 2 : Math.floor(scale * 10) + 10};--flower-bottom:${isOnMountain ? `${mountainBottom}%` : `${randomBetween(-12, 28)}px`};--sway-duration:${randomBetween(3, 5)}s;--delay:${delay}s`;
 
     flower.innerHTML = `
         <div class="flower-stem"></div>
@@ -52,10 +53,15 @@ function createFlower() {
 
 function createField() {
     const fragment = document.createDocumentFragment();
-    const flowerCount = window.innerWidth < 700 ? 42 : 70;
+    const flowerCount = window.innerWidth < 700 ? 34 : 52;
+    const mountainFlowerCount = window.innerWidth < 700 ? 16 : 28;
 
     for (let index = 0; index < flowerCount; index += 1) {
         fragment.appendChild(createFlower());
+    }
+
+    for (let index = 0; index < mountainFlowerCount; index += 1) {
+        fragment.appendChild(createFlower(true));
     }
 
     field.replaceChildren(fragment);
