@@ -143,6 +143,9 @@ function openGarden() {
     createField();
     createFireflies();
     startPetals();
+    // Mantiene una salida visible mientras se escribe el mensaje, algo que en
+    // pantallas pequeñas puede tardar varios segundos.
+    hideMessageButton.hidden = false;
     typeMessage();
     window.setTimeout(() => intro.remove(), 1200);
 }
