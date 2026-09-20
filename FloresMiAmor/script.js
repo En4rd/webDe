@@ -34,7 +34,7 @@ function createFlower() {
     const scale = randomBetween(0.5, 1.2);
     const delay = randomBetween(0, 4);
     flower.className = "flower";
-    flower.style.cssText = `left:${randomBetween(-3, 98)}%;--scale:${scale};--layer:${Math.floor(scale * 10)};--sway-duration:${randomBetween(3, 5)}s;--delay:${delay}s`;
+    flower.style.cssText = `left:${randomBetween(-3, 98)}%;--scale:${scale};--layer:${Math.floor(scale * 10) + 10};--flower-bottom:${randomBetween(-12, 28)}px;--sway-duration:${randomBetween(3, 5)}s;--delay:${delay}s`;
 
     flower.innerHTML = `
         <div class="flower-stem"></div>
