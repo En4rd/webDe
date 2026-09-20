@@ -5,6 +5,7 @@ const field = document.getElementById("field");
 const petalsContainer = document.getElementById("petals");
 const firefliesContainer = document.getElementById("fireflies");
 const message = document.querySelector(".message");
+const messageToggle = document.getElementById("messageToggle");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let isOpen = false;
@@ -50,6 +51,18 @@ function createFlower() {
 
 function createField() {
     const fragment = document.createDocumentFragment();
+    const isMobile = window.innerWidth < 700;
+    const flowerCount = isMobile ? 20 : 70;
+
+    for (let index = 0; index < flowerCount; index += 1) {
+        const flower = createFlower();
+
+        if (isMobile) {
+            const spacing = 100 / flowerCount;
+            flower.style.left = `${(index + .5) * spacing + randomBetween(-1.4, 1.4)}%`;
+        }
+
+        fragment.appendChild(flower);
     const flowerCount = window.innerWidth < 700 ? 42 : 70;
 
     for (let index = 0; index < flowerCount; index += 1) {
@@ -136,6 +149,14 @@ function openGarden() {
     window.setTimeout(() => intro.remove(), 1200);
 }
 
+function toggleMessage() {
+    const isHidden = message.classList.toggle("is-hidden");
+    messageToggle.setAttribute("aria-pressed", String(isHidden));
+    messageToggle.textContent = isHidden ? "Mostrar mensaje" : "Ocultar mensaje";
+}
+
+button.addEventListener("click", openGarden, { once: true });
+messageToggle.addEventListener("click", toggleMessage);
 button.addEventListener("click", openGarden, { once: true });
 window.addEventListener("pagehide", () => window.clearInterval(petalsTimer), { once: true });
 createStars();
