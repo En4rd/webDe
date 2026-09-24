@@ -32,6 +32,9 @@
     <!-- Cielo -->
 
     <div class="sun" aria-hidden="true">
+        <div class="sun-rays">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
         <div class="sun-spot"></div>
     </div>
 
@@ -66,13 +69,11 @@
 
     </div>
 
-    <button class="hide-message-button" id="hideMessageButton" type="button" aria-controls="message" hidden>
-        Ver el paisaje
+    <button class="hide-message-button" id="hideMessageButton" type="button" aria-controls="message" aria-pressed="false" hidden>
+        Ocultar mensaje
     </button>
 
-    <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false" hidden>
-        Ver versión nocturna 🌙
-    </button>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Activar versión nocturna" aria-pressed="false" hidden></button>
 
     <!-- Campo -->
 

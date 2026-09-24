@@ -10,6 +10,7 @@ const themeToggle = document.getElementById("themeToggle");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let isOpen = false;
+let isMessageHidden = false;
 let petalsTimer;
 
 function randomBetween(min, max) {
@@ -32,12 +33,13 @@ function createStars() {
     });
 }
 
-function createFlower() {
+function createFlower(isOnMountain = false) {
     const flower = document.createElement("div");
-    const scale = randomBetween(0.5, 1.2);
+    const scale = isOnMountain ? randomBetween(0.28, 0.52) : randomBetween(0.5, 1.2);
     const delay = randomBetween(0, 4);
-    flower.className = "flower";
-    flower.style.cssText = `left:${randomBetween(-3, 98)}%;--scale:${scale};--layer:${Math.floor(scale * 10) + 10};--flower-bottom:${randomBetween(-12, 28)}px;--sway-duration:${randomBetween(3, 5)}s;--delay:${delay}s`;
+    const mountainBottom = randomBetween(35, 68);
+    flower.className = `flower${isOnMountain ? " flower-on-mountain" : ""}`;
+    flower.style.cssText = `left:${randomBetween(-3, 98)}%;--scale:${scale};--layer:${isOnMountain ? 2 : Math.floor(scale * 10) + 10};--flower-bottom:${isOnMountain ? `${mountainBottom}%` : `${randomBetween(-12, 28)}px`};--sway-duration:${randomBetween(3, 5)}s;--delay:${delay}s`;
 
     flower.innerHTML = `
         <div class="flower-stem"></div>
@@ -52,10 +54,15 @@ function createFlower() {
 
 function createField() {
     const fragment = document.createDocumentFragment();
-    const flowerCount = window.innerWidth < 700 ? 42 : 70;
+    const flowerCount = window.innerWidth < 700 ? 46 : 72;
+    const mountainFlowerCount = window.innerWidth < 700 ? 24 : 40;
 
     for (let index = 0; index < flowerCount; index += 1) {
         fragment.appendChild(createFlower());
+    }
+
+    for (let index = 0; index < mountainFlowerCount; index += 1) {
+        fragment.appendChild(createFlower(true));
     }
 
     field.replaceChildren(fragment);
@@ -130,15 +137,18 @@ async function typeMessage() {
     hideMessageButton.hidden = false;
 }
 
-function hideMessage() {
-    message.classList.add("is-hidden");
-    hideMessageButton.hidden = true;
+function toggleMessage() {
+    isMessageHidden = !isMessageHidden;
+    message.classList.toggle("is-hidden", isMessageHidden);
+    hideMessageButton.setAttribute("aria-pressed", String(isMessageHidden));
+    hideMessageButton.textContent = isMessageHidden ? "Mostrar mensaje" : "Ocultar mensaje";
 }
 
 function toggleTheme() {
     const isNightMode = garden.classList.toggle("night-mode");
     themeToggle.setAttribute("aria-pressed", String(isNightMode));
-    themeToggle.textContent = isNightMode ? "Ver versión de día ☀️" : "Ver versión nocturna 🌙";
+    themeToggle.setAttribute("aria-label", isNightMode ? "Activar versión de día" : "Activar versión nocturna");
+    themeToggle.style.setProperty("--theme-icon", isNightMode ? '"☀️"' : '"🌙"');
 }
 
 function openGarden() {
@@ -159,7 +169,7 @@ function openGarden() {
 }
 
 button.addEventListener("click", openGarden, { once: true });
-hideMessageButton.addEventListener("click", hideMessage, { once: true });
+hideMessageButton.addEventListener("click", toggleMessage);
 themeToggle.addEventListener("click", toggleTheme);
 window.addEventListener("pagehide", () => window.clearInterval(petalsTimer), { once: true });
 createStars();
