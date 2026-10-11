@@ -9,7 +9,8 @@
 
 body {
     margin: 0;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     font-family: Arial, sans-serif;
     min-width: 20rem;
 }
@@ -30,6 +31,7 @@ button { font: inherit; }
 .scene {
     position: relative;
     min-height: 100dvh;
+    height: 100dvh;
     overflow: hidden;
     background: linear-gradient(to bottom, #fdfdf6, #bde8f5, #8ed1a0);
 }
@@ -137,7 +139,11 @@ button { font: inherit; }
     bottom: auto;
     z-index: 6;
     width: min(37rem, calc(100% - 2rem));
-    padding: .25rem;
+    max-height: calc(100% - 7rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    padding: .25rem .35rem .75rem;
     color: #284344;
     text-align: center;
     text-shadow: 0 2px 10px rgba(255, 255, 255, .82);
@@ -276,8 +282,29 @@ button { font: inherit; }
 
 .garden.night-mode { background: linear-gradient(to bottom, #050719 0%, #0b1030 40%, #171f45 70%, #101b20 100%); }
 .garden.night-mode .stars { opacity: 1; }
-.garden.night-mode .sun { background: radial-gradient(circle at 35% 35%, #fffde7, #fff9c4 45%, #f5e6a8 75%, #e8d48b); box-shadow: 0 0 20px rgba(255, 248, 190, .6), 0 0 60px rgba(255, 245, 180, .35), 0 0 120px rgba(255, 245, 180, .15); }
-.garden.night-mode .sun::before, .garden.night-mode .sun::after, .garden.night-mode .sun-spot { background: rgba(180, 160, 110, .15); }
+.garden.night-mode .sun {
+    background: transparent;
+    box-shadow: none;
+    animation: none;
+}
+.garden.night-mode .sun::before {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff4c2;
+    box-shadow: 0 0 20px rgba(255, 248, 190, .6), 0 0 60px rgba(255, 245, 180, .35);
+}
+.garden.night-mode .sun::after {
+    top: -8%;
+    right: -12%;
+    bottom: auto;
+    left: auto;
+    width: 88%;
+    height: 88%;
+    background: #0b1030;
+}
+.garden.night-mode .sun-spot { display: none; }
 .garden.night-mode .cloud { background: rgba(80, 90, 130, .12); }
 .garden.night-mode .message { color: #fff; text-shadow: 0 2px 10px rgba(1, 6, 20, .9); }
 .garden.night-mode .message h2 { color: #ffd83d; }
@@ -302,12 +329,20 @@ button { font: inherit; }
 }
 
 @media (max-width: 23.4375rem), (max-height: 43.75rem) {
-    .message { top: .4rem; }
+    .message { top: .4rem; max-height: calc(100% - 5.5rem); }
     .message h2 { margin-bottom: .25rem; font-size: 1.25rem; }
     .message p { margin-bottom: .2rem; line-height: 1.35; font-size: .8rem; }
     .message span { margin-top: .1rem; }
     .hide-message-button { bottom: max(.5rem, env(safe-area-inset-bottom)); padding: .5rem .9rem; }
-    .field { height: 30%; }
+    .field { height: 27%; }
+}
+
+@media (max-height: 34.375rem) {
+    .message {
+        max-height: calc(100% - 5rem);
+        padding-bottom: .5rem;
+    }
+    .field { height: 24%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
