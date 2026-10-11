@@ -7,6 +7,8 @@ const insectsContainer = document.getElementById("insects");
 const message = document.querySelector(".message");
 const hideMessageButton = document.getElementById("hideMessageButton");
 const themeToggle = document.getElementById("themeToggle");
+const musicToggle = document.getElementById("musicToggle");
+const backgroundMusic = document.getElementById("backgroundMusic");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let isOpen = false;
@@ -154,7 +156,29 @@ function hideMessage() {
 function toggleTheme() {
     const isNightMode = garden.classList.toggle("night-mode");
     themeToggle.setAttribute("aria-pressed", String(isNightMode));
-    themeToggle.textContent = isNightMode ? "Ver versión de día ☀️" : "Ver versión nocturna 🌙";
+    themeToggle.setAttribute("aria-label", isNightMode ? "Activar modo de día" : "Activar modo nocturno");
+    themeToggle.textContent = isNightMode ? "☀️" : "🌙";
+}
+
+function toggleMusic() {
+    backgroundMusic.muted = !backgroundMusic.muted;
+    const isMuted = backgroundMusic.muted;
+    musicToggle.textContent = isMuted ? "🔇" : "🔊";
+    musicToggle.setAttribute("aria-pressed", String(isMuted));
+    musicToggle.setAttribute("aria-label", isMuted ? "Activar sonido" : "Silenciar música");
+    musicToggle.title = isMuted ? "Activar sonido" : "Silenciar música";
+}
+
+function startBackgroundMusic() {
+    // El navegador permite mejor la reproducción si se solicita desde el clic de «Abrir».
+    backgroundMusic.volume = 0.35;
+    const playback = backgroundMusic.play();
+    if (playback && typeof playback.catch === "function") {
+        playback.catch((error) => {
+            // La canción debe existir en audio/cancion.mp3; no interrumpir la experiencia si falta.
+            console.warn("No se pudo iniciar la música. Verifica audio/cancion.mp3.", error);
+        });
+    }
 }
 
 function openGarden() {
@@ -169,6 +193,8 @@ function openGarden() {
     hideMessageButton.hidden = false;
     hideMessageButton.textContent = "Ver el paisaje";
     themeToggle.hidden = false;
+    musicToggle.hidden = false;
+    startBackgroundMusic();
     typeMessage();
     window.setTimeout(() => intro.remove(), 1200);
 }
@@ -176,5 +202,9 @@ function openGarden() {
 button.addEventListener("click", openGarden, { once: true });
 hideMessageButton.addEventListener("click", hideMessage);
 themeToggle.addEventListener("click", toggleTheme);
-window.addEventListener("pagehide", () => window.clearInterval(petalsTimer), { once: true });
+musicToggle.addEventListener("click", toggleMusic);
+window.addEventListener("pagehide", () => {
+    window.clearInterval(petalsTimer);
+    backgroundMusic.pause();
+}, { once: true });
 createStars();
