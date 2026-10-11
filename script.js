@@ -253,7 +253,7 @@ function hideLovePage(updateHistory = true) {
     garden.classList.remove("love-page-open");
     document.body.classList.remove("love-route-open");
     if (updateHistory && window.location.hash === "#nuestro-tiempo") {
-        history.pushState({ page: "garden" }, "", window.location.pathname + window.location.search);
+        history.replaceState({ page: "garden" }, "", window.location.pathname + window.location.search);
     }
     storyToggle.focus();
 }
