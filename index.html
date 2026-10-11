@@ -70,9 +70,15 @@
         Ver el paisaje
     </button>
 
-    <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false" hidden>
-        Ver versión nocturna 🌙
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Activar modo nocturno" aria-pressed="false" hidden>
+        🌙
     </button>
+
+    <button class="music-toggle" id="musicToggle" type="button" aria-label="Silenciar música" aria-pressed="false" title="Silenciar música" hidden>
+        🔊
+    </button>
+
+    <audio id="backgroundMusic" src="audio/cancion.mp3" loop preload="auto"></audio>
 
     <!-- Campo -->
 
