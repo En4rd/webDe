@@ -51,7 +51,7 @@ function createFlower() {
         <div class="flower-leaf left"></div>
         <div class="flower-leaf right"></div>
         <div class="flower-head">
-            ${"<div class=\"flower-petal\"></div>".repeat(8)}
+            ${"<div class=\\"flower-petal\\"></div>".repeat(8)}
             <div class="flower-center"></div>
         </div>`;
     return flower;
@@ -170,8 +170,8 @@ function toggleMusic() {
 }
 
 function startBackgroundMusic() {
-    // El navegador permite mejor la reproducción si se solicita desde el clic de «Abrir».
-    backgroundMusic.volume = 0.35;
+    // Volumen inicial al 5% para mantener la música de fondo discreta.
+    backgroundMusic.volume = 0.05;
     const playback = backgroundMusic.play();
     if (playback && typeof playback.catch === "function") {
         playback.catch((error) => {
