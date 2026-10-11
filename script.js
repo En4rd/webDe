@@ -54,7 +54,7 @@ function createFlower() {
         <div class="flower-leaf left"></div>
         <div class="flower-leaf right"></div>
         <div class="flower-head">
-            \${'<div class="flower-petal"></div>'.repeat(8)}
+            ${'<div class="flower-petal"></div>'.repeat(8)}
             <div class="flower-center"></div>
         </div>`;
     return flower;
