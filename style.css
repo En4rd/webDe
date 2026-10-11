@@ -440,3 +440,93 @@ button { font: inherit; }
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+
+/* Acceso al mensaje especial, debajo del engranaje. */
+.story-toggle {
+    position: absolute;
+    z-index: 10;
+    top: max(4rem, calc(env(safe-area-inset-top) + 4rem));
+    right: max(1rem, env(safe-area-inset-right));
+    display: grid;
+    place-items: center;
+    width: 2.8rem;
+    height: 2.8rem;
+    padding: 0;
+    border: 1px solid rgba(111, 94, 30, .4);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .9);
+    color: #8b5b00;
+    box-shadow: 0 .2rem .75rem rgba(0, 0, 0, .16);
+    cursor: pointer;
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1;
+}
+.story-toggle[hidden] { display: none; }
+.story-toggle:hover { background: #fff3c4; transform: scale(1.05); }
+.story-toggle:focus-visible,
+.love-page button:focus-visible { outline: 3px solid #b28a00; outline-offset: 3px; }
+
+.love-page {
+    position: fixed;
+    z-index: 30;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow-y: auto;
+    padding: max(5rem, calc(env(safe-area-inset-top) + 4.5rem)) 1rem max(1.25rem, env(safe-area-inset-bottom));
+    background: radial-gradient(ellipse at 15% 15%, rgba(255, 230, 133, .5), transparent 35%), linear-gradient(145deg, #fff9e6 0%, #fce9a9 45%, #f7d7a5 100%);
+    color: #533e24;
+}
+.love-page[hidden] { display: none; }
+.love-back-button {
+    position: fixed;
+    z-index: 2;
+    top: max(1rem, env(safe-area-inset-top));
+    left: max(1rem, env(safe-area-inset-left));
+    min-height: 2.75rem;
+    padding: .65rem 1rem;
+    border: 1px solid rgba(111, 94, 30, .3);
+    border-radius: 2rem;
+    background: rgba(255, 255, 255, .8);
+    color: #604719;
+    cursor: pointer;
+    font-weight: 700;
+}
+.love-card {
+    width: min(100%, 42rem);
+    margin: auto;
+    padding: clamp(1.4rem, 5vw, 3rem);
+    border: 1px solid rgba(255, 255, 255, .85);
+    border-radius: 1.5rem;
+    background: rgba(255, 255, 255, .74);
+    box-shadow: 0 1rem 3rem rgba(99, 64, 16, .15);
+    text-align: center;
+}
+.love-heart { display: block; margin-bottom: .4rem; font-size: 2.5rem; }
+.love-eyebrow { margin: 0 0 .5rem; color: #9b741d; font-size: .8rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.love-card h2 { margin: 0 auto 1.25rem; color: #8a5a13; font-family: Georgia, serif; font-size: clamp(1.8rem, 5vw, 2.7rem); line-height: 1.15; }
+.love-message { max-width: 34rem; margin: 0 auto 1.75rem; font-size: clamp(1rem, 2.5vw, 1.1rem); line-height: 1.8; white-space: normal; }
+.together-counter { margin: 0 auto; padding: 1.2rem .8rem; border-radius: 1rem; background: rgba(255, 222, 120, .3); }
+.together-label { margin: 0 0 .5rem; font-weight: 800; }
+.counter-value { margin: 0; color: #8a5a13; font-family: Georgia, serif; font-size: clamp(2.4rem, 10vw, 4rem); font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: .04em; }
+.counter-caption { margin: .25rem 0 0; color: #80643a; font-size: .85rem; }
+.love-signature { margin: 1.5rem 0 0; color: #8a5a13; font-family: Georgia, serif; font-style: italic; }
+.garden.love-page-open { visibility: hidden; }
+body.love-route-open { overflow: hidden; }
+
+.garden.night-mode ~ .love-page { background: linear-gradient(145deg, #11162d, #242b4c 55%, #3c3150); color: #fff4d1; }
+.garden.night-mode ~ .love-page .love-card { border-color: rgba(255, 244, 173, .18); background: rgba(13, 20, 43, .86); }
+.garden.night-mode ~ .love-page .love-card h2,
+.garden.night-mode ~ .love-page .counter-value,
+.garden.night-mode ~ .love-page .love-signature { color: #ffdf7a; }
+.garden.night-mode ~ .love-page .love-eyebrow,
+.garden.night-mode ~ .love-page .counter-caption { color: #e5d4a1; }
+.garden.night-mode ~ .love-page .together-counter { background: rgba(255, 223, 122, .1); }
+
+@media (max-width: 43.75rem) {
+    .love-page { align-items: start; padding-top: max(4.8rem, calc(env(safe-area-inset-top) + 4.2rem)); }
+    .love-card { padding: 1.35rem 1.1rem; border-radius: 1.2rem; }
+    .love-message { line-height: 1.65; }
+}
