@@ -7,7 +7,12 @@ const insectsContainer = document.getElementById("insects");
 const message = document.querySelector(".message");
 const hideMessageButton = document.getElementById("hideMessageButton");
 const settingsToggle = document.getElementById("settingsToggle");
+const storyToggle = document.getElementById("storyToggle");
 const settingsMenu = document.getElementById("settingsMenu");
+const lovePage = document.getElementById("lovePage");
+const loveBackButton = document.getElementById("loveBackButton");
+const relationshipCounter = document.getElementById("relationshipCounter");
+const relationshipStartDate = new Date(2026, 6, 11);
 const themeToggle = document.getElementById("themeToggle");
 const musicToggle = document.getElementById("musicToggle");
 const volumeControl = document.getElementById("volumeControl");
@@ -207,6 +212,64 @@ function startBackgroundMusic() {
     }
 }
 
+function updateRelationshipCounter() {
+    const now = new Date();
+    if (now < relationshipStartDate) {
+        relationshipCounter.textContent = "0-0-0";
+        return;
+    }
+
+    let years = now.getFullYear() - relationshipStartDate.getFullYear();
+    let months = now.getMonth() - relationshipStartDate.getMonth();
+    let days = now.getDate() - relationshipStartDate.getDate();
+
+    if (days < 0) {
+        months -= 1;
+        days += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+    }
+    if (months < 0) {
+        years -= 1;
+        months += 12;
+    }
+    relationshipCounter.textContent = `${years}-${months}-${days}`;
+}
+
+function showLovePage() {
+    settingsMenu.hidden = true;
+    settingsToggle.setAttribute("aria-expanded", "false");
+    settingsToggle.setAttribute("aria-label", "Abrir ajustes");
+    settingsToggle.title = "Ajustes";
+    lovePage.hidden = false;
+    garden.classList.add("love-page-open");
+    document.body.classList.add("love-route-open");
+    history.pushState({ page: "love" }, "", "#nuestro-tiempo");
+    updateRelationshipCounter();
+    loveBackButton.focus();
+}
+
+function hideLovePage(updateHistory = true) {
+    lovePage.hidden = true;
+    garden.classList.remove("love-page-open");
+    document.body.classList.remove("love-route-open");
+    if (updateHistory && window.location.hash === "#nuestro-tiempo") {
+        history.pushState({ page: "garden" }, "", window.location.pathname + window.location.search);
+    }
+    storyToggle.focus();
+}
+
+function syncPageWithRoute() {
+    if (window.location.hash === "#nuestro-tiempo" && isOpen) {
+        lovePage.hidden = false;
+        garden.classList.add("love-page-open");
+        document.body.classList.add("love-route-open");
+        updateRelationshipCounter();
+    } else {
+        lovePage.hidden = true;
+        garden.classList.remove("love-page-open");
+        document.body.classList.remove("love-route-open");
+    }
+}
+
 function openGarden() {
     if (isOpen) return;
     isOpen = true;
@@ -219,6 +282,7 @@ function openGarden() {
     hideMessageButton.hidden = false;
     hideMessageButton.textContent = "Ver el paisaje";
     settingsToggle.hidden = false;
+    storyToggle.hidden = false;
     settingsMenu.hidden = true;
     startBackgroundMusic();
     typeMessage();
@@ -227,6 +291,11 @@ function openGarden() {
 
 button.addEventListener("click", openGarden, { once: true });
 hideMessageButton.addEventListener("click", hideMessage);
+storyToggle.addEventListener("click", showLovePage);
+loveBackButton.addEventListener("click", () => hideLovePage());
+window.addEventListener("popstate", syncPageWithRoute);
+window.addEventListener("hashchange", syncPageWithRoute);
+window.setInterval(updateRelationshipCounter, 60 * 60 * 1000);
 themeToggle.addEventListener("click", toggleTheme);
 musicToggle.addEventListener("click", toggleMusic);
 settingsToggle.addEventListener("click", () => {
