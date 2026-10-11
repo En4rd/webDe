@@ -8,6 +8,9 @@ const message = document.querySelector(".message");
 const hideMessageButton = document.getElementById("hideMessageButton");
 const themeToggle = document.getElementById("themeToggle");
 const musicToggle = document.getElementById("musicToggle");
+const volumeControl = document.getElementById("volumeControl");
+const volumeSlider = document.getElementById("volumeSlider");
+const volumeValue = document.getElementById("volumeValue");
 const backgroundMusic = document.getElementById("backgroundMusic");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -51,7 +54,7 @@ function createFlower() {
         <div class="flower-leaf left"></div>
         <div class="flower-leaf right"></div>
         <div class="flower-head">
-            ${"<div class=\\"flower-petal\\"></div>".repeat(8)}
+            ${"<div class=\\\"flower-petal\\\"></div>".repeat(8)}
             <div class="flower-center"></div>
         </div>`;
     return flower;
@@ -160,8 +163,7 @@ function toggleTheme() {
     themeToggle.textContent = isNightMode ? "☀️" : "🌙";
 }
 
-function toggleMusic() {
-    backgroundMusic.muted = !backgroundMusic.muted;
+function updateMusicButton() {
     const isMuted = backgroundMusic.muted;
     musicToggle.textContent = isMuted ? "🔇" : "🔊";
     musicToggle.setAttribute("aria-pressed", String(isMuted));
@@ -169,9 +171,28 @@ function toggleMusic() {
     musicToggle.title = isMuted ? "Activar sonido" : "Silenciar música";
 }
 
+function toggleMusic() {
+    backgroundMusic.muted = !backgroundMusic.muted;
+    updateMusicButton();
+}
+
+function updateVolume() {
+    const volume = Number(volumeSlider.value);
+    backgroundMusic.volume = volume / 100;
+    volumeValue.value = `${volume}%`;
+    volumeValue.textContent = `${volume}%`;
+    volumeSlider.setAttribute("aria-valuetext", `${volume}%`);
+
+    // Al subir el volumen desde cero, vuelve a habilitar el sonido.
+    if (volume > 0) {
+        backgroundMusic.muted = false;
+        updateMusicButton();
+    }
+}
+
 function startBackgroundMusic() {
-    // Volumen inicial al 5% para mantener la música de fondo discreta.
-    backgroundMusic.volume = 0.05;
+    // El control permite ajustar el volumen; inicia discretamente al 5%.
+    updateVolume();
     backgroundMusic.currentTime = 7;
     const playback = backgroundMusic.play();
     if (playback && typeof playback.catch === "function") {
@@ -195,6 +216,7 @@ function openGarden() {
     hideMessageButton.textContent = "Ver el paisaje";
     themeToggle.hidden = false;
     musicToggle.hidden = false;
+    volumeControl.hidden = false;
     startBackgroundMusic();
     typeMessage();
     window.setTimeout(() => intro.remove(), 1200);
@@ -204,6 +226,7 @@ button.addEventListener("click", openGarden, { once: true });
 hideMessageButton.addEventListener("click", hideMessage);
 themeToggle.addEventListener("click", toggleTheme);
 musicToggle.addEventListener("click", toggleMusic);
+volumeSlider.addEventListener("input", updateVolume);
 window.addEventListener("pagehide", () => {
     window.clearInterval(petalsTimer);
     backgroundMusic.pause();
