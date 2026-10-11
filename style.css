@@ -516,14 +516,14 @@ button { font: inherit; }
 .garden.love-page-open { visibility: hidden; }
 body.love-route-open { overflow: hidden; }
 
-.garden.night-mode ~ .love-page { background: linear-gradient(145deg, #11162d, #242b4c 55%, #3c3150); color: #fff4d1; }
-.garden.night-mode ~ .love-page .love-card { border-color: rgba(255, 244, 173, .18); background: rgba(13, 20, 43, .86); }
-.garden.night-mode ~ .love-page .love-card h2,
-.garden.night-mode ~ .love-page .counter-value,
-.garden.night-mode ~ .love-page .love-signature { color: #ffdf7a; }
-.garden.night-mode ~ .love-page .love-eyebrow,
-.garden.night-mode ~ .love-page .counter-caption { color: #e5d4a1; }
-.garden.night-mode ~ .love-page .together-counter { background: rgba(255, 223, 122, .1); }
+.love-page.night-mode { background: linear-gradient(145deg, #11162d, #242b4c 55%, #3c3150); color: #fff4d1; }
+.love-page.night-mode .love-card { border-color: rgba(255, 244, 173, .18); background: rgba(13, 20, 43, .86); }
+.love-page.night-mode .love-card h2,
+.love-page.night-mode .counter-value,
+.love-page.night-mode .love-signature { color: #ffdf7a; }
+.love-page.night-mode .love-eyebrow,
+.love-page.night-mode .counter-caption { color: #e5d4a1; }
+.love-page.night-mode .together-counter { background: rgba(255, 223, 122, .1); }
 
 @media (max-width: 43.75rem) {
     .love-page { align-items: start; padding-top: max(4.8rem, calc(env(safe-area-inset-top) + 4.2rem)); }
