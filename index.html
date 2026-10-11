@@ -78,6 +78,12 @@
         🔊
     </button>
 
+    <div class="volume-control" id="volumeControl" hidden>
+        <label for="volumeSlider" aria-label="Volumen de la música">♪</label>
+        <input id="volumeSlider" type="range" min="0" max="100" value="5" step="1" aria-label="Volumen de la música" aria-valuetext="5%">
+        <output id="volumeValue" for="volumeSlider">5%</output>
+    </div>
+
     <audio id="backgroundMusic" src="audio/cancion.mp3" loop preload="auto"></audio>
 
     <!-- Campo -->
