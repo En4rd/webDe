@@ -66,22 +66,30 @@
 
     </div>
 
-    <button class="hide-message-button" id="hideMessageButton" type="button" aria-controls="message" hidden>
-        Ver el paisaje
+    <button class="settings-toggle" id="settingsToggle" type="button" aria-label="Abrir ajustes" aria-expanded="false" aria-controls="settingsMenu" title="Ajustes" hidden>
+        ⚙
     </button>
 
-    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Activar modo nocturno" aria-pressed="false" hidden>
-        🌙
-    </button>
+    <div class="settings-menu" id="settingsMenu" aria-label="Ajustes del jardín" hidden>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Activar modo nocturno" aria-pressed="false">
+            🌙 <span>Modo nocturno</span>
+        </button>
 
-    <button class="music-toggle" id="musicToggle" type="button" aria-label="Silenciar música" aria-pressed="false" title="Silenciar música" hidden>
-        🔊
-    </button>
+        <button class="music-toggle" id="musicToggle" type="button" aria-label="Silenciar música" aria-pressed="false" title="Silenciar música">
+            🔊 <span>Silenciar música</span>
+        </button>
 
-    <div class="volume-control" id="volumeControl" hidden>
-        <label for="volumeSlider" aria-label="Volumen de la música">♪</label>
-        <input id="volumeSlider" type="range" min="0" max="100" value="5" step="1" aria-label="Volumen de la música" aria-valuetext="5%">
-        <output id="volumeValue" for="volumeSlider">5%</output>
+        <div class="volume-control" id="volumeControl">
+            <label for="volumeSlider">Volumen</label>
+            <div class="volume-slider-row">
+                <input id="volumeSlider" type="range" min="0" max="100" value="1" step="1" aria-label="Volumen de la música" aria-valuetext="1%">
+                <output id="volumeValue" for="volumeSlider">1%</output>
+            </div>
+        </div>
+
+        <button class="hide-message-button" id="hideMessageButton" type="button" aria-controls="message">
+            Ver el paisaje
+        </button>
     </div>
 
     <audio id="backgroundMusic" src="audio/cancion.mp3" loop preload="auto"></audio>
