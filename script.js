@@ -172,6 +172,7 @@ function toggleMusic() {
 function startBackgroundMusic() {
     // Volumen inicial al 5% para mantener la música de fondo discreta.
     backgroundMusic.volume = 0.05;
+    backgroundMusic.currentTime = 7;
     const playback = backgroundMusic.play();
     if (playback && typeof playback.catch === "function") {
         playback.catch((error) => {
