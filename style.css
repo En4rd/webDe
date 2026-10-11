@@ -284,6 +284,40 @@ button { font: inherit; }
 .theme-toggle { left: max(1rem, env(safe-area-inset-left)); }
 .music-toggle { left: calc(max(1rem, env(safe-area-inset-left)) + 3.25rem); }
 
+.volume-control {
+    position: absolute;
+    z-index: 8;
+    top: max(0.8rem, env(safe-area-inset-top));
+    left: calc(max(1rem, env(safe-area-inset-left)) + 6.5rem);
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    min-height: 2.75rem;
+    padding: .45rem .7rem;
+    border: 1px solid rgba(111, 94, 30, .4);
+    border-radius: 2rem;
+    background: rgba(255, 255, 255, .82);
+    color: #60500e;
+    box-shadow: 0 .2rem .75rem rgba(0, 0, 0, .12);
+}
+.volume-control[hidden] { display: none; }
+.volume-control label { font-size: 1.1rem; line-height: 1; }
+.volume-control input[type="range"] {
+    width: clamp(4.25rem, 12vw, 7rem);
+    accent-color: #d5a900;
+    cursor: pointer;
+}
+.volume-control output {
+    min-width: 2.25rem;
+    font-size: .8rem;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+.volume-control input[type="range"]:focus-visible {
+    outline: 2px solid #8b6d00;
+    outline-offset: 3px;
+}
+
 .theme-toggle[hidden],
 .music-toggle[hidden] { display: none; }
 
@@ -326,13 +360,19 @@ button { font: inherit; }
 .garden.night-mode .message h2 { color: #ffd83d; }
 .garden.night-mode .hide-message-button,
 .garden.night-mode .theme-toggle,
-.garden.night-mode .music-toggle { border-color: rgba(255, 244, 173, .7); background: rgba(8, 18, 44, .72); color: #fff8c9; }
+.garden.night-mode .music-toggle,
+.garden.night-mode .volume-control { border-color: rgba(255, 244, 173, .7); background: rgba(8, 18, 44, .72); color: #fff8c9; }
 .garden.night-mode .hide-message-button:hover,
 .garden.night-mode .theme-toggle:hover,
-.garden.night-mode .music-toggle:hover { background: rgba(27, 45, 85, .88); }
+.garden.night-mode .music-toggle:hover,
+.garden.night-mode .volume-control:hover { background: rgba(27, 45, 85, .88); }
 .garden.night-mode .field { background: linear-gradient(to bottom, #183c22 0%, #0d2816 45%, #07170d 100%); }
 
 @media (max-width: 43.75rem) {
+    .volume-control {
+        top: max(4rem, calc(env(safe-area-inset-top) + 3.2rem));
+        left: max(1rem, env(safe-area-inset-left));
+    }
     .scene { min-height: 100svh; }
     .intro { padding: 1.5rem; }
     .small-text { margin: 0 0 .5rem; font-size: 1rem; }
