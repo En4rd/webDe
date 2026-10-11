@@ -165,6 +165,7 @@ function hideMessage() {
 
 function toggleTheme() {
     const isNightMode = garden.classList.toggle("night-mode");
+    lovePage.classList.toggle("night-mode", isNightMode);
     themeToggle.setAttribute("aria-pressed", String(isNightMode));
     themeToggle.setAttribute("aria-label", isNightMode ? "Activar modo de día" : "Activar modo nocturno");
     themeToggle.querySelector("span").textContent = isNightMode ? "Modo de día" : "Modo nocturno";
