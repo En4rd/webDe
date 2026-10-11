@@ -6,6 +6,8 @@ const petalsContainer = document.getElementById("petals");
 const insectsContainer = document.getElementById("insects");
 const message = document.querySelector(".message");
 const hideMessageButton = document.getElementById("hideMessageButton");
+const settingsToggle = document.getElementById("settingsToggle");
+const settingsMenu = document.getElementById("settingsMenu");
 const themeToggle = document.getElementById("themeToggle");
 const musicToggle = document.getElementById("musicToggle");
 const volumeControl = document.getElementById("volumeControl");
@@ -160,12 +162,14 @@ function toggleTheme() {
     const isNightMode = garden.classList.toggle("night-mode");
     themeToggle.setAttribute("aria-pressed", String(isNightMode));
     themeToggle.setAttribute("aria-label", isNightMode ? "Activar modo de día" : "Activar modo nocturno");
-    themeToggle.textContent = isNightMode ? "☀️" : "🌙";
+    themeToggle.querySelector("span").textContent = isNightMode ? "Modo de día" : "Modo nocturno";
+    themeToggle.firstChild.textContent = isNightMode ? "☀️ " : "🌙 ";
 }
 
 function updateMusicButton() {
     const isMuted = backgroundMusic.muted;
-    musicToggle.textContent = isMuted ? "🔇" : "🔊";
+    musicToggle.firstChild.textContent = isMuted ? "🔇 " : "🔊 ";
+    musicToggle.querySelector("span").textContent = isMuted ? "Activar sonido" : "Silenciar música";
     musicToggle.setAttribute("aria-pressed", String(isMuted));
     musicToggle.setAttribute("aria-label", isMuted ? "Activar sonido" : "Silenciar música");
     musicToggle.title = isMuted ? "Activar sonido" : "Silenciar música";
@@ -191,7 +195,7 @@ function updateVolume() {
 }
 
 function startBackgroundMusic() {
-    // El control permite ajustar el volumen; inicia discretamente al 5%.
+    // Inicia discretamente al 1%; el usuario puede ajustarlo desde el menú de ajustes.
     updateVolume();
     backgroundMusic.currentTime = 7;
     const playback = backgroundMusic.play();
@@ -214,9 +218,8 @@ function openGarden() {
     startPetals();
     hideMessageButton.hidden = false;
     hideMessageButton.textContent = "Ver el paisaje";
-    themeToggle.hidden = false;
-    musicToggle.hidden = false;
-    volumeControl.hidden = false;
+    settingsToggle.hidden = false;
+    settingsMenu.hidden = true;
     startBackgroundMusic();
     typeMessage();
     window.setTimeout(() => intro.remove(), 1200);
@@ -226,6 +229,30 @@ button.addEventListener("click", openGarden, { once: true });
 hideMessageButton.addEventListener("click", hideMessage);
 themeToggle.addEventListener("click", toggleTheme);
 musicToggle.addEventListener("click", toggleMusic);
+settingsToggle.addEventListener("click", () => {
+    const isExpanded = settingsToggle.getAttribute("aria-expanded") === "true";
+    settingsToggle.setAttribute("aria-expanded", String(!isExpanded));
+    settingsToggle.setAttribute("aria-label", isExpanded ? "Abrir ajustes" : "Cerrar ajustes");
+    settingsToggle.title = isExpanded ? "Ajustes" : "Cerrar ajustes";
+    settingsMenu.hidden = isExpanded;
+});
+document.addEventListener("click", (event) => {
+    if (settingsMenu.hidden) return;
+    if (!settingsMenu.contains(event.target) && !settingsToggle.contains(event.target)) {
+        settingsMenu.hidden = true;
+        settingsToggle.setAttribute("aria-expanded", "false");
+        settingsToggle.setAttribute("aria-label", "Abrir ajustes");
+        settingsToggle.title = "Ajustes";
+    }
+});
+document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || settingsMenu.hidden) return;
+    settingsMenu.hidden = true;
+    settingsToggle.setAttribute("aria-expanded", "false");
+    settingsToggle.setAttribute("aria-label", "Abrir ajustes");
+    settingsToggle.title = "Ajustes";
+    settingsToggle.focus();
+});
 volumeSlider.addEventListener("input", updateVolume);
 window.addEventListener("pagehide", () => {
     window.clearInterval(petalsTimer);
