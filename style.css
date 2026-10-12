@@ -595,3 +595,28 @@ body.love-route-open { overflow: hidden; }
 }
 .garden.night-mode .song-info-label,
 .garden.night-mode .song-info-note { color: #ffdf7a; }
+
+/* En móviles, los accesos quedan en la parte inferior para no tapar el mensaje. */
+@media (max-width: 43.75rem) {
+    .settings-toggle {
+        top: auto;
+        right: max(1rem, env(safe-area-inset-right));
+        bottom: max(.85rem, env(safe-area-inset-bottom));
+    }
+
+    .story-toggle {
+        top: auto;
+        right: calc(max(1rem, env(safe-area-inset-right)) + 3.45rem);
+        bottom: max(.85rem, env(safe-area-inset-bottom));
+    }
+
+    .settings-menu {
+        top: auto;
+        right: max(1rem, env(safe-area-inset-right));
+        bottom: calc(max(.85rem, env(safe-area-inset-bottom)) + 3.55rem);
+        max-height: min(70svh, 32rem);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+}
+
