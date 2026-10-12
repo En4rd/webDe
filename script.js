@@ -15,6 +15,8 @@ const relationshipCounter = document.getElementById("relationshipCounter");
 const relationshipStartDate = new Date(2026, 6, 11);
 const themeToggle = document.getElementById("themeToggle");
 const musicToggle = document.getElementById("musicToggle");
+const songInfoToggle = document.getElementById("songInfoToggle");
+const songInfoCard = document.getElementById("songInfoCard");
 const volumeControl = document.getElementById("volumeControl");
 const volumeSlider = document.getElementById("volumeSlider");
 const volumeValue = document.getElementById("volumeValue");
@@ -299,6 +301,11 @@ window.addEventListener("hashchange", syncPageWithRoute);
 window.setInterval(updateRelationshipCounter, 60 * 60 * 1000);
 themeToggle.addEventListener("click", toggleTheme);
 musicToggle.addEventListener("click", toggleMusic);
+songInfoToggle.addEventListener("click", () => {
+    const isExpanded = songInfoToggle.getAttribute("aria-expanded") === "true";
+    songInfoToggle.setAttribute("aria-expanded", String(!isExpanded));
+    songInfoCard.hidden = isExpanded;
+});
 settingsToggle.addEventListener("click", () => {
     const isExpanded = settingsToggle.getAttribute("aria-expanded") === "true";
     settingsToggle.setAttribute("aria-expanded", String(!isExpanded));
