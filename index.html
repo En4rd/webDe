@@ -13,7 +13,7 @@
 
     <main class="scene">
 
-        <div class="stars"></div>
+        <div class="stars" aria-hidden="true"></div>
 
         <section class="intro">
             <p class="small-text">Tengo algo para ti...</p>
@@ -35,19 +35,19 @@
         <div class="sun-spot"></div>
     </div>
 
-    <div class="cloud cloud1"></div>
-    <div class="cloud cloud2"></div>
+    <div class="cloud cloud1" aria-hidden="true"></div>
+    <div class="cloud cloud2" aria-hidden="true"></div>
 
-    <div class="stars"></div>
+    <div class="stars" aria-hidden="true"></div>
 
     <!-- Efectos -->
 
     <div class="insects" id="insects" aria-hidden="true"></div>
-    <div class="petals" id="petals"></div>
+    <div class="petals" id="petals" aria-hidden="true"></div>
 
     <!-- Mensaje -->
 
-    <div class="message" id="message" aria-live="polite">
+    <div class="message" id="message" aria-live="off">
 
         <h2>Para Mayra Luz 🌻</h2>
 
@@ -66,13 +66,45 @@
 
     </div>
 
-    <button class="hide-message-button" id="hideMessageButton" type="button" aria-controls="message" hidden>
-        Ver el paisaje
+    <button class="settings-toggle" id="settingsToggle" type="button" aria-label="Abrir ajustes" aria-expanded="false" aria-controls="settingsMenu" title="Ajustes" hidden>
+        ⚙
     </button>
+    <button class="story-toggle" id="storyToggle" type="button" aria-label="Leer nuestro mensaje" title="Nuestro mensaje" hidden>!</button>
 
-    <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false" hidden>
-        Ver versión nocturna 🌙
-    </button>
+    <div class="settings-menu" id="settingsMenu" aria-label="Ajustes del jardín" hidden>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Activar modo nocturno" aria-pressed="false">
+            🌙 <span>Modo nocturno</span>
+        </button>
+
+        <button class="music-toggle" id="musicToggle" type="button" aria-label="Silenciar música" aria-pressed="false" title="Silenciar música">
+            🔊 <span>Silenciar música</span>
+        </button>
+
+        <button class="song-info-toggle" id="songInfoToggle" type="button" aria-expanded="false" aria-controls="songInfoCard">
+            🎵 <span>Información de la canción</span>
+        </button>
+        <div class="song-info-card" id="songInfoCard" role="status" hidden>
+            <span class="song-info-note" aria-hidden="true">♫</span>
+            <p class="song-info-label">Canción de fondo</p>
+            <p class="song-info-title">Bruno Mars - Count on Me | Piano Cover by Pianella Piano</p>
+        </div>
+
+        <div class="volume-control" id="volumeControl">
+            <label for="volumeSlider">Volumen</label>
+            <div class="volume-slider-row">
+                <input id="volumeSlider" type="range" min="0" max="100" value="1" step="1" aria-label="Volumen de la música" aria-valuetext="1%">
+                <output id="volumeValue" for="volumeSlider">1%</output>
+            </div>
+        </div>
+
+        <button class="hide-message-button" id="hideMessageButton" type="button" aria-controls="message">
+            Ver el paisaje
+        </button>
+    </div>
+
+    <audio id="backgroundMusic" src="audio/cancion.mp3" loop preload="auto"></audio>
+
+
 
     <!-- Campo -->
 
@@ -81,6 +113,29 @@
 </section>
 
     </main>
+
+    <section class="love-page" id="lovePage" aria-labelledby="lovePageTitle" hidden>
+        <button class="love-back-button" id="loveBackButton" type="button">← Volver al jardín</button>
+        <div class="love-card">
+            <span class="love-heart" aria-hidden="true">💛</span>
+            <p class="love-eyebrow">Un lugar para nosotros</p>
+            <h2 id="lovePageTitle">Qué feliz me hace estar contigo</h2>
+            <p class="love-message">
+                Desde que llegaste a mi vida, compartir momentos contigo se ha convertido en una de mis cosas favoritas.
+                Me hace feliz conocerte cada día más, verte sonreír, escucharte y crear recuerdos a tu lado.
+                No necesito que todos los días sean perfectos; me basta con que podamos seguir compartiendo, aprendiendo
+                y creciendo juntos. Gracias por ser tú, por dejarme estar cerca de ti y por hacer tan bonito este camino.
+                Me ilusiona todo lo que todavía nos queda por vivir. Quiero seguir sumando días, historias y motivos
+                para sonreír contigo. 💛
+            </p>
+            <div class="together-counter" aria-live="polite">
+                <p class="together-label">Juntos desde el 11-07-2026</p>
+                <p class="counter-value" id="relationshipCounter">0-0-0</p>
+                <p class="counter-caption">Años - Meses - Días</p>
+            </div>
+            <p class="love-signature">Con mucho cariño, para ti. 🌻</p>
+        </div>
+    </section>
 
     <script src="script.js"></script>
 
