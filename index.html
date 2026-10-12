@@ -80,6 +80,15 @@
             🔊 <span>Silenciar música</span>
         </button>
 
+        <button class="song-info-toggle" id="songInfoToggle" type="button" aria-expanded="false" aria-controls="songInfoCard">
+            🎵 <span>Información de la canción</span>
+        </button>
+        <div class="song-info-card" id="songInfoCard" role="status" hidden>
+            <span class="song-info-note" aria-hidden="true">♫</span>
+            <p class="song-info-label">Canción de fondo</p>
+            <p class="song-info-title">Bruno Mars - Count on Me | Piano Cover by Pianella Piano</p>
+        </div>
+
         <div class="volume-control" id="volumeControl">
             <label for="volumeSlider">Volumen</label>
             <div class="volume-slider-row">
