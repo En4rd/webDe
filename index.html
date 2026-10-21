@@ -83,10 +83,21 @@
         <button class="song-info-toggle" id="songInfoToggle" type="button" aria-expanded="false" aria-controls="songInfoCard">
             🎵 <span>Información de la canción</span>
         </button>
-        <div class="song-info-card" id="songInfoCard" role="status" hidden>
-            <span class="song-info-note" aria-hidden="true">♫</span>
-            <p class="song-info-label">Canción de fondo</p>
-            <p class="song-info-title">Bruno Mars - Count on Me | Piano Cover by Pianella Piano</p>
+        <div class="song-info-card" id="songInfoCard" aria-label="Reproductor de música" hidden>
+            <div class="song-player-topline">
+                <span class="song-info-label">REPRODUCIENDO</span>
+                <span class="song-player-brand"><span aria-hidden="true">●</span> spotify style</span>
+            </div>
+            <div class="song-player-main">
+                <div class="song-cover" aria-hidden="true">♫</div>
+                <div class="song-player-track">
+                    <p class="song-info-title">Count on Me</p>
+                    <p class="song-info-artist">Bruno Mars · Piano Cover by Pianella Piano</p>
+                </div>
+                <button class="song-player-button" id="songPlayerButton" type="button" aria-label="Reproducir canción" title="Reproducir canción">▶</button>
+            </div>
+            <div class="song-player-progress" aria-hidden="true"><span id="songProgressFill"></span></div>
+            <div class="song-player-time"><span id="songCurrentTime">0:00</span><span id="songDuration">--:--</span></div>
         </div>
 
         <div class="volume-control" id="volumeControl">
