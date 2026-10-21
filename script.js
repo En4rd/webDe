@@ -301,11 +301,57 @@ window.addEventListener("hashchange", syncPageWithRoute);
 window.setInterval(updateRelationshipCounter, 60 * 60 * 1000);
 themeToggle.addEventListener("click", toggleTheme);
 musicToggle.addEventListener("click", toggleMusic);
+const songPlayerButton = document.getElementById("songPlayerButton");
+const songProgressFill = document.getElementById("songProgressFill");
+const songCurrentTime = document.getElementById("songCurrentTime");
+const songDuration = document.getElementById("songDuration");
+
+function formatSongTime(seconds) {
+    if (!Number.isFinite(seconds)) return "--:--";
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60).toString().padStart(2, "0");
+    return `${minutes}:${remainingSeconds}`;
+}
+
+function updateSongPlayer() {
+    const duration = backgroundMusic.duration;
+    const currentTime = backgroundMusic.currentTime;
+    songCurrentTime.textContent = formatSongTime(currentTime);
+    songDuration.textContent = formatSongTime(duration);
+    songProgressFill.style.width = Number.isFinite(duration) && duration > 0
+        ? `${Math.min(100, (currentTime / duration) * 100)}%`
+        : "0%";
+    const isPlaying = !backgroundMusic.paused;
+    songPlayerButton.textContent = isPlaying ? "Ⅱ" : "▶";
+    songPlayerButton.setAttribute("aria-label", isPlaying ? "Pausar canción" : "Reproducir canción");
+    songPlayerButton.title = isPlaying ? "Pausar canción" : "Reproducir canción";
+}
+
 songInfoToggle.addEventListener("click", () => {
     const isExpanded = songInfoToggle.getAttribute("aria-expanded") === "true";
     songInfoToggle.setAttribute("aria-expanded", String(!isExpanded));
     songInfoCard.hidden = isExpanded;
+    if (!isExpanded) updateSongPlayer();
 });
+
+songPlayerButton.addEventListener("click", async () => {
+    if (backgroundMusic.paused) {
+        try {
+            await backgroundMusic.play();
+        } catch (error) {
+            console.error("No se pudo reproducir la canción:", error);
+        }
+    } else {
+        backgroundMusic.pause();
+    }
+    updateSongPlayer();
+});
+
+backgroundMusic.addEventListener("play", updateSongPlayer);
+backgroundMusic.addEventListener("pause", updateSongPlayer);
+backgroundMusic.addEventListener("timeupdate", updateSongPlayer);
+backgroundMusic.addEventListener("loadedmetadata", updateSongPlayer);
+backgroundMusic.addEventListener("ended", updateSongPlayer);
 settingsToggle.addEventListener("click", () => {
     const isExpanded = settingsToggle.getAttribute("aria-expanded") === "true";
     settingsToggle.setAttribute("aria-expanded", String(!isExpanded));
