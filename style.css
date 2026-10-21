@@ -737,3 +737,28 @@ body.love-route-open { overflow: hidden; }
     .song-player-button { flex-basis: 2.15rem; width: 2.15rem; height: 2.15rem; }
 }
 
+/* Tema claro: reproductor en tonos amarillos para combinar con los girasoles. */
+.garden:not(.night-mode) .song-info-card {
+    border-color: rgba(173, 125, 0, .28);
+    background: linear-gradient(145deg, #fff8d8, #ffe68a);
+    color: #352b0c;
+    box-shadow: 0 .4rem 1.2rem rgba(95, 71, 0, .16), inset 0 1px 0 rgba(255, 255, 255, .8);
+}
+.garden:not(.night-mode) .song-info-label { color: #826000; }
+.garden:not(.night-mode) .song-player-brand { color: #79662d; }
+.garden:not(.night-mode) .song-player-brand span { color: #8b6800; }
+.garden:not(.night-mode) .song-cover {
+    background: radial-gradient(circle at 35% 25%, #fff2a8, #e5b936 48%, #a87d14);
+    color: #342907;
+}
+.garden:not(.night-mode) .song-info-title { color: #352b0c; }
+.garden:not(.night-mode) .song-info-artist { color: #75612b; }
+.garden:not(.night-mode) .song-player-time { color: #75612b; }
+.garden:not(.night-mode) .song-player-progress { background: #e0ca78; }
+.garden:not(.night-mode) .song-player-progress span { background: #806000; }
+.garden:not(.night-mode) .song-player-button {
+    background: #806000;
+    color: #fffbe8;
+}
+.garden:not(.night-mode) .song-player-button:hover { background: #654b00; }
+
