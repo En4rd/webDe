@@ -1,19 +1,7 @@
-const albums={
-"nuestro-comienzo":{title:"Nuestro comienzo",date:"11 de julio de 2026",description:"El inicio de una historia que quiero seguir escribiendo contigo. 💛",photos:[]},
-"primer-viaje":{title:"Nuestro primer viaje",date:"Una aventura por recordar",description:"Lugares nuevos, momentos juntos y recuerdos para siempre.",photos:[]},
-"cumpleanos":{title:"Cumpleaños",date:"Días especiales",description:"Celebrando tu vida y todos los momentos que nos regala.",photos:[]},
-"aniversarios":{title:"Nuestros aniversarios",date:"Un año más de historias",description:"Cada fecha especial merece quedarse en fotografías.",photos:[]}
-};
-const id=document.body.dataset.album;const album=albums[id];
-if(album){
-document.title=album.title+" | Nuestros recuerdos";
-document.getElementById("albumTitle").textContent=album.title;
-document.getElementById("albumDate").textContent=album.date;
-document.getElementById("albumDescription").textContent=album.description;
-const grid=document.getElementById("photoGrid");
-const empty=document.getElementById("emptyState");
-empty.hidden=album.photos.length>0;
-album.photos.forEach(photo=>{const figure=document.createElement("figure");figure.className="polaroid";const img=document.createElement("img");img.src=photo.src;img.alt=photo.caption||album.title;img.loading="lazy";img.addEventListener("click",()=>{lightboxImage.src=photo.src;lightbox.classList.add("open");lightbox.setAttribute("aria-hidden","false")});const caption=document.createElement("figcaption");caption.textContent=photo.caption||"";figure.append(img,caption);grid.appendChild(figure)});
-}
-const lightbox=document.getElementById("albumLightbox"),lightboxImage=document.getElementById("lightboxImage");
-lightbox.addEventListener("click",()=>{lightbox.classList.remove("open");lightbox.setAttribute("aria-hidden","true");lightboxImage.removeAttribute("src")});
+const albumId = new URLSearchParams(location.search).get('album');
+const titleNode=document.getElementById('albumTitle'),dateNode=document.getElementById('albumDate'),descNode=document.getElementById('albumDescription'),grid=document.getElementById('photoGrid'),empty=document.getElementById('emptyState'),lightbox=document.getElementById('albumLightbox'),lightboxImage=document.getElementById('lightboxImage');
+function titleFromFolder(s){const m=s.match(/^\\d{4}-\\d{2}-\\d{2}-(.+)$/);return (m?m[1]:s).replace(/[-_]+/g,' ').replace(/\\b\\w/g,c=>c.toUpperCase());}
+function dateFromFolder(s){const m=s.match(/^(\\d{4})-(\\d{2})-(\\d{2})-/);return m?new Date(+m[1],+m[2]-1,+m[3]).toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'}):'Un recuerdo especial';}
+function theme(s){if(/viaje|vacacion|aventura/i.test(s))return 'travel';if(/cumple|birthday/i.test(s))return 'birthday';if(/aniversario|anniversary/i.test(s))return 'anniversary';return 'romantic';}
+async function loadAlbum(){if(!albumId||!/^[a-zA-Z0-9_-]+$/.test(albumId)){titleNode.textContent='Recuerdo no encontrado';empty.hidden=false;return;}document.body.dataset.album=theme(albumId);titleNode.textContent=titleFromFolder(albumId);dateNode.textContent=dateFromFolder(albumId);descNode.textContent='Cada fotografía guarda un pedacito de nuestra historia. 💛';document.title=titleNode.textContent+' | Nuestros recuerdos';try{const url='https://api.github.com/repos/En4rd/webDe/contents/recuerdos/'+encodeURIComponent(albumId);const response=await fetch(url);if(!response.ok)throw Error('GitHub API: '+response.status);const files=await response.json();const photos=files.filter(f=>f.type==='file'&&/\\.(jpe?g|png|webp|gif)$/i.test(f.name));grid.replaceChildren();photos.forEach(photo=>{const figure=document.createElement('figure');figure.className='polaroid';const img=document.createElement('img');img.src=photo.download_url;img.alt=photo.name.replace(/[-_]/g,' ').replace(/\\.[^.]+$/,'');img.loading='lazy';img.tabIndex=0;img.addEventListener('click',()=>{lightboxImage.src=img.src;lightboxImage.alt=img.alt;lightbox.classList.add('open');lightbox.setAttribute('aria-hidden','false')});const cap=document.createElement('figcaption');cap.textContent=img.alt;figure.append(img,cap);grid.append(figure);});empty.hidden=photos.length>0;empty.textContent=photos.length?'':'Aún no hay fotos. Sube JPG, PNG, WebP o GIF a esta carpeta y aparecerán aquí. 💛';}catch(e){console.error(e);empty.hidden=false;empty.textContent='No pudimos cargar las fotografías. Comprueba tu conexión.';}}
+lightbox.addEventListener('click',()=>{lightbox.classList.remove('open');lightbox.setAttribute('aria-hidden','true');lightboxImage.removeAttribute('src')});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lightbox.classList.contains('open'))lightbox.click()});loadAlbum();
