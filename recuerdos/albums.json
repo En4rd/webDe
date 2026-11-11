@@ -1,3 +1,37 @@
 {
-  "albums": []
+  "albums": [
+    {
+      "id": "2026-11-10-Boda",
+      "title": "Boda",
+      "date": "10 de noviembre de 2026",
+      "description": "Cada fotografía guarda un pedacito de nuestra historia. 💛",
+      "cover": "",
+      "photos": [
+        {
+          "src": "recuerdos-publicados/2026-11-10-Boda/1.%20Que-hermosa-%20sonrisa.jpeg",
+          "caption": "1. Que hermosa  sonrisa"
+        },
+        {
+          "src": "recuerdos-publicados/2026-11-10-Boda/2.Conexion.jpeg",
+          "caption": "2.Conexion"
+        },
+        {
+          "src": "recuerdos-publicados/2026-11-10-Boda/3.Calidez.jpeg",
+          "caption": "3.Calidez"
+        },
+        {
+          "src": "recuerdos-publicados/2026-11-10-Boda/4.Dia-de-gala.jpeg",
+          "caption": "4.Dia de gala"
+        },
+        {
+          "src": "recuerdos-publicados/2026-11-10-Boda/5.Instante-Feliz.jpeg",
+          "caption": "5.Instante Feliz"
+        },
+        {
+          "src": "recuerdos-publicados/2026-11-10-Boda/6.Lugar-seguro.jpeg",
+          "caption": "6.Lugar seguro"
+        }
+      ]
+    }
+  ]
 }
