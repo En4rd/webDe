@@ -1,6 +1,7 @@
 const http = require("node:http");
 const fs = require("node:fs");
 const path = require("node:path");
+const { execFileSync } = require("node:child_process");
 
 const ROOT = path.resolve(__dirname, "..");
 const PORT = Number(process.env.PORT || 5501);
@@ -109,9 +110,33 @@ const server = http.createServer((request, response) => {
                 const folder = path.join(ROOT, "recuerdos", publishRoute[1]);
                 if (!fs.existsSync(folder) || !fs.statSync(folder).isDirectory()) return sendJson(response, 404, { error: "Álbum no encontrado" });
                 const marker = path.join(folder, ".published");
-                if (payload.published) fs.writeFileSync(marker, "Publicado de forma intencional.\n", "utf8");
-                else if (fs.existsSync(marker)) fs.unlinkSync(marker);
-                return sendJson(response, 200, { published: payload.published });
+                const wasPublished = fs.existsSync(marker);
+
+                if (payload.published) fs.writeFileSync(marker, "Publicado de forma intencional.\\n", "utf8");
+                else if (wasPublished) fs.unlinkSync(marker);
+
+                try {
+                    const publisher = path.join(__dirname, "publicar-albumes.js");
+                    const output = execFileSync(process.execPath, [publisher], {
+                        cwd: ROOT,
+                        encoding: "utf8",
+                        stdio: ["ignore", "pipe", "pipe"]
+                    });
+                    console.log(output.trim());
+                    return sendJson(response, 200, {
+                        published: payload.published,
+                        generated: true,
+                        message: "La carpeta recuerdos-publicados y el manifiesto se actualizaron correctamente."
+                    });
+                } catch (error) {
+                    // Si la generación falla, restaura el estado anterior del álbum.
+                    if (wasPublished) fs.writeFileSync(marker, "Publicado de forma intencional.\\n", "utf8");
+                    else if (fs.existsSync(marker)) fs.unlinkSync(marker);
+                    console.error("No se pudo generar la publicación:", error.stderr || error.message);
+                    return sendJson(response, 500, {
+                        error: "No se pudo generar la carpeta de álbumes publicados. Se restauró el estado anterior."
+                    });
+                }
             } catch (error) {
                 return sendJson(response, 400, { error: "Solicitud inválida" });
             }
