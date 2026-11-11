@@ -44,49 +44,39 @@ const messageLines = [...message.querySelectorAll("h2, p, span")].map((element) 
 
 
 /*
- * Álbumes: la fuente principal es recuerdos/albums.json.
- * Así funciona igual en local (Live Server / servidor estático) y en GitHub Pages.
+ * Álbumes locales:
+ * En el servidor Node se descubren directamente las carpetas de recuerdos/.
+ * En producción se utiliza el manifiesto generado por tools/publicar-albumes.js.
  */
 let memoryAlbums = [];
-let memoryAlbumsLoad = null;
 
-async function loadMemoryManifest() {
-    if (memoryAlbumsLoad) return memoryAlbumsLoad;
-    memoryAlbumsLoad = (async () => {
-        const response = await fetch("recuerdos/albums.json", { cache: "no-store" });
-        if (!response.ok) throw new Error("No se pudo leer recuerdos/albums.json (" + response.status + ")");
-        const data = await response.json();
-        if (!Array.isArray(data.albums)) throw new Error("El manifiesto debe contener un arreglo albums.");
-        return data.albums.map((album) => ({
-            id: String(album.id || ""),
-            title: String(album.title || album.id || "Recuerdo"),
-            date: String(album.date || "Un recuerdo especial"),
-            description: String(album.description || "Un momento que merece quedarse para siempre. 💛"),
-            cover: String(album.cover || ""),
-            photos: Array.isArray(album.photos) ? album.photos.filter((photo) => photo && photo.src).map((photo) => ({
-                src: String(photo.src),
-                caption: String(photo.caption || "")
-            })) : []
-        })).filter((album) => /^[a-zA-Z0-9_-]+$/.test(album.id));
-    })();
+async function loadMemoryAlbums() {
     try {
-        memoryAlbums = await memoryAlbumsLoad;
-        return memoryAlbums;
+        const localResponse = await fetch("/__albums", { cache: "no-store" });
+        if (localResponse.ok) {
+            const localData = await localResponse.json();
+            if (Array.isArray(localData.albums)) return localData.albums;
+        }
     } catch (error) {
-        memoryAlbumsLoad = null;
-        throw error;
+        // En GitHub Pages no existe la API local; se usa el manifiesto publicado.
     }
+
+    const response = await fetch("recuerdos/albums.json", { cache: "no-store" });
+    if (!response.ok) throw new Error("No se pudo leer recuerdos/albums.json (" + response.status + ")");
+    const data = await response.json();
+    if (!Array.isArray(data.albums)) throw new Error("El manifiesto debe contener un arreglo albums.");
+    return data.albums;
 }
 
 async function discoverMemoryAlbums() {
     memoryAlbumGrid.setAttribute("aria-busy", "true");
-    memoryAlbumGrid.textContent = "Cargando nuestros recuerdos...";
+    memoryAlbumGrid.textContent = "Buscando carpetas y fotografías...";
     try {
-        await loadMemoryManifest();
+        memoryAlbums = await loadMemoryAlbums();
         renderMemoryAlbums();
     } catch (error) {
         console.error("Error al cargar los álbumes:", error);
-        memoryAlbumGrid.textContent = "No pudimos cargar los recuerdos. Comprueba que estés usando un servidor local y que exista recuerdos/albums.json.";
+        memoryAlbumGrid.textContent = "No pudimos cargar los recuerdos. Inicia el servidor local con: node tools/dev-server.js";
     } finally {
         memoryAlbumGrid.removeAttribute("aria-busy");
     }
@@ -95,14 +85,19 @@ async function discoverMemoryAlbums() {
 function renderMemoryAlbums() {
     memoryAlbumGrid.replaceChildren();
     if (!memoryAlbums.length) {
-        memoryAlbumGrid.textContent = "Todavía no hay álbumes. Agrega uno en recuerdos/albums.json.";
+        memoryAlbumGrid.textContent = "Todavía no hay álbumes. Crea una carpeta dentro de recuerdos/ y agrega tus fotografías.";
         return;
     }
 
     memoryAlbums.forEach((album) => {
-        const card = document.createElement("button");
-        card.type = "button";
+        const card = document.createElement("article");
         card.className = "memory-album-card";
+
+        const openButton = document.createElement("button");
+        openButton.type = "button";
+        openButton.className = "memory-album-open";
+        openButton.setAttribute("aria-label", "Abrir álbum " + album.title);
+
         const preview = document.createElement("span");
         preview.className = "memory-album-preview";
         const cover = album.cover || (album.photos[0] && album.photos[0].src);
@@ -116,16 +111,44 @@ function renderMemoryAlbums() {
         } else {
             preview.textContent = "📷";
         }
+
         const title = document.createElement("span");
         title.className = "memory-album-title";
         title.textContent = album.title;
         const date = document.createElement("span");
         date.className = "memory-album-date";
-        date.textContent = album.date;
-        card.append(preview, title, date);
-        card.addEventListener("click", () => {
+        date.textContent = album.date || (album.photos.length + " fotografías");
+        openButton.append(preview, title, date);
+        openButton.addEventListener("click", () => {
             window.location.href = "album.html?album=" + encodeURIComponent(album.id);
         });
+        card.appendChild(openButton);
+
+        if (album.local) {
+            const publishButton = document.createElement("button");
+            publishButton.type = "button";
+            publishButton.className = "memory-publish-toggle";
+            publishButton.textContent = album.published ? "✓ Publicado · Retirar" : "＋ Publicar álbum";
+            publishButton.setAttribute("aria-pressed", String(Boolean(album.published)));
+            publishButton.addEventListener("click", async () => {
+                publishButton.disabled = true;
+                try {
+                    const response = await fetch("/__albums/" + encodeURIComponent(album.id) + "/publication", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ published: !album.published })
+                    });
+                    if (!response.ok) throw new Error("No se pudo cambiar el estado de publicación.");
+                    await discoverMemoryAlbums();
+                } catch (error) {
+                    console.error(error);
+                    publishButton.textContent = "Error · Reintentar";
+                    publishButton.disabled = false;
+                }
+            });
+            card.appendChild(publishButton);
+        }
+
         memoryAlbumGrid.appendChild(card);
     });
 }
