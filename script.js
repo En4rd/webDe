@@ -44,40 +44,74 @@ const messageLines = [...message.querySelectorAll("h2, p, span")].map((element) 
 
 
 /*
- * ÁLBUMES: agrega aquí las fotografías de cada evento.
- * Guarda los archivos en recuerdos/<id>/ y añade sus rutas al arreglo photos.
- * Ejemplo: { src: "recuerdos/nuestro-comienzo/foto-01.jpg", caption: "Nuestro primer recuerdo" }
+ * Álbumes: la fuente principal es recuerdos/albums.json.
+ * Así funciona igual en local (Live Server / servidor estático) y en GitHub Pages.
  */
 let memoryAlbums = [];
+let memoryAlbumsLoad = null;
+
+async function loadMemoryManifest() {
+    if (memoryAlbumsLoad) return memoryAlbumsLoad;
+    memoryAlbumsLoad = (async () => {
+        const response = await fetch("recuerdos/albums.json", { cache: "no-store" });
+        if (!response.ok) throw new Error("No se pudo leer recuerdos/albums.json (" + response.status + ")");
+        const data = await response.json();
+        if (!Array.isArray(data.albums)) throw new Error("El manifiesto debe contener un arreglo albums.");
+        return data.albums.map((album) => ({
+            id: String(album.id || ""),
+            title: String(album.title || album.id || "Recuerdo"),
+            date: String(album.date || "Un recuerdo especial"),
+            description: String(album.description || "Un momento que merece quedarse para siempre. 💛"),
+            cover: String(album.cover || ""),
+            photos: Array.isArray(album.photos) ? album.photos.filter((photo) => photo && photo.src).map((photo) => ({
+                src: String(photo.src),
+                caption: String(photo.caption || "")
+            })) : []
+        })).filter((album) => /^[a-zA-Z0-9_-]+$/.test(album.id));
+    })();
+    try {
+        memoryAlbums = await memoryAlbumsLoad;
+        return memoryAlbums;
+    } catch (error) {
+        memoryAlbumsLoad = null;
+        throw error;
+    }
+}
+
 async function discoverMemoryAlbums() {
-  try {
-    const response = await fetch('https://api.github.com/repos/En4rd/webDe/contents/recuerdos');
-    if (!response.ok) throw new Error('GitHub API: ' + response.status);
-    const folders = await response.json();
-    const known = { 'nuestro-comienzo':['Nuestro comienzo','11 de julio de 2026'], 'primer-viaje':['Nuestro primer viaje','Una aventura por recordar'], 'cumpleanos':['Cumpleaños','Días especiales'], 'aniversarios':['Nuestros aniversarios','Un año más de historias'] };
-    memoryAlbums = folders.filter(x => x.type === 'dir').map(x => {
-      const m = x.name.match(/^(\\d{4})-(\\d{2})-(\\d{2})-(.+)$/);
-      const title = known[x.name]?.[0] || (m ? m[4] : x.name).replace(/[-_]+/g,' ').replace(/\\b\\w/g,c=>c.toUpperCase());
-      const date = known[x.name]?.[1] || (m ? m[3]+'/'+m[2]+'/'+m[1] : 'Un recuerdo especial');
-      return { id:x.name, title, date, description:'Un momento que merece quedarse para siempre. 💛', cover:'', photos:[] };
-    });
-    renderMemoryAlbums();
-  } catch (error) { console.error(error); memoryAlbumGrid.textContent = 'No pudimos cargar los recuerdos. Inténtalo de nuevo.'; }
+    memoryAlbumGrid.setAttribute("aria-busy", "true");
+    memoryAlbumGrid.textContent = "Cargando nuestros recuerdos...";
+    try {
+        await loadMemoryManifest();
+        renderMemoryAlbums();
+    } catch (error) {
+        console.error("Error al cargar los álbumes:", error);
+        memoryAlbumGrid.textContent = "No pudimos cargar los recuerdos. Comprueba que estés usando un servidor local y que exista recuerdos/albums.json.";
+    } finally {
+        memoryAlbumGrid.removeAttribute("aria-busy");
+    }
 }
 
 function renderMemoryAlbums() {
     memoryAlbumGrid.replaceChildren();
+    if (!memoryAlbums.length) {
+        memoryAlbumGrid.textContent = "Todavía no hay álbumes. Agrega uno en recuerdos/albums.json.";
+        return;
+    }
+
     memoryAlbums.forEach((album) => {
         const card = document.createElement("button");
         card.type = "button";
         card.className = "memory-album-card";
         const preview = document.createElement("span");
         preview.className = "memory-album-preview";
-        if (album.cover) {
+        const cover = album.cover || (album.photos[0] && album.photos[0].src);
+        if (cover) {
             const image = document.createElement("img");
-            image.src = album.cover;
+            image.src = cover;
             image.alt = "";
             image.loading = "lazy";
+            image.onerror = () => { image.remove(); preview.textContent = "📷"; };
             preview.appendChild(image);
         } else {
             preview.textContent = "📷";
@@ -89,36 +123,15 @@ function renderMemoryAlbums() {
         date.className = "memory-album-date";
         date.textContent = album.date;
         card.append(preview, title, date);
-        card.addEventListener("click", () => { window.location.href = `album.html?album=${encodeURIComponent(album.id)}`; });
+        card.addEventListener("click", () => {
+            window.location.href = "album.html?album=" + encodeURIComponent(album.id);
+        });
         memoryAlbumGrid.appendChild(card);
     });
 }
 
 function openMemoryAlbum(albumId) {
-    const album = memoryAlbums.find((item) => item.id === albumId);
-    if (!album) return;
-    memoryGalleryTitle.textContent = album.title;
-    memoryGalleryDate.textContent = album.date;
-    memoryGalleryDescription.textContent = album.description;
-    memoryPhotoGrid.replaceChildren();
-    memoryEmptyNote.hidden = album.photos.length > 0;
-    album.photos.forEach((photo) => {
-        const figure = document.createElement("figure");
-        figure.className = "memory-polaroid";
-        const image = document.createElement("img");
-        image.src = photo.src;
-        image.alt = photo.caption || album.title;
-        image.loading = "lazy";
-        const caption = document.createElement("figcaption");
-        caption.textContent = photo.caption || "";
-        figure.append(image, caption);
-        memoryPhotoGrid.appendChild(figure);
-    });
-    memoryAlbumGrid.hidden = true;
-    memoryGallery.hidden = false;
-    history.pushState({ page: "memories", albumId }, "", `#recuerdos/${albumId}`);
-    memoriesPage.scrollTo({ top: 0, behavior: "instant" });
-    memoryGalleryBack.focus();
+    window.location.href = "album.html?album=" + encodeURIComponent(albumId);
 }
 
 function showMemoriesPage() {
@@ -130,7 +143,9 @@ function showMemoriesPage() {
     memoryAlbumGrid.hidden = false;
     memoryGallery.hidden = true;
     discoverMemoryAlbums();
-    history.pushState({ page: "memories" }, "", "#recuerdos");
+    if (window.location.hash !== "#recuerdos") {
+        history.pushState({ page: "memories" }, "", "#recuerdos");
+    }
     memoriesPage.scrollTo({ top: 0, behavior: "instant" });
     memoriesBackButton.focus();
 }
@@ -146,7 +161,8 @@ function hideMemoriesPage(updateHistory = true) {
 }
 
 function syncMemoriesRoute() {
-    if (!isOpen || !window.location.hash.startsWith("#recuerdos")) {
+    const isMemoriesRoute = window.location.hash === "#recuerdos" || window.location.hash.startsWith("#recuerdos/");
+    if (!isOpen || !isMemoriesRoute) {
         memoriesPage.hidden = true;
         garden.classList.remove("memories-page-open");
         document.body.classList.remove("memories-route-open");
@@ -155,39 +171,10 @@ function syncMemoriesRoute() {
     memoriesPage.hidden = false;
     garden.classList.add("memories-page-open");
     document.body.classList.add("memories-route-open");
+    memoryAlbumGrid.hidden = false;
+    memoryGallery.hidden = true;
     discoverMemoryAlbums();
-    const albumId = window.location.hash.startsWith("#recuerdos/")
-        ? window.location.hash.slice("#recuerdos/".length)
-        : null;
-    if (albumId) {
-        const album = memoryAlbums.find((item) => item.id === albumId);
-        if (album) {
-            memoryGalleryTitle.textContent = album.title;
-            memoryGalleryDate.textContent = album.date;
-            memoryGalleryDescription.textContent = album.description;
-            memoryPhotoGrid.replaceChildren();
-            memoryEmptyNote.hidden = album.photos.length > 0;
-            album.photos.forEach((photo) => {
-                const figure = document.createElement("figure");
-                figure.className = "memory-polaroid";
-                const image = document.createElement("img");
-                image.src = photo.src;
-                image.alt = photo.caption || album.title;
-                image.loading = "lazy";
-                const caption = document.createElement("figcaption");
-                caption.textContent = photo.caption || "";
-                figure.append(image, caption);
-                memoryPhotoGrid.appendChild(figure);
-            });
-            memoryAlbumGrid.hidden = true;
-            memoryGallery.hidden = false;
-        }
-    } else {
-        memoryAlbumGrid.hidden = false;
-        memoryGallery.hidden = true;
-    }
 }
-
 function randomBetween(min, max) {
     return Math.random() * (max - min) + min;
 }
@@ -447,6 +434,11 @@ function openGarden() {
     settingsMenu.hidden = true;
     startBackgroundMusic();
     typeMessage();
+    if (window.location.hash.startsWith("#recuerdos")) {
+        syncMemoriesRoute();
+    } else if (window.location.hash === "#nuestro-tiempo") {
+        syncPageWithRoute();
+    }
     window.setTimeout(() => intro.remove(), 1200);
 }
 
