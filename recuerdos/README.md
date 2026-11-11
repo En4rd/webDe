@@ -1,31 +1,18 @@
-# Álbumes de recuerdos
+# Crear recuerdos automáticamente
 
-Cada colección tiene su propia página HTML y un fondo temático. Las fotografías se guardan en este repositorio.
+No necesitas editar JavaScript para añadir eventos ni fotos.
 
-## Páginas
-- `recuerdos/nuestro-comienzo/index.html`
-- `recuerdos/primer-viaje/index.html`
-- `recuerdos/cumpleanos/index.html`
-- `recuerdos/aniversarios/index.html`
+1. Abre la carpeta `recuerdos/` en GitHub.
+2. Crea una carpeta con el formato `AAAA-MM-DD-nombre-del-evento`. Ejemplo: `2027-02-14-san-valentin`.
+3. Sube las fotografías directamente dentro de esa carpeta.
+4. Al publicarse los cambios, el nuevo álbum aparecerá automáticamente en la sección 📷. Cada archivo JPG, JPEG, PNG, WebP o GIF aparecerá como una fotografía y se podrá abrir ampliada.
 
-## Cómo agregar fotografías
+La fecha y el título se obtienen del nombre de la carpeta. Usa minúsculas, sin acentos ni espacios, separando palabras con guiones. Git no conserva carpetas vacías: sube al menos una foto.
 
-1. Sube las imágenes a la carpeta del evento correspondiente. Usa JPG, PNG o WebP optimizados para web.
-2. Abre el archivo raíz `album.js` y busca el álbum deseado.
-3. Agrega las rutas y los pies de foto en su arreglo `photos`. Ejemplo:
+## Fondos automáticos
+- `viaje`, `vacacion` o `aventura`: fondo de viaje.
+- `cumple` o `birthday`: fondo de cumpleaños.
+- `aniversario` o `anniversary`: fondo de aniversario.
+- Otros nombres: fondo romántico.
 
-```js
-"nuestro-comienzo": {
-  title: "Nuestro comienzo",
-  date: "11 de julio de 2026",
-  description: "El inicio de nuestra historia.",
-  photos: [
-    { src: "recuerdos/nuestro-comienzo/foto-01.jpg", caption: "Nuestro primer recuerdo" },
-    { src: "recuerdos/nuestro-comienzo/foto-02.jpg", caption: "Un día especial" }
-  ]
-}
-```
-
-4. Para cambiar la portada que aparece en la tarjeta del índice de recuerdos, edita la propiedad `cover` del álbum correspondiente en `script.js`, usando la ruta de la imagen.
-
-Los nombres de archivo y las rutas distinguen mayúsculas y minúsculas. Evita espacios y acentos en los nombres de archivo.
+La detección utiliza la API pública de GitHub, por lo que el repositorio debe ser público y existe un límite de solicitudes. Las fotos deben estar directamente dentro de la carpeta del evento.
