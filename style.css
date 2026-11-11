@@ -870,3 +870,6 @@ body.love-route-open { overflow: hidden; }
 }
 @media (max-width: 22rem) { .memory-album-grid { grid-template-columns: 1fr; } }
 
+
+
+/* Las páginas individuales de recuerdos usan fondos temáticos definidos en album.css. */
