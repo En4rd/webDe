@@ -8,6 +8,17 @@ const message = document.querySelector(".message");
 const hideMessageButton = document.getElementById("hideMessageButton");
 const settingsToggle = document.getElementById("settingsToggle");
 const storyToggle = document.getElementById("storyToggle");
+const memoriesToggle = document.getElementById("memoriesToggle");
+const memoriesPage = document.getElementById("memoriesPage");
+const memoriesBackButton = document.getElementById("memoriesBackButton");
+const memoryAlbumGrid = document.getElementById("memoryAlbumGrid");
+const memoryGallery = document.getElementById("memoryGallery");
+const memoryGalleryBack = document.getElementById("memoryGalleryBack");
+const memoryGalleryTitle = document.getElementById("memoryGalleryTitle");
+const memoryGalleryDate = document.getElementById("memoryGalleryDate");
+const memoryGalleryDescription = document.getElementById("memoryGalleryDescription");
+const memoryPhotoGrid = document.getElementById("memoryPhotoGrid");
+const memoryEmptyNote = document.getElementById("memoryEmptyNote");
 const settingsMenu = document.getElementById("settingsMenu");
 const lovePage = document.getElementById("lovePage");
 const loveBackButton = document.getElementById("loveBackButton");
@@ -30,6 +41,170 @@ const messageLines = [...message.querySelectorAll("h2, p, span")].map((element) 
     element,
     text: element.textContent.trim(),
 }));
+
+
+/*
+ * ÁLBUMES: agrega aquí las fotografías de cada evento.
+ * Guarda los archivos en recuerdos/<id>/ y añade sus rutas al arreglo photos.
+ * Ejemplo: { src: "recuerdos/nuestro-comienzo/foto-01.jpg", caption: "Nuestro primer recuerdo" }
+ */
+const memoryAlbums = [
+    {
+        id: "nuestro-comienzo",
+        title: "Nuestro comienzo",
+        date: "11 de julio de 2026",
+        description: "El inicio de una historia que quiero seguir escribiendo contigo. 💛",
+        cover: "",
+        photos: []
+    },
+    {
+        id: "primer-viaje",
+        title: "Nuestro primer viaje",
+        date: "Una aventura por recordar",
+        description: "Lugares nuevos, momentos juntos y recuerdos para siempre.",
+        cover: "",
+        photos: []
+    },
+    {
+        id: "cumpleanos",
+        title: "Cumpleaños",
+        date: "Días especiales",
+        description: "Celebrando tu vida y todos los momentos que nos regala.",
+        cover: "",
+        photos: []
+    },
+    {
+        id: "aniversarios",
+        title: "Nuestros aniversarios",
+        date: "Un año más de historias",
+        description: "Cada fecha especial merece quedarse en fotografías.",
+        cover: "",
+        photos: []
+    }
+];
+
+function renderMemoryAlbums() {
+    memoryAlbumGrid.replaceChildren();
+    memoryAlbums.forEach((album) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "memory-album-card";
+        const preview = document.createElement("span");
+        preview.className = "memory-album-preview";
+        if (album.cover) {
+            const image = document.createElement("img");
+            image.src = album.cover;
+            image.alt = "";
+            image.loading = "lazy";
+            preview.appendChild(image);
+        } else {
+            preview.textContent = "📷";
+        }
+        const title = document.createElement("span");
+        title.className = "memory-album-title";
+        title.textContent = album.title;
+        const date = document.createElement("span");
+        date.className = "memory-album-date";
+        date.textContent = album.date;
+        card.append(preview, title, date);
+        card.addEventListener("click", () => openMemoryAlbum(album.id));
+        memoryAlbumGrid.appendChild(card);
+    });
+}
+
+function openMemoryAlbum(albumId) {
+    const album = memoryAlbums.find((item) => item.id === albumId);
+    if (!album) return;
+    memoryGalleryTitle.textContent = album.title;
+    memoryGalleryDate.textContent = album.date;
+    memoryGalleryDescription.textContent = album.description;
+    memoryPhotoGrid.replaceChildren();
+    memoryEmptyNote.hidden = album.photos.length > 0;
+    album.photos.forEach((photo) => {
+        const figure = document.createElement("figure");
+        figure.className = "memory-polaroid";
+        const image = document.createElement("img");
+        image.src = photo.src;
+        image.alt = photo.caption || album.title;
+        image.loading = "lazy";
+        const caption = document.createElement("figcaption");
+        caption.textContent = photo.caption || "";
+        figure.append(image, caption);
+        memoryPhotoGrid.appendChild(figure);
+    });
+    memoryAlbumGrid.hidden = true;
+    memoryGallery.hidden = false;
+    history.pushState({ page: "memories", albumId }, "", `#recuerdos/${albumId}`);
+    memoriesPage.scrollTo({ top: 0, behavior: "instant" });
+    memoryGalleryBack.focus();
+}
+
+function showMemoriesPage() {
+    settingsMenu.hidden = true;
+    settingsToggle.setAttribute("aria-expanded", "false");
+    memoriesPage.hidden = false;
+    garden.classList.add("memories-page-open");
+    document.body.classList.add("memories-route-open");
+    memoryAlbumGrid.hidden = false;
+    memoryGallery.hidden = true;
+    renderMemoryAlbums();
+    history.pushState({ page: "memories" }, "", "#recuerdos");
+    memoriesPage.scrollTo({ top: 0, behavior: "instant" });
+    memoriesBackButton.focus();
+}
+
+function hideMemoriesPage(updateHistory = true) {
+    memoriesPage.hidden = true;
+    garden.classList.remove("memories-page-open");
+    document.body.classList.remove("memories-route-open");
+    if (updateHistory && window.location.hash.startsWith("#recuerdos")) {
+        history.replaceState({ page: "garden" }, "", window.location.pathname + window.location.search);
+    }
+    memoriesToggle.focus();
+}
+
+function syncMemoriesRoute() {
+    if (!isOpen || !window.location.hash.startsWith("#recuerdos")) {
+        memoriesPage.hidden = true;
+        garden.classList.remove("memories-page-open");
+        document.body.classList.remove("memories-route-open");
+        return;
+    }
+    memoriesPage.hidden = false;
+    garden.classList.add("memories-page-open");
+    document.body.classList.add("memories-route-open");
+    renderMemoryAlbums();
+    const albumId = window.location.hash.startsWith("#recuerdos/")
+        ? window.location.hash.slice("#recuerdos/".length)
+        : null;
+    if (albumId) {
+        const album = memoryAlbums.find((item) => item.id === albumId);
+        if (album) {
+            memoryGalleryTitle.textContent = album.title;
+            memoryGalleryDate.textContent = album.date;
+            memoryGalleryDescription.textContent = album.description;
+            memoryPhotoGrid.replaceChildren();
+            memoryEmptyNote.hidden = album.photos.length > 0;
+            album.photos.forEach((photo) => {
+                const figure = document.createElement("figure");
+                figure.className = "memory-polaroid";
+                const image = document.createElement("img");
+                image.src = photo.src;
+                image.alt = photo.caption || album.title;
+                image.loading = "lazy";
+                const caption = document.createElement("figcaption");
+                caption.textContent = photo.caption || "";
+                figure.append(image, caption);
+                memoryPhotoGrid.appendChild(figure);
+            });
+            memoryAlbumGrid.hidden = true;
+            memoryGallery.hidden = false;
+        }
+    } else {
+        memoryAlbumGrid.hidden = false;
+        memoryGallery.hidden = true;
+    }
+}
 
 function randomBetween(min, max) {
     return Math.random() * (max - min) + min;
@@ -286,6 +461,7 @@ function openGarden() {
     hideMessageButton.textContent = "Ver el paisaje";
     settingsToggle.hidden = false;
     storyToggle.hidden = false;
+    memoriesToggle.hidden = false;
     settingsMenu.hidden = true;
     startBackgroundMusic();
     typeMessage();
@@ -296,8 +472,16 @@ button.addEventListener("click", openGarden, { once: true });
 hideMessageButton.addEventListener("click", hideMessage);
 storyToggle.addEventListener("click", showLovePage);
 loveBackButton.addEventListener("click", () => hideLovePage());
-window.addEventListener("popstate", syncPageWithRoute);
-window.addEventListener("hashchange", syncPageWithRoute);
+window.addEventListener("popstate", () => { syncPageWithRoute(); syncMemoriesRoute(); });
+window.addEventListener("hashchange", () => { syncPageWithRoute(); syncMemoriesRoute(); });
+memoriesToggle.addEventListener("click", showMemoriesPage);
+memoriesBackButton.addEventListener("click", () => hideMemoriesPage());
+memoryGalleryBack.addEventListener("click", () => {
+    memoryGallery.hidden = true;
+    memoryAlbumGrid.hidden = false;
+    history.pushState({ page: "memories" }, "", "#recuerdos");
+    memoriesPage.scrollTo({ top: 0, behavior: "smooth" });
+});
 window.setInterval(updateRelationshipCounter, 60 * 60 * 1000);
 themeToggle.addEventListener("click", toggleTheme);
 musicToggle.addEventListener("click", toggleMusic);
