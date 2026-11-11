@@ -48,40 +48,22 @@ const messageLines = [...message.querySelectorAll("h2, p, span")].map((element) 
  * Guarda los archivos en recuerdos/<id>/ y añade sus rutas al arreglo photos.
  * Ejemplo: { src: "recuerdos/nuestro-comienzo/foto-01.jpg", caption: "Nuestro primer recuerdo" }
  */
-const memoryAlbums = [
-    {
-        id: "nuestro-comienzo",
-        title: "Nuestro comienzo",
-        date: "11 de julio de 2026",
-        description: "El inicio de una historia que quiero seguir escribiendo contigo. 💛",
-        cover: "",
-        photos: []
-    },
-    {
-        id: "primer-viaje",
-        title: "Nuestro primer viaje",
-        date: "Una aventura por recordar",
-        description: "Lugares nuevos, momentos juntos y recuerdos para siempre.",
-        cover: "",
-        photos: []
-    },
-    {
-        id: "cumpleanos",
-        title: "Cumpleaños",
-        date: "Días especiales",
-        description: "Celebrando tu vida y todos los momentos que nos regala.",
-        cover: "",
-        photos: []
-    },
-    {
-        id: "aniversarios",
-        title: "Nuestros aniversarios",
-        date: "Un año más de historias",
-        description: "Cada fecha especial merece quedarse en fotografías.",
-        cover: "",
-        photos: []
-    }
-];
+let memoryAlbums = [];
+async function discoverMemoryAlbums() {
+  try {
+    const response = await fetch('https://api.github.com/repos/En4rd/webDe/contents/recuerdos');
+    if (!response.ok) throw new Error('GitHub API: ' + response.status);
+    const folders = await response.json();
+    const known = { 'nuestro-comienzo':['Nuestro comienzo','11 de julio de 2026'], 'primer-viaje':['Nuestro primer viaje','Una aventura por recordar'], 'cumpleanos':['Cumpleaños','Días especiales'], 'aniversarios':['Nuestros aniversarios','Un año más de historias'] };
+    memoryAlbums = folders.filter(x => x.type === 'dir').map(x => {
+      const m = x.name.match(/^(\\d{4})-(\\d{2})-(\\d{2})-(.+)$/);
+      const title = known[x.name]?.[0] || (m ? m[4] : x.name).replace(/[-_]+/g,' ').replace(/\\b\\w/g,c=>c.toUpperCase());
+      const date = known[x.name]?.[1] || (m ? m[3]+'/'+m[2]+'/'+m[1] : 'Un recuerdo especial');
+      return { id:x.name, title, date, description:'Un momento que merece quedarse para siempre. 💛', cover:'', photos:[] };
+    });
+    renderMemoryAlbums();
+  } catch (error) { console.error(error); memoryAlbumGrid.textContent = 'No pudimos cargar los recuerdos. Inténtalo de nuevo.'; }
+}
 
 function renderMemoryAlbums() {
     memoryAlbumGrid.replaceChildren();
@@ -107,7 +89,7 @@ function renderMemoryAlbums() {
         date.className = "memory-album-date";
         date.textContent = album.date;
         card.append(preview, title, date);
-        card.addEventListener("click", () => { window.location.href = `recuerdos/${album.id}/index.html`; });
+        card.addEventListener("click", () => { window.location.href = `album.html?album=${encodeURIComponent(album.id)}`; });
         memoryAlbumGrid.appendChild(card);
     });
 }
@@ -147,7 +129,7 @@ function showMemoriesPage() {
     document.body.classList.add("memories-route-open");
     memoryAlbumGrid.hidden = false;
     memoryGallery.hidden = true;
-    renderMemoryAlbums();
+    discoverMemoryAlbums();
     history.pushState({ page: "memories" }, "", "#recuerdos");
     memoriesPage.scrollTo({ top: 0, behavior: "instant" });
     memoriesBackButton.focus();
@@ -173,7 +155,7 @@ function syncMemoriesRoute() {
     memoriesPage.hidden = false;
     garden.classList.add("memories-page-open");
     document.body.classList.add("memories-route-open");
-    renderMemoryAlbums();
+    discoverMemoryAlbums();
     const albumId = window.location.hash.startsWith("#recuerdos/")
         ? window.location.hash.slice("#recuerdos/".length)
         : null;
