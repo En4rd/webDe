@@ -107,7 +107,7 @@ function renderMemoryAlbums() {
         date.className = "memory-album-date";
         date.textContent = album.date;
         card.append(preview, title, date);
-        card.addEventListener("click", () => openMemoryAlbum(album.id));
+        card.addEventListener("click", () => { window.location.href = `recuerdos/${album.id}/index.html`; });
         memoryAlbumGrid.appendChild(card);
     });
 }
