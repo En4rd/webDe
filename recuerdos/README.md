@@ -1,25 +1,31 @@
-# Álbum de recuerdos
+# Álbumes de recuerdos
 
-Las fotografías se guardan directamente en este repositorio.
+Cada colección tiene su propia página HTML y un fondo temático. Las fotografías se guardan en este repositorio.
+
+## Páginas
+- `recuerdos/nuestro-comienzo/index.html`
+- `recuerdos/primer-viaje/index.html`
+- `recuerdos/cumpleanos/index.html`
+- `recuerdos/aniversarios/index.html`
 
 ## Cómo agregar fotografías
 
-1. Sube tus imágenes a la carpeta del evento correspondiente:
-   - `recuerdos/nuestro-comienzo/`
-   - `recuerdos/primer-viaje/`
-   - `recuerdos/cumpleanos/`
-   - `recuerdos/aniversarios/`
-2. Abre `script.js` y busca el arreglo `memoryAlbums`.
-3. En el evento correspondiente, agrega las rutas al arreglo `photos`. Ejemplo:
+1. Sube las imágenes a la carpeta del evento correspondiente. Usa JPG, PNG o WebP optimizados para web.
+2. Abre el archivo raíz `album.js` y busca el álbum deseado.
+3. Agrega las rutas y los pies de foto en su arreglo `photos`. Ejemplo:
 
 ```js
-photos: [
+"nuestro-comienzo": {
+  title: "Nuestro comienzo",
+  date: "11 de julio de 2026",
+  description: "El inicio de nuestra historia.",
+  photos: [
     { src: "recuerdos/nuestro-comienzo/foto-01.jpg", caption: "Nuestro primer recuerdo" },
     { src: "recuerdos/nuestro-comienzo/foto-02.jpg", caption: "Un día especial" }
-]
+  ]
+}
 ```
 
-4. Opcionalmente, asigna una portada en `cover`:
-   `cover: "recuerdos/nuestro-comienzo/foto-01.jpg"`
+4. Para cambiar la portada que aparece en la tarjeta del índice de recuerdos, edita la propiedad `cover` del álbum correspondiente en `script.js`, usando la ruta de la imagen.
 
-Las rutas distinguen mayúsculas y minúsculas. Usa nombres de archivo sencillos, sin espacios ni acentos. Se recomiendan JPG o WebP optimizados para web.
+Los nombres de archivo y las rutas distinguen mayúsculas y minúsculas. Evita espacios y acentos en los nombres de archivo.
