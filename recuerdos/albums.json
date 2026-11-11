@@ -1,35 +1,56 @@
 {
   "albums": [
     {
-      "id": "2026-11-10-Boda",
+      "id": "2026-09-10-Boda",
       "title": "Boda",
-      "date": "10 de noviembre de 2026",
+      "date": "10 de septiembre de 2026",
       "description": "Cada fotografía guarda un pedacito de nuestra historia. 💛",
       "cover": "",
       "photos": [
         {
-          "src": "recuerdos-publicados/2026-11-10-Boda/1.%20Que-hermosa-%20sonrisa.jpeg",
+          "src": "recuerdos-publicados/2026-09-10-Boda/1.%20Que-hermosa-%20sonrisa.jpeg",
           "caption": "1. Que hermosa  sonrisa"
         },
         {
-          "src": "recuerdos-publicados/2026-11-10-Boda/2.Conexion.jpeg",
+          "src": "recuerdos-publicados/2026-09-10-Boda/2.Conexion.jpeg",
           "caption": "2.Conexion"
         },
         {
-          "src": "recuerdos-publicados/2026-11-10-Boda/3.Calidez.jpeg",
+          "src": "recuerdos-publicados/2026-09-10-Boda/3.Calidez.jpeg",
           "caption": "3.Calidez"
         },
         {
-          "src": "recuerdos-publicados/2026-11-10-Boda/4.Dia-de-gala.jpeg",
+          "src": "recuerdos-publicados/2026-09-10-Boda/4.Dia-de-gala.jpeg",
           "caption": "4.Dia de gala"
         },
         {
-          "src": "recuerdos-publicados/2026-11-10-Boda/5.Instante-Feliz.jpeg",
+          "src": "recuerdos-publicados/2026-09-10-Boda/5.Instante-Feliz.jpeg",
           "caption": "5.Instante Feliz"
         },
         {
-          "src": "recuerdos-publicados/2026-11-10-Boda/6.Lugar-seguro.jpeg",
+          "src": "recuerdos-publicados/2026-09-10-Boda/6.Lugar-seguro.jpeg",
           "caption": "6.Lugar seguro"
+        }
+      ]
+    },
+    {
+      "id": "2026-11-06-primer-viaje",
+      "title": "Primer Viaje",
+      "date": "6 de noviembre de 2026",
+      "description": "Cada fotografía guarda un pedacito de nuestra historia. 💛",
+      "cover": "",
+      "photos": [
+        {
+          "src": "recuerdos-publicados/2026-11-06-primer-viaje/1.Detras-De-Camaras.jpeg",
+          "caption": "1.Detras De Camaras"
+        },
+        {
+          "src": "recuerdos-publicados/2026-11-06-primer-viaje/2.Beso-De-Mar.jpeg",
+          "caption": "2.Beso De Mar"
+        },
+        {
+          "src": "recuerdos-publicados/2026-11-06-primer-viaje/3.En-La-Orilla.jpeg",
+          "caption": "3.En La Orilla"
         }
       ]
     }
