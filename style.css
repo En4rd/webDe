@@ -825,13 +825,23 @@ body.love-route-open { overflow: hidden; }
     background: #fffefa;
     box-shadow: 0 .35rem 1rem rgba(88,65,23,.12);
     color: #49391e;
-    cursor: pointer;
     text-align: center;
     transform: rotate(-.7deg);
     transition: transform .2s ease, box-shadow .2s ease;
 }
 .memory-album-card:nth-child(even) { transform: rotate(1deg); }
 .memory-album-card:hover { transform: translateY(-4px) rotate(0); box-shadow: 0 .7rem 1.4rem rgba(88,65,23,.18); }
+.memory-album-open {
+    display: flex; flex-direction: column; align-items: stretch; width: 100%;
+    padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; text-align: center;
+}
+.memory-publish-toggle {
+    margin-top: .8rem; padding: .55rem .7rem; border: 1px solid #d8c58e;
+    border-radius: 2rem; background: #fff9e7; color: #75550a; cursor: pointer;
+    font-size: .78rem; font-weight: 700;
+}
+.memory-publish-toggle[aria-pressed="true"] { border-color: #8eaa79; background: #edf5e8; color: #416b35; }
+.memory-publish-toggle:disabled { opacity: .6; cursor: wait; }
 .memory-album-preview {
     display: grid;
     place-items: center;
