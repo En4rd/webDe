@@ -100,7 +100,8 @@ function renderMemoryAlbums() {
 
         const preview = document.createElement("span");
         preview.className = "memory-album-preview";
-        const cover = album.cover || (album.photos[0] && album.photos[0].src);
+        const photos = Array.isArray(album.photos) ? album.photos : [];
+        const cover = album.cover || (photos[0] && photos[0].src);
         if (cover) {
             const image = document.createElement("img");
             image.src = cover;
