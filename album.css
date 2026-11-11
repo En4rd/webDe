@@ -6,3 +6,9 @@ body[data-album="aniversarios"]{--paper:#f5efff;--ink:#392d50;--muted:#76658c;--
 @media(max-width:700px){body{padding:1rem}.album-header{margin:1.7rem auto}.photo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.polaroid{padding:.5rem .5rem .85rem}.polaroid figcaption{font-size:.82rem}}
 @media(max-width:360px){.photo-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* Fondos automáticos según el nombre de la carpeta del recuerdo. */
+body[data-album="romantic"]{--paper:#fff9e9;--ink:#49391e;--muted:#806b48;--accent:#b77b28;--glow:rgba(255,203,127,.48);background-image:radial-gradient(ellipse at 12% 8%,var(--glow),transparent 38%),linear-gradient(145deg,#fff9e9,#f2d9bd 60%,#f5e9d3)}
+body[data-album="travel"]{--paper:#eaf4ef;--ink:#263f3c;--muted:#54736b;--accent:#397d70;--glow:rgba(117,190,165,.42);background-image:radial-gradient(ellipse at 85% 10%,var(--glow),transparent 40%),linear-gradient(145deg,#eaf4ef,#d4e8e1 55%,#e9e5cf)}
+body[data-album="birthday"]{--paper:#fff0f1;--ink:#503344;--muted:#8b6477;--accent:#bd668d;--glow:rgba(241,163,190,.45);background-image:radial-gradient(ellipse at 15% 8%,var(--glow),transparent 40%),linear-gradient(145deg,#fff0f1,#f8dce8 55%,#f9edcf)}
+body[data-album="anniversary"]{--paper:#f5efff;--ink:#392d50;--muted:#76658c;--accent:#8a65ad;--glow:rgba(187,159,222,.42);background-image:radial-gradient(ellipse at 80% 5%,var(--glow),transparent 40%),linear-gradient(145deg,#f5efff,#e7ddf5 55%,#f8e9d8)}
