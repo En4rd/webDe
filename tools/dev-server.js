@@ -3,7 +3,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const ROOT = path.resolve(__dirname, "..");
-const PORT = Number(process.env.PORT || 5500);
+const PORT = Number(process.env.PORT || 5501);
 const IMAGE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"]);
 const MIME_TYPES = {
     ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8",
