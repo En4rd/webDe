@@ -29,33 +29,18 @@ function dateFromId(value) {
     return date.toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
 }
 
-async function readManifest() {
+async function readAlbum() {
+    const localResponse = await fetch("/__albums/" + encodeURIComponent(albumId), { cache: "no-store" }).catch(() => null);
+    if (localResponse && localResponse.ok) {
+        const data = await localResponse.json();
+        return data.album;
+    }
+
     const response = await fetch("recuerdos/albums.json", { cache: "no-store" });
     if (!response.ok) throw new Error("No se pudo cargar recuerdos/albums.json (" + response.status + ")");
     const data = await response.json();
     if (!Array.isArray(data.albums)) throw new Error("Formato de manifiesto inválido.");
-    return data.albums;
-}
-
-async function getAlbumPhotos(album) {
-    const configured = Array.isArray(album.photos) ? album.photos.filter((photo) => photo && photo.src) : [];
-    if (configured.length) return configured;
-
-    // Compatibilidad: si no se configuraron fotos en el manifiesto, intenta
-    // descubrir archivos ya publicados en el repositorio de GitHub.
-    const apiUrl = "https://api.github.com/repos/En4rd/webDe/contents/recuerdos/" + encodeURIComponent(album.id);
-    const response = await fetch(apiUrl);
-    if (!response.ok) {
-        if (response.status === 404) return [];
-        throw new Error("GitHub API: " + response.status);
-    }
-    const files = await response.json();
-    return files
-        .filter((file) => file.type === "file" && /\.(jpe?g|png|webp|gif)$/i.test(file.name))
-        .map((file) => ({
-            src: file.download_url,
-            caption: file.name.replace(/[-_]/g, " ").replace(/\.[^.]+$/, "")
-        }));
+    return data.albums.find((item) => item.id === albumId) || null;
 }
 
 function closeLightbox() {
@@ -81,12 +66,11 @@ async function loadAlbum() {
     }
 
     try {
-        const albums = await readManifest();
-        const album = albums.find((item) => item.id === albumId);
+        const album = await readAlbum();
         if (!album) {
             titleNode.textContent = "Recuerdo no encontrado";
             empty.hidden = false;
-            empty.textContent = "Este álbum no existe en recuerdos/albums.json.";
+            empty.textContent = "Este álbum no existe o todavía no está publicado.";
             return;
         }
 
@@ -97,7 +81,7 @@ async function loadAlbum() {
         document.title = titleNode.textContent + " | Nuestros recuerdos";
         empty.hidden = false;
         empty.textContent = "Cargando fotografías...";
-        const photos = await getAlbumPhotos(album);
+        const photos = Array.isArray(album.photos) ? album.photos : [];
         grid.replaceChildren();
 
         photos.forEach((photo) => {
@@ -119,7 +103,7 @@ async function loadAlbum() {
                 figure.remove();
                 if (!grid.children.length) {
                     empty.hidden = false;
-                    empty.textContent = "No se pudieron cargar las imágenes. Revisa las rutas en recuerdos/albums.json.";
+                    empty.textContent = "No se pudieron cargar las imágenes. Revisa los archivos del álbum.";
                 }
             }, { once: true });
             const caption = document.createElement("figcaption");
@@ -129,13 +113,11 @@ async function loadAlbum() {
         });
 
         empty.hidden = photos.length > 0;
-        if (!photos.length) {
-            empty.textContent = "Aún no hay fotografías. Agrega sus rutas en recuerdos/albums.json o sube imágenes a esta carpeta en GitHub. 💛";
-        }
+        if (!photos.length) empty.textContent = "Aún no hay fotografías en esta carpeta. 💛";
     } catch (error) {
         console.error("Error al cargar el álbum:", error);
         empty.hidden = false;
-        empty.textContent = "No pudimos cargar este álbum. Comprueba la conexión y el archivo recuerdos/albums.json.";
+        empty.textContent = "No pudimos cargar el álbum. Comprueba que el servidor local esté activo.";
     }
 }
 
