@@ -118,7 +118,7 @@ function renderMemoryAlbums() {
         title.textContent = album.title;
         const date = document.createElement("span");
         date.className = "memory-album-date";
-        date.textContent = album.date || (album.photos.length + " fotografías");
+        date.textContent = album.date || (photos.length + " fotografías");
         openButton.append(preview, title, date);
         openButton.addEventListener("click", () => {
             window.location.href = "album.html?album=" + encodeURIComponent(album.id);
