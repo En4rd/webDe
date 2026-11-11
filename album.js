@@ -1,7 +1,153 @@
-const albumId = new URLSearchParams(location.search).get('album');
-const titleNode=document.getElementById('albumTitle'),dateNode=document.getElementById('albumDate'),descNode=document.getElementById('albumDescription'),grid=document.getElementById('photoGrid'),empty=document.getElementById('emptyState'),lightbox=document.getElementById('albumLightbox'),lightboxImage=document.getElementById('lightboxImage');
-function titleFromFolder(s){const m=s.match(/^\\d{4}-\\d{2}-\\d{2}-(.+)$/);return (m?m[1]:s).replace(/[-_]+/g,' ').replace(/\\b\\w/g,c=>c.toUpperCase());}
-function dateFromFolder(s){const m=s.match(/^(\\d{4})-(\\d{2})-(\\d{2})-/);return m?new Date(+m[1],+m[2]-1,+m[3]).toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'}):'Un recuerdo especial';}
-function theme(s){if(/viaje|vacacion|aventura/i.test(s))return 'travel';if(/cumple|birthday/i.test(s))return 'birthday';if(/aniversario|anniversary/i.test(s))return 'anniversary';return 'romantic';}
-async function loadAlbum(){if(!albumId||!/^[a-zA-Z0-9_-]+$/.test(albumId)){titleNode.textContent='Recuerdo no encontrado';empty.hidden=false;return;}document.body.dataset.album=theme(albumId);titleNode.textContent=titleFromFolder(albumId);dateNode.textContent=dateFromFolder(albumId);descNode.textContent='Cada fotografía guarda un pedacito de nuestra historia. 💛';document.title=titleNode.textContent+' | Nuestros recuerdos';try{const url='https://api.github.com/repos/En4rd/webDe/contents/recuerdos/'+encodeURIComponent(albumId);const response=await fetch(url);if(!response.ok)throw Error('GitHub API: '+response.status);const files=await response.json();const photos=files.filter(f=>f.type==='file'&&/\\.(jpe?g|png|webp|gif)$/i.test(f.name));grid.replaceChildren();photos.forEach(photo=>{const figure=document.createElement('figure');figure.className='polaroid';const img=document.createElement('img');img.src=photo.download_url;img.alt=photo.name.replace(/[-_]/g,' ').replace(/\\.[^.]+$/,'');img.loading='lazy';img.tabIndex=0;img.addEventListener('click',()=>{lightboxImage.src=img.src;lightboxImage.alt=img.alt;lightbox.classList.add('open');lightbox.setAttribute('aria-hidden','false')});const cap=document.createElement('figcaption');cap.textContent=img.alt;figure.append(img,cap);grid.append(figure);});empty.hidden=photos.length>0;empty.textContent=photos.length?'':'Aún no hay fotos. Sube JPG, PNG, WebP o GIF a esta carpeta y aparecerán aquí. 💛';}catch(e){console.error(e);empty.hidden=false;empty.textContent='No pudimos cargar las fotografías. Comprueba tu conexión.';}}
-lightbox.addEventListener('click',()=>{lightbox.classList.remove('open');lightbox.setAttribute('aria-hidden','true');lightboxImage.removeAttribute('src')});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lightbox.classList.contains('open'))lightbox.click()});loadAlbum();
+const params = new URLSearchParams(window.location.search);
+const albumId = params.get("album");
+const titleNode = document.getElementById("albumTitle");
+const dateNode = document.getElementById("albumDate");
+const descNode = document.getElementById("albumDescription");
+const grid = document.getElementById("photoGrid");
+const empty = document.getElementById("emptyState");
+const lightbox = document.getElementById("albumLightbox");
+const lightboxImage = document.getElementById("lightboxImage");
+
+function titleFromFolder(value) {
+    const match = value.match(/^\d{4}-\d{2}-\d{2}-(.+)$/);
+    const raw = (match ? match[1] : value).replace(/[-_]+/g, " ");
+    return raw.replace(/\b\p{L}/gu, (letter) => letter.toLocaleUpperCase("es-MX"));
+}
+
+function themeFromId(value) {
+    if (/viaje|vacacion|aventura/i.test(value)) return "travel";
+    if (/cumple|birthday/i.test(value)) return "birthday";
+    if (/aniversario|anniversary/i.test(value)) return "anniversary";
+    return "romantic";
+}
+
+function dateFromId(value) {
+    const match = value.match(/^(\d{4})-(\d{2})-(\d{2})-/);
+    if (!match) return "Un recuerdo especial";
+    const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+    if (Number.isNaN(date.getTime())) return "Un recuerdo especial";
+    return date.toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
+}
+
+async function readManifest() {
+    const response = await fetch("recuerdos/albums.json", { cache: "no-store" });
+    if (!response.ok) throw new Error("No se pudo cargar recuerdos/albums.json (" + response.status + ")");
+    const data = await response.json();
+    if (!Array.isArray(data.albums)) throw new Error("Formato de manifiesto inválido.");
+    return data.albums;
+}
+
+async function getAlbumPhotos(album) {
+    const configured = Array.isArray(album.photos) ? album.photos.filter((photo) => photo && photo.src) : [];
+    if (configured.length) return configured;
+
+    // Compatibilidad: si no se configuraron fotos en el manifiesto, intenta
+    // descubrir archivos ya publicados en el repositorio de GitHub.
+    const apiUrl = "https://api.github.com/repos/En4rd/webDe/contents/recuerdos/" + encodeURIComponent(album.id);
+    const response = await fetch(apiUrl);
+    if (!response.ok) {
+        if (response.status === 404) return [];
+        throw new Error("GitHub API: " + response.status);
+    }
+    const files = await response.json();
+    return files
+        .filter((file) => file.type === "file" && /\.(jpe?g|png|webp|gif)$/i.test(file.name))
+        .map((file) => ({
+            src: file.download_url,
+            caption: file.name.replace(/[-_]/g, " ").replace(/\.[^.]+$/, "")
+        }));
+}
+
+function closeLightbox() {
+    lightbox.classList.remove("open");
+    lightbox.setAttribute("aria-hidden", "true");
+    lightboxImage.removeAttribute("src");
+}
+
+function openLightbox(image) {
+    lightboxImage.src = image.src;
+    lightboxImage.alt = image.alt;
+    lightbox.classList.add("open");
+    lightbox.setAttribute("aria-hidden", "false");
+    lightbox.focus();
+}
+
+async function loadAlbum() {
+    if (!albumId || !/^[a-zA-Z0-9_-]+$/.test(albumId)) {
+        titleNode.textContent = "Recuerdo no encontrado";
+        empty.hidden = false;
+        empty.textContent = "El enlace del álbum no es válido.";
+        return;
+    }
+
+    try {
+        const albums = await readManifest();
+        const album = albums.find((item) => item.id === albumId);
+        if (!album) {
+            titleNode.textContent = "Recuerdo no encontrado";
+            empty.hidden = false;
+            empty.textContent = "Este álbum no existe en recuerdos/albums.json.";
+            return;
+        }
+
+        document.body.dataset.album = themeFromId(album.id);
+        titleNode.textContent = album.title || titleFromFolder(album.id);
+        dateNode.textContent = album.date || dateFromId(album.id);
+        descNode.textContent = album.description || "Cada fotografía guarda un pedacito de nuestra historia. 💛";
+        document.title = titleNode.textContent + " | Nuestros recuerdos";
+        empty.hidden = false;
+        empty.textContent = "Cargando fotografías...";
+        const photos = await getAlbumPhotos(album);
+        grid.replaceChildren();
+
+        photos.forEach((photo) => {
+            const figure = document.createElement("figure");
+            figure.className = "polaroid";
+            const image = document.createElement("img");
+            image.src = photo.src;
+            image.alt = photo.caption || album.title || album.id;
+            image.loading = "lazy";
+            image.tabIndex = 0;
+            image.addEventListener("click", () => openLightbox(image));
+            image.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    openLightbox(image);
+                }
+            });
+            image.addEventListener("error", () => {
+                figure.remove();
+                if (!grid.children.length) {
+                    empty.hidden = false;
+                    empty.textContent = "No se pudieron cargar las imágenes. Revisa las rutas en recuerdos/albums.json.";
+                }
+            }, { once: true });
+            const caption = document.createElement("figcaption");
+            caption.textContent = photo.caption || "";
+            figure.append(image, caption);
+            grid.appendChild(figure);
+        });
+
+        empty.hidden = photos.length > 0;
+        if (!photos.length) {
+            empty.textContent = "Aún no hay fotografías. Agrega sus rutas en recuerdos/albums.json o sube imágenes a esta carpeta en GitHub. 💛";
+        }
+    } catch (error) {
+        console.error("Error al cargar el álbum:", error);
+        empty.hidden = false;
+        empty.textContent = "No pudimos cargar este álbum. Comprueba la conexión y el archivo recuerdos/albums.json.";
+    }
+}
+
+lightbox.addEventListener("click", closeLightbox);
+lightbox.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" || event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        closeLightbox();
+    }
+});
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && lightbox.classList.contains("open")) closeLightbox();
+});
+
+loadAlbum();
