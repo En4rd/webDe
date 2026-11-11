@@ -10,7 +10,7 @@
 node tools/dev-server.js
 ```
 
-4. Abre http://127.0.0.1:5500.
+4. Abre http://127.0.0.1:5501.
 
 El servidor detecta las carpetas y fotografías directamente. No tienes que editar JavaScript ni albums.json. Actualiza el navegador para ver archivos recién agregados. La primera imagen alfabética se usa como portada.
 
