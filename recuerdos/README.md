@@ -1,43 +1,56 @@
-# Álbumes de recuerdos
+# Álbumes de recuerdos (flujo local)
 
-Los álbumes se administran desde `albums.json`. Así funcionan tanto en tu servidor local como en GitHub Pages, sin depender de que el navegador pueda listar carpetas del disco.
+## Crear álbumes y verlos en local
 
-## Agregar fotografías
+1. Crea una carpeta dentro de `recuerdos/`, por ejemplo `recuerdos/2027-02-14-san-valentin/`.
+2. Copia tus fotografías dentro. Se admiten JPG, JPEG, PNG, WebP, GIF y AVIF.
+3. En la terminal de VS Code, desde la raíz del proyecto, ejecuta:
 
-1. Crea una carpeta para el álbum dentro de `recuerdos/`, por ejemplo `recuerdos/nuestro-comienzo/`.
-2. Copia las imágenes dentro de esa carpeta.
-3. Abre `recuerdos/albums.json` y agrega sus rutas al arreglo `photos` del álbum correspondiente:
+```powershell
+node tools/dev-server.js
+```
+
+4. Abre http://127.0.0.1:5500.
+
+El servidor detecta las carpetas y fotografías directamente. No tienes que editar JavaScript ni albums.json. Actualiza el navegador para ver archivos recién agregados. La primera imagen alfabética se usa como portada.
+
+## Nombre, fecha y descripción opcionales
+
+Si quieres personalizar un álbum, crea dentro de su carpeta un archivo `.album.json`:
 
 ```json
 {
-  "id": "nuestro-comienzo",
-  "title": "Nuestro comienzo",
-  "date": "11 de julio de 2026",
-  "description": "El inicio de nuestra historia. 💛",
-  "cover": "recuerdos/nuestro-comienzo/foto-01.jpg",
-  "photos": [
-    { "src": "recuerdos/nuestro-comienzo/foto-01.jpg", "caption": "Nuestro primer recuerdo" },
-    { "src": "recuerdos/nuestro-comienzo/foto-02.jpg", "caption": "Un día especial" }
-  ]
+  "title": "Nuestro día especial",
+  "date": "14 de febrero de 2027",
+  "description": "Un recuerdo que quiero conservar."
 }
 ```
 
-El campo `cover` es opcional: si no lo indicas, se usa la primera fotografía. Formatos recomendados: JPG, JPEG, PNG, WebP y GIF. Las rutas son relativas a la raíz del sitio.
+Si no existe, el título se obtiene del nombre de la carpeta. Si el nombre empieza con AAAA-MM-DD-, también se obtiene la fecha.
 
-## Crear otro álbum
+## Publicar solo los álbumes que elijas
 
-Agrega otro objeto al arreglo `albums` de `albums.json`. El `id` debe ser único y contener solo letras, números, guiones o guiones bajos. Ejemplo: `2027-02-14-san-valentin`.
+En la página local, cada álbum tiene un botón **Publicar álbum**. Al seleccionarlo, solo se marca para publicación; todavía no se suben fotos ni se hace ningún commit.
 
-## Probar en Windows
-
-No abras `index.html` con doble clic: el navegador puede bloquear la lectura de archivos JSON mediante `fetch`.
-
-Desde la terminal de VS Code, en la carpeta raíz del proyecto, ejecuta:
+Cuando estés listo, ejecuta:
 
 ```powershell
-py -m http.server 5500
+node tools/publicar-albumes.js
 ```
 
-Abre `http://localhost:5500`. También puedes usar la extensión Live Server de VS Code.
+Este comando copia únicamente los álbumes marcados como publicados a `recuerdos-publicados/` y genera `recuerdos/albums.json`. Los álbumes originales dentro de `recuerdos/` están excluidos de Git por `.gitignore`, así que las fotos privadas no se agregan accidentalmente con un `git add .`.
 
-**Importante:** guarda las imágenes dentro del proyecto y registra sus rutas en `photos` en `albums.json`. Los servidores estáticos no permiten descubrir automáticamente los archivos de una carpeta local. Si `photos` está vacío, el álbum intenta consultar las fotos publicadas en GitHub como alternativa.
+Después revisa los cambios:
+
+```powershell
+git status
+```
+
+Solo los archivos de `recuerdos-publicados/` y el manifiesto generado se preparan para que los publiques con commit y push. Si retiras un álbum en la interfaz local, vuelve a ejecutar el comando para quitarlo de la versión preparada.
+
+## Importante
+
+- Usa `node tools/dev-server.js` para la prueba local. Live Server por sí solo no puede listar carpetas del disco ni guardar el estado de publicación.
+- Detén el servidor con Ctrl+C.
+- No edites manualmente `recuerdos/albums.json`: lo genera el script de publicación.
+- Los archivos originales permanecen en tu computadora. El proceso de preparación de publicación hace copias, no mueve ni elimina las fotos originales.
