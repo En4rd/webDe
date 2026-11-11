@@ -46,6 +46,27 @@
       ]
     },
     {
+      "id": "2026-10-08-Horneando",
+      "title": "Horneando",
+      "date": "8 de octubre de 2026",
+      "description": "Cada fotografía guarda un pedacito de nuestra historia. 💛",
+      "cover": "",
+      "photos": [
+        {
+          "src": "recuerdos-publicados/2026-10-08-Horneando/1.Noche-de-Pizza.jpeg",
+          "caption": "1.Noche de Pizza"
+        },
+        {
+          "src": "recuerdos-publicados/2026-10-08-Horneando/2.Modo-chef.jpeg",
+          "caption": "2.Modo chef"
+        },
+        {
+          "src": "recuerdos-publicados/2026-10-08-Horneando/3.Momento-de-descanso.jpeg",
+          "caption": "3.Momento de descanso"
+        }
+      ]
+    },
+    {
       "id": "2026-11-06-primer-viaje",
       "title": "Primer Viaje",
       "date": "6 de noviembre de 2026",
