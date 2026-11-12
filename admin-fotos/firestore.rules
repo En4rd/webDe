@@ -6,7 +6,8 @@ service cloud.firestore {
     }
     function isAdmin() {
       return signedIn() &&
-        exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.enabled == true;
     }
     function albumIsPublic(albumId) {
       return get(/databases/$(database)/documents/albums/$(albumId)).data.published == true;
