@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+    function isAdmin() {
+      return signedIn() &&
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    function albumIsPublic(albumId) {
+      return get(/databases/$(database)/documents/albums/$(albumId)).data.published == true;
+    }
+
+    // Los documentos admins/{uid} se crean manualmente desde Firebase Console.
+    // Cada usuario solo puede consultar su propio documento; nadie puede escribirlos desde la app.
+    match /admins/{uid} {
+      allow get: if signedIn() && request.auth.uid == uid;
+      allow list, create, update, delete: if false;
+    }
+
+    match /albums/{albumId} {
+      allow read: if isAdmin() || resource.data.published == true;
+      allow create: if isAdmin()
+        && request.resource.data.keys().hasAll(['title', 'date', 'published', 'createdBy'])
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.published == false;
+      allow update, delete: if isAdmin();
+
+      match /photos/{photoId} {
+        allow read: if isAdmin() || albumIsPublic(albumId);
+        allow create, update, delete: if isAdmin();
+      }
+    }
+  }
+}
