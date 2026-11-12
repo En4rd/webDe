@@ -21,7 +21,7 @@ function clearPreviewObjectUrls() {
 }
 let installPrompt = null;
 
-const configReady = firebaseConfig && firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.appId;
+const configReady = firebaseConfig && [firebaseConfig.apiKey, firebaseConfig.authDomain, firebaseConfig.projectId, firebaseConfig.storageBucket, firebaseConfig.appId].every((value) => typeof value === "string" && value.trim().length > 0);
 if (!configReady) {
   setupNotice.hidden = false;
 } else {
