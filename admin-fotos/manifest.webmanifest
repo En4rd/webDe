@@ -1,0 +1,15 @@
+{
+  "id": "./",
+  "name": "Nuestros recuerdos · Administrador",
+  "short_name": "Recuerdos",
+  "description": "Administrador privado de nuestros álbumes.",
+  "lang": "es-MX",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fffaf0",
+  "theme_color": "#f7c948",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
