@@ -16,10 +16,11 @@ PWA privada para administrar álbumes compartidos por dos personas. Se integra c
 2. Registrar una aplicación Web y copiar su configuración en `firebase-config.js`.
 3. Activar **Authentication → Sign-in method → Email/Password**.
 4. Crear manualmente las dos cuentas desde **Authentication → Users → Add user**. No habilitar registro desde el cliente.
-5. Crear una base de datos **Cloud Firestore** y un bucket de **Cloud Storage**.
-6. En Firestore, crear dos documentos en la colección `admins`. El ID de cada documento debe ser el UID de la cuenta correspondiente. El contenido puede ser `{ "enabled": true }`.
-7. Publicar `firestore.rules` en la pestaña Rules de Firestore y `storage.rules` en la pestaña Rules de Storage.
-8. Servir la PWA por HTTPS. En producción, GitHub Pages funciona con HTTPS; también se puede usar Firebase Hosting.
+5. Crear una base de datos **Cloud Firestore** y un bucket de **Cloud Storage**. Importante: Firebase requiere actualmente el plan Blaze (pago por uso) para crear/usar Cloud Storage en proyectos nuevos; revisa precios y configura alertas de presupuesto antes de habilitarlo.
+6. Configurar CORS para las vistas previas sin URL pública permanente. Instala Google Cloud CLI y ejecuta `gcloud storage buckets update gs://TU_BUCKET --cors-file=admin-fotos/cors.json`. Añade el dominio final de la página a `origin` antes de producción.
+7. En Firestore, crear dos documentos en la colección `admins`. El ID de cada documento debe ser el UID de la cuenta correspondiente. El contenido puede ser `{ "enabled": true }`.
+8. Publicar `firestore.rules` en la pestaña Rules de Firestore y `storage.rules` en la pestaña Rules de Storage.
+9. Servir la PWA por HTTPS. En producción, GitHub Pages funciona con HTTPS; también se puede usar Firebase Hosting.
 
 ## Modelo de datos
 
