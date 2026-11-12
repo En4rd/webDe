@@ -8,6 +8,17 @@ const message = document.querySelector(".message");
 const hideMessageButton = document.getElementById("hideMessageButton");
 const settingsToggle = document.getElementById("settingsToggle");
 const storyToggle = document.getElementById("storyToggle");
+const memoriesToggle = document.getElementById("memoriesToggle");
+const memoriesPage = document.getElementById("memoriesPage");
+const memoriesBackButton = document.getElementById("memoriesBackButton");
+const memoryAlbumGrid = document.getElementById("memoryAlbumGrid");
+const memoryGallery = document.getElementById("memoryGallery");
+const memoryGalleryBack = document.getElementById("memoryGalleryBack");
+const memoryGalleryTitle = document.getElementById("memoryGalleryTitle");
+const memoryGalleryDate = document.getElementById("memoryGalleryDate");
+const memoryGalleryDescription = document.getElementById("memoryGalleryDescription");
+const memoryPhotoGrid = document.getElementById("memoryPhotoGrid");
+const memoryEmptyNote = document.getElementById("memoryEmptyNote");
 const settingsMenu = document.getElementById("settingsMenu");
 const lovePage = document.getElementById("lovePage");
 const loveBackButton = document.getElementById("loveBackButton");
@@ -31,6 +42,163 @@ const messageLines = [...message.querySelectorAll("h2, p, span")].map((element) 
     text: element.textContent.trim(),
 }));
 
+
+/*
+ * Álbumes locales:
+ * En el servidor Node se descubren directamente las carpetas de recuerdos/.
+ * En producción se utiliza el manifiesto generado por tools/publicar-albumes.js.
+ */
+let memoryAlbums = [];
+
+async function loadMemoryAlbums() {
+    try {
+        const localResponse = await fetch("/__albums", { cache: "no-store" });
+        if (localResponse.ok) {
+            const localData = await localResponse.json();
+            if (Array.isArray(localData.albums)) return localData.albums;
+        }
+    } catch (error) {
+        // En GitHub Pages no existe la API local; se usa el manifiesto publicado.
+    }
+
+    const response = await fetch("recuerdos/albums.json", { cache: "no-store" });
+    if (!response.ok) throw new Error("No se pudo leer recuerdos/albums.json (" + response.status + ")");
+    const data = await response.json();
+    if (!Array.isArray(data.albums)) throw new Error("El manifiesto debe contener un arreglo albums.");
+    return data.albums;
+}
+
+async function discoverMemoryAlbums() {
+    memoryAlbumGrid.setAttribute("aria-busy", "true");
+    memoryAlbumGrid.textContent = "Buscando carpetas y fotografías...";
+    try {
+        memoryAlbums = await loadMemoryAlbums();
+        renderMemoryAlbums();
+    } catch (error) {
+        console.error("Error al cargar los álbumes:", error);
+        memoryAlbumGrid.textContent = "No pudimos cargar los recuerdos. Inicia el servidor local con: node tools/dev-server.js";
+    } finally {
+        memoryAlbumGrid.removeAttribute("aria-busy");
+    }
+}
+
+function renderMemoryAlbums() {
+    memoryAlbumGrid.replaceChildren();
+    if (!memoryAlbums.length) {
+        memoryAlbumGrid.textContent = "Todavía no hay álbumes. Crea una carpeta dentro de recuerdos/ y agrega tus fotografías.";
+        return;
+    }
+
+    memoryAlbums.forEach((album) => {
+        const card = document.createElement("article");
+        card.className = "memory-album-card";
+
+        const openButton = document.createElement("button");
+        openButton.type = "button";
+        openButton.className = "memory-album-open";
+        openButton.setAttribute("aria-label", "Abrir álbum " + album.title);
+
+        const preview = document.createElement("span");
+        preview.className = "memory-album-preview";
+        const photos = Array.isArray(album.photos) ? album.photos : [];
+        const cover = album.cover || (photos[0] && photos[0].src);
+        if (cover) {
+            const image = document.createElement("img");
+            image.src = cover;
+            image.alt = "";
+            image.loading = "lazy";
+            image.onerror = () => { image.remove(); preview.textContent = "📷"; };
+            preview.appendChild(image);
+        } else {
+            preview.textContent = "📷";
+        }
+
+        const title = document.createElement("span");
+        title.className = "memory-album-title";
+        title.textContent = album.title;
+        const date = document.createElement("span");
+        date.className = "memory-album-date";
+        date.textContent = album.date || (photos.length + " fotografías");
+        openButton.append(preview, title, date);
+        openButton.addEventListener("click", () => {
+            window.location.href = "album.html?album=" + encodeURIComponent(album.id);
+        });
+        card.appendChild(openButton);
+
+        if (album.local) {
+            const publishButton = document.createElement("button");
+            publishButton.type = "button";
+            publishButton.className = "memory-publish-toggle";
+            publishButton.textContent = album.published ? "✓ Publicado · Retirar" : "＋ Publicar álbum";
+            publishButton.setAttribute("aria-pressed", String(Boolean(album.published)));
+            publishButton.addEventListener("click", async () => {
+                publishButton.disabled = true;
+                try {
+                    const response = await fetch("/__albums/" + encodeURIComponent(album.id) + "/publication", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ published: !album.published })
+                    });
+                    if (!response.ok) throw new Error("No se pudo cambiar el estado de publicación.");
+                    await discoverMemoryAlbums();
+                } catch (error) {
+                    console.error(error);
+                    publishButton.textContent = "Error · Reintentar";
+                    publishButton.disabled = false;
+                }
+            });
+            card.appendChild(publishButton);
+        }
+
+        memoryAlbumGrid.appendChild(card);
+    });
+}
+
+function openMemoryAlbum(albumId) {
+    window.location.href = "album.html?album=" + encodeURIComponent(albumId);
+}
+
+function showMemoriesPage() {
+    settingsMenu.hidden = true;
+    settingsToggle.setAttribute("aria-expanded", "false");
+    memoriesPage.hidden = false;
+    garden.classList.add("memories-page-open");
+    document.body.classList.add("memories-route-open");
+    memoryAlbumGrid.hidden = false;
+    memoryGallery.hidden = true;
+    discoverMemoryAlbums();
+    if (window.location.hash !== "#recuerdos") {
+        history.pushState({ page: "memories" }, "", "#recuerdos");
+    }
+    memoriesPage.scrollTo({ top: 0, behavior: "instant" });
+    memoriesBackButton.focus();
+}
+
+function hideMemoriesPage(updateHistory = true) {
+    memoriesPage.hidden = true;
+    garden.classList.remove("memories-page-open");
+    document.body.classList.remove("memories-route-open");
+    if (updateHistory && window.location.hash.startsWith("#recuerdos")) {
+        history.replaceState({ page: "garden" }, "", window.location.pathname + window.location.search);
+    }
+    memoriesToggle.focus();
+}
+
+function syncMemoriesRoute() {
+    const isMemoriesRoute = window.location.hash === "#recuerdos" || window.location.hash.startsWith("#recuerdos/");
+    if (!isOpen || !isMemoriesRoute) {
+        memoriesPage.hidden = true;
+        garden.classList.remove("memories-page-open");
+        document.body.classList.remove("memories-route-open");
+        return;
+    }
+    memoriesPage.hidden = false;
+    garden.classList.add("memories-page-open");
+    document.body.classList.add("memories-route-open");
+    memoryAlbumGrid.hidden = false;
+    memoryGallery.hidden = true;
+    discoverMemoryAlbums();
+}
 function randomBetween(min, max) {
     return Math.random() * (max - min) + min;
 }
@@ -286,9 +454,15 @@ function openGarden() {
     hideMessageButton.textContent = "Ver el paisaje";
     settingsToggle.hidden = false;
     storyToggle.hidden = false;
+    memoriesToggle.hidden = false;
     settingsMenu.hidden = true;
     startBackgroundMusic();
     typeMessage();
+    if (window.location.hash.startsWith("#recuerdos")) {
+        syncMemoriesRoute();
+    } else if (window.location.hash === "#nuestro-tiempo") {
+        syncPageWithRoute();
+    }
     window.setTimeout(() => intro.remove(), 1200);
 }
 
@@ -296,8 +470,16 @@ button.addEventListener("click", openGarden, { once: true });
 hideMessageButton.addEventListener("click", hideMessage);
 storyToggle.addEventListener("click", showLovePage);
 loveBackButton.addEventListener("click", () => hideLovePage());
-window.addEventListener("popstate", syncPageWithRoute);
-window.addEventListener("hashchange", syncPageWithRoute);
+window.addEventListener("popstate", () => { syncPageWithRoute(); syncMemoriesRoute(); });
+window.addEventListener("hashchange", () => { syncPageWithRoute(); syncMemoriesRoute(); });
+memoriesToggle.addEventListener("click", showMemoriesPage);
+memoriesBackButton.addEventListener("click", () => hideMemoriesPage());
+memoryGalleryBack.addEventListener("click", () => {
+    memoryGallery.hidden = true;
+    memoryAlbumGrid.hidden = false;
+    history.pushState({ page: "memories" }, "", "#recuerdos");
+    memoriesPage.scrollTo({ top: 0, behavior: "smooth" });
+});
 window.setInterval(updateRelationshipCounter, 60 * 60 * 1000);
 themeToggle.addEventListener("click", toggleTheme);
 musicToggle.addEventListener("click", toggleMusic);

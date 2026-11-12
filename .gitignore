@@ -1,0 +1,4 @@
+# Los álbumes originales son privados/locales. Solo se publican mediante tools/publicar-albumes.js.
+/recuerdos/*/
+!/recuerdos/README.md
+!/recuerdos/albums.json

@@ -1,0 +1,91 @@
+{
+  "albums": [
+    {
+      "id": "2026-09-10-Boda",
+      "title": "Boda",
+      "date": "10 de septiembre de 2026",
+      "description": "Cada fotografía guarda un pedacito de nuestra historia. 💛",
+      "cover": "",
+      "photos": [
+        {
+          "src": "recuerdos-publicados/2026-09-10-Boda/1.%20Que-hermosa-%20sonrisa.jpeg",
+          "caption": "1. Que hermosa  sonrisa"
+        },
+        {
+          "src": "recuerdos-publicados/2026-09-10-Boda/2.Conexion.jpeg",
+          "caption": "2.Conexion"
+        },
+        {
+          "src": "recuerdos-publicados/2026-09-10-Boda/3.Calidez.jpeg",
+          "caption": "3.Calidez"
+        },
+        {
+          "src": "recuerdos-publicados/2026-09-10-Boda/4.Dia-de-gala.jpeg",
+          "caption": "4.Dia de gala"
+        },
+        {
+          "src": "recuerdos-publicados/2026-09-10-Boda/5.Instante-Feliz.jpeg",
+          "caption": "5.Instante Feliz"
+        },
+        {
+          "src": "recuerdos-publicados/2026-09-10-Boda/6.Lugar-seguro.jpeg",
+          "caption": "6.Lugar seguro"
+        },
+        {
+          "src": "recuerdos-publicados/2026-09-10-Boda/7.Pasos-Juntos.jpeg",
+          "caption": "7.Pasos Juntos"
+        },
+        {
+          "src": "recuerdos-publicados/2026-09-10-Boda/8.Reflejo.jpeg",
+          "caption": "8.Reflejo"
+        },
+        {
+          "src": "recuerdos-publicados/2026-09-10-Boda/9.Solo-Nosotros.jpeg",
+          "caption": "9.Solo Nosotros"
+        }
+      ]
+    },
+    {
+      "id": "2026-10-08-Horneando",
+      "title": "Horneando",
+      "date": "8 de octubre de 2026",
+      "description": "Cada fotografía guarda un pedacito de nuestra historia. 💛",
+      "cover": "",
+      "photos": [
+        {
+          "src": "recuerdos-publicados/2026-10-08-Horneando/1.Noche-de-Pizza.jpeg",
+          "caption": "1.Noche de Pizza"
+        },
+        {
+          "src": "recuerdos-publicados/2026-10-08-Horneando/2.Modo-chef.jpeg",
+          "caption": "2.Modo chef"
+        },
+        {
+          "src": "recuerdos-publicados/2026-10-08-Horneando/3.Momento-de-descanso.jpeg",
+          "caption": "3.Momento de descanso"
+        }
+      ]
+    },
+    {
+      "id": "2026-11-06-primer-viaje",
+      "title": "Primer Viaje",
+      "date": "6 de noviembre de 2026",
+      "description": "Cada fotografía guarda un pedacito de nuestra historia. 💛",
+      "cover": "",
+      "photos": [
+        {
+          "src": "recuerdos-publicados/2026-11-06-primer-viaje/1.Detras-De-Camaras.jpeg",
+          "caption": "1.Detras De Camaras"
+        },
+        {
+          "src": "recuerdos-publicados/2026-11-06-primer-viaje/2.Beso-De-Mar.jpeg",
+          "caption": "2.Beso De Mar"
+        },
+        {
+          "src": "recuerdos-publicados/2026-11-06-primer-viaje/3.En-La-Orilla.jpeg",
+          "caption": "3.En La Orilla"
+        }
+      ]
+    }
+  ]
+}

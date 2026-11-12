@@ -70,6 +70,7 @@
         ⚙
     </button>
     <button class="story-toggle" id="storyToggle" type="button" aria-label="Leer nuestro mensaje" title="Nuestro mensaje" hidden>!</button>
+    <button class="memories-toggle" id="memoriesToggle" type="button" aria-label="Abrir nuestros recuerdos" title="Nuestros recuerdos" hidden>📷</button>
 
     <div class="settings-menu" id="settingsMenu" aria-label="Ajustes del jardín" hidden>
         <button class="theme-toggle" id="themeToggle" type="button" aria-label="Activar modo nocturno" aria-pressed="false">
@@ -145,6 +146,27 @@
                 <p class="counter-caption">Años - Meses - Días</p>
             </div>
             <p class="love-signature">Con mucho cariño, para ti. 🌻</p>
+        </div>
+    </section>
+
+ 
+    <section class="memories-page" id="memoriesPage" aria-labelledby="memoriesTitle" hidden>
+        <button class="memories-back-button" id="memoriesBackButton" type="button">← Volver al jardín</button>
+        <div class="memories-shell">
+            <header class="memories-header">
+                <span class="memories-eyebrow">NUESTRA HISTORIA EN FOTOGRAFÍAS</span>
+                <h2 id="memoriesTitle">Nuestros recuerdos 📸</h2>
+                <p>Pequeños momentos que quiero guardar contigo.</p>
+            </header>
+            <div class="memory-album-grid" id="memoryAlbumGrid" aria-live="polite"></div>
+            <section class="memory-gallery" id="memoryGallery" hidden aria-live="polite">
+                <button class="memory-gallery-back" id="memoryGalleryBack" type="button">← Todos nuestros recuerdos</button>
+                <h3 id="memoryGalleryTitle"></h3>
+                <p class="memory-gallery-date" id="memoryGalleryDate"></p>
+                <p class="memory-gallery-description" id="memoryGalleryDescription"></p>
+                <div class="memory-photo-grid" id="memoryPhotoGrid"></div>
+                <p class="memory-empty-note" id="memoryEmptyNote" hidden>Aquí iremos guardando las fotografías de este momento. 💛</p>
+            </section>
         </div>
     </section>
 
