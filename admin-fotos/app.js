@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, serverTimestamp, query, orderBy, setDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
+import { getStorage, ref, uploadBytes, getBlob, deleteObject } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const $ = (id) => document.getElementById(id);
@@ -14,6 +14,11 @@ const albumList = $("albumList");
 const dashboardError = $("dashboardError");
 let auth, db, storage, currentUser;
 let albums = [];
+const previewObjectUrls = new Set();
+function clearPreviewObjectUrls() {
+  for (const url of previewObjectUrls) URL.revokeObjectURL(url);
+  previewObjectUrls.clear();
+}
 let installPrompt = null;
 
 const configReady = firebaseConfig && firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.appId;
@@ -93,6 +98,7 @@ async function loadAlbums() {
 }
 
 async function renderAlbums() {
+  clearPreviewObjectUrls();
   albumList.replaceChildren();
   $("albumCount").textContent = albums.length + (albums.length === 1 ? " álbum" : " álbumes");
   if (!albums.length) {
@@ -190,9 +196,16 @@ async function renderAlbums() {
       const item = document.createElement("div");
       item.className = "photo-item";
       const image = document.createElement("img");
-      image.src = photo.url;
       image.alt = photo.caption || "Fotografía del álbum";
       image.loading = "lazy";
+      getBlob(ref(storage, photo.storagePath), 15 * 1024 * 1024).then((blob) => {
+        const objectUrl = URL.createObjectURL(blob);
+        previewObjectUrls.add(objectUrl);
+        image.src = objectUrl;
+      }).catch((error) => {
+        console.warn("No se pudo cargar la vista previa:", error);
+        image.alt = "No se pudo cargar esta fotografía";
+      });
       const remove = document.createElement("button");
       remove.type = "button";
       remove.textContent = "×";
@@ -230,13 +243,10 @@ async function uploadPhotos(albumId, files) {
     const storagePath = "albums/" + albumId + "/" + photoRef.id + "_" + safeName;
     const destination = ref(storage, storagePath);
     await uploadBytes(destination, file, { contentType: file.type });
-    const url = await getDownloadURL(destination);
-    await import("https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js").then(({ setDoc }) =>
-      setDoc(photoRef, {
-        url, storagePath, caption: file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " "),
-        fileName: file.name, contentType: file.type, size: file.size, createdAt: serverTimestamp()
-      })
-    );
+    await setDoc(photoRef, {
+      storagePath, caption: file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " "),
+      fileName: file.name, contentType: file.type, size: file.size, createdAt: serverTimestamp()
+    });
   }
   await updateDoc(doc(db, "albums", albumId), { updatedAt: serverTimestamp() });
 }
