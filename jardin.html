@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nuestro jardín | Para Mayra Luz 🌻</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="scene">
+
+        <div class="stars" aria-hidden="true"></div>
+
+        <section class="intro">
+            <p class="small-text">Tengo algo para ti...</p>
+
+            <h1>🌻</h1>
+
+            <h2>Un pequeño detalle</h2>
+
+            <button id="openButton" type="button" aria-controls="garden">
+                Abrir 💛
+            </button>
+        </section>
+
+<section class="garden" id="garden" aria-label="Jardín de girasoles">
+
+    <!-- Cielo -->
+
+    <div class="sun" aria-hidden="true">
+        <div class="sun-spot"></div>
+    </div>
+
+    <div class="cloud cloud1" aria-hidden="true"></div>
+    <div class="cloud cloud2" aria-hidden="true"></div>
+
+    <div class="stars" aria-hidden="true"></div>
+
+    <!-- Efectos -->
+
+    <div class="insects" id="insects" aria-hidden="true"></div>
+    <div class="petals" id="petals" aria-hidden="true"></div>
+
+    <!-- Mensaje -->
+
+    <div class="message" id="message" aria-live="off">
+
+        <h2>Para Mayra Luz 🌻</h2>
+
+        <p>
+        Sé lo mucho que te gustan las flores y lo especial que es para ti el color amarillo. 
+            Sin embargo, las flores naturales terminan por marchitarse, y yo quería regalarte algo que conserve esta fecha para siempre. 
+            Diseñé este espacio especialmente para ti, para que sin importar cuánto tiempo pase, siempre puedas volver aquí y recordar lo importante que eres para mí y lo bonito que es este día.
+        </p>
+
+        <p>
+            Por eso hoy quería regalarte
+            un pequeño pedacito de primavera.
+        </p>
+
+        <span>💛</span>
+
+    </div>
+
+    <button class="settings-toggle" id="settingsToggle" type="button" aria-label="Abrir ajustes" aria-expanded="false" aria-controls="settingsMenu" title="Ajustes" hidden>
+        ⚙
+    </button>
+    <button class="story-toggle" id="storyToggle" type="button" aria-label="Leer nuestro mensaje" title="Nuestro mensaje" hidden>!</button>
+    <button class="memories-toggle" id="memoriesToggle" type="button" aria-label="Abrir nuestros recuerdos" title="Nuestros recuerdos" hidden>📷</button>
+
+    <div class="settings-menu" id="settingsMenu" aria-label="Ajustes del jardín" hidden>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Activar modo nocturno" aria-pressed="false">
+            🌙 <span>Modo nocturno</span>
+        </button>
+
+        <button class="music-toggle" id="musicToggle" type="button" aria-label="Silenciar música" aria-pressed="false" title="Silenciar música">
+            🔊 <span>Silenciar música</span>
+        </button>
+
+        <button class="song-info-toggle" id="songInfoToggle" type="button" aria-expanded="false" aria-controls="songInfoCard">
+            🎵 <span>Información de la canción</span>
+        </button>
+        <div class="song-info-card" id="songInfoCard" aria-label="Reproductor de música" hidden>
+            <div class="song-player-topline">
+                <span class="song-info-label">REPRODUCIENDO</span>
+                <span class="song-player-brand"><span aria-hidden="true">●</span> spotify style</span>
+            </div>
+            <div class="song-player-main">
+                <div class="song-cover" aria-hidden="true">♫</div>
+                <div class="song-player-track">
+                    <p class="song-info-title">Count on Me</p>
+                    <p class="song-info-artist">Bruno Mars · Piano Cover by Pianella Piano</p>
+                </div>
+                <button class="song-player-button" id="songPlayerButton" type="button" aria-label="Reproducir canción" title="Reproducir canción">▶</button>
+            </div>
+            <div class="song-player-progress" aria-hidden="true"><span id="songProgressFill"></span></div>
+            <div class="song-player-time"><span id="songCurrentTime">0:00</span><span id="songDuration">--:--</span></div>
+        </div>
+
+        <div class="volume-control" id="volumeControl">
+            <label for="volumeSlider">Volumen</label>
+            <div class="volume-slider-row">
+                <input id="volumeSlider" type="range" min="0" max="100" value="1" step="1" aria-label="Volumen de la música" aria-valuetext="1%">
+                <output id="volumeValue" for="volumeSlider">1%</output>
+            </div>
+        </div>
+
+        <button class="hide-message-button" id="hideMessageButton" type="button" aria-controls="message">
+            Ver el paisaje
+        </button>
+    </div>
+
+    <audio id="backgroundMusic" src="audio/cancion.mp3" loop preload="auto"></audio>
+
+
+
+    <!-- Campo -->
+
+    <div class="field" id="field"></div>
+
+</section>
+
+    </main>
+
+    <section class="love-page" id="lovePage" aria-labelledby="lovePageTitle" hidden>
+        <button class="love-back-button" id="loveBackButton" type="button">← Volver al jardín</button>
+        <div class="love-card">
+            <span class="love-heart" aria-hidden="true">💛</span>
+            <p class="love-eyebrow">Un lugar para nosotros</p>
+            <h2 id="lovePageTitle">Qué feliz me hace estar contigo</h2>
+            <p class="love-message">
+                Desde que llegaste a mi vida, compartir momentos contigo se ha convertido en una de mis cosas favoritas.
+                Me hace feliz conocerte cada día más, verte sonreír, escucharte y crear recuerdos a tu lado.
+                No necesito que todos los días sean perfectos; me basta con que podamos seguir compartiendo, aprendiendo
+                y creciendo juntos. Gracias por ser tú, por dejarme estar cerca de ti y por hacer tan bonito este camino.
+                Me ilusiona todo lo que todavía nos queda por vivir. Quiero seguir sumando días, historias y motivos
+                para sonreír contigo. 💛
+            </p>
+            <div class="together-counter" aria-live="polite">
+                <p class="together-label">Juntos desde el 11-07-2026</p>
+                <p class="counter-value" id="relationshipCounter">0-0-0</p>
+                <p class="counter-caption">Años - Meses - Días</p>
+            </div>
+            <p class="love-signature">Con mucho cariño, para ti. 🌻</p>
+        </div>
+    </section>
+
+ 
+    <section class="memories-page" id="memoriesPage" aria-labelledby="memoriesTitle" hidden>
+        <button class="memories-back-button" id="memoriesBackButton" type="button">← Volver al jardín</button>
+        <div class="memories-shell">
+            <header class="memories-header">
+                <span class="memories-eyebrow">NUESTRA HISTORIA EN FOTOGRAFÍAS</span>
+                <h2 id="memoriesTitle">Nuestros recuerdos 📸</h2>
+                <p>Pequeños momentos que quiero guardar contigo.</p>
+            </header>
+            <div class="memory-album-grid" id="memoryAlbumGrid" aria-live="polite"></div>
+            <section class="memory-gallery" id="memoryGallery" hidden aria-live="polite">
+                <button class="memory-gallery-back" id="memoryGalleryBack" type="button">← Todos nuestros recuerdos</button>
+                <h3 id="memoryGalleryTitle"></h3>
+                <p class="memory-gallery-date" id="memoryGalleryDate"></p>
+                <p class="memory-gallery-description" id="memoryGalleryDescription"></p>
+                <div class="memory-photo-grid" id="memoryPhotoGrid"></div>
+                <p class="memory-empty-note" id="memoryEmptyNote" hidden>Aquí iremos guardando las fotografías de este momento. 💛</p>
+            </section>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
