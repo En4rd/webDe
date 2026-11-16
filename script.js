@@ -7,8 +7,6 @@ const insectsContainer = document.getElementById("insects");
 const message = document.querySelector(".message");
 const hideMessageButton = document.getElementById("hideMessageButton");
 const settingsToggle = document.getElementById("settingsToggle");
-const storyToggle = document.getElementById("storyToggle");
-const memoriesToggle = document.getElementById("memoriesToggle");
 const memoriesPage = document.getElementById("memoriesPage");
 const memoriesBackButton = document.getElementById("memoriesBackButton");
 const memoryAlbumGrid = document.getElementById("memoryAlbumGrid");
@@ -181,7 +179,6 @@ function hideMemoriesPage(updateHistory = true) {
     if (updateHistory && window.location.hash.startsWith("#recuerdos")) {
         history.replaceState({ page: "garden" }, "", window.location.pathname + window.location.search);
     }
-    memoriesToggle.focus();
 }
 
 function syncMemoriesRoute() {
@@ -425,7 +422,6 @@ function hideLovePage(updateHistory = true) {
     if (updateHistory && window.location.hash === "#nuestro-tiempo") {
         history.replaceState({ page: "garden" }, "", window.location.pathname + window.location.search);
     }
-    storyToggle.focus();
 }
 
 function syncPageWithRoute() {
@@ -454,8 +450,6 @@ function openGarden({ skipIntro = false } = {}) {
     hideMessageButton.hidden = false;
     hideMessageButton.textContent = "Ver el paisaje";
     settingsToggle.hidden = false;
-    storyToggle.hidden = false;
-    memoriesToggle.hidden = false;
     settingsMenu.hidden = true;
     startBackgroundMusic();
     typeMessage();
@@ -469,13 +463,11 @@ function openGarden({ skipIntro = false } = {}) {
 
 button.addEventListener("click", openGarden, { once: true });
 hideMessageButton.addEventListener("click", hideMessage);
-storyToggle.addEventListener("click", showLovePage);
 loveBackButton.addEventListener("click", () => {
     window.location.href = "index.html";
 });
 window.addEventListener("popstate", () => { syncPageWithRoute(); syncMemoriesRoute(); });
 window.addEventListener("hashchange", () => { syncPageWithRoute(); syncMemoriesRoute(); });
-memoriesToggle.addEventListener("click", showMemoriesPage);
 memoriesBackButton.addEventListener("click", () => {
     window.location.href = "index.html";
 });
