@@ -441,11 +441,12 @@ function syncPageWithRoute() {
     }
 }
 
-function openGarden() {
+function openGarden({ skipIntro = false } = {}) {
     if (isOpen) return;
     isOpen = true;
     button.disabled = true;
     intro.classList.add("is-hidden");
+    if (skipIntro) intro.remove();
     garden.classList.add("show");
     createField();
     createInsects();
@@ -463,17 +464,21 @@ function openGarden() {
     } else if (window.location.hash === "#nuestro-tiempo") {
         syncPageWithRoute();
     }
-    window.setTimeout(() => intro.remove(), 1200);
+    if (!skipIntro) window.setTimeout(() => intro.remove(), 1200);
 }
 
 button.addEventListener("click", openGarden, { once: true });
 hideMessageButton.addEventListener("click", hideMessage);
 storyToggle.addEventListener("click", showLovePage);
-loveBackButton.addEventListener("click", () => hideLovePage());
+loveBackButton.addEventListener("click", () => {
+    window.location.href = "index.html";
+});
 window.addEventListener("popstate", () => { syncPageWithRoute(); syncMemoriesRoute(); });
 window.addEventListener("hashchange", () => { syncPageWithRoute(); syncMemoriesRoute(); });
 memoriesToggle.addEventListener("click", showMemoriesPage);
-memoriesBackButton.addEventListener("click", () => hideMemoriesPage());
+memoriesBackButton.addEventListener("click", () => {
+    window.location.href = "index.html";
+});
 memoryGalleryBack.addEventListener("click", () => {
     memoryGallery.hidden = true;
     memoryAlbumGrid.hidden = false;
@@ -564,3 +569,11 @@ window.addEventListener("pagehide", () => {
     backgroundMusic.pause();
 }, { once: true });
 createStars();
+
+// Las rutas de recuerdos y nuestro tiempo abren directamente su sección.
+// La introducción queda reservada para entrar al jardín desde la página principal.
+if (window.location.hash === "#recuerdos" ||
+    window.location.hash.startsWith("#recuerdos/") ||
+    window.location.hash === "#nuestro-tiempo") {
+    openGarden({ skipIntro: true });
+}
