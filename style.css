@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
+
 :root {
     color-scheme: light;
     --sky-top: #fdfdf6;
@@ -463,61 +465,43 @@ button { font: inherit; }
     font-weight: 800;
     line-height: 1;
 }
-.story-toggle[hidden] { display: none; }
+
 .story-toggle:hover { background: #fff3c4; transform: scale(1.05); }
 .story-toggle:focus-visible,
 .love-page button:focus-visible { outline: 3px solid #b28a00; outline-offset: 3px; }
 
 .love-page {
-    position: fixed;
-    z-index: 30;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    overflow-y: auto;
-    padding: max(5rem, calc(env(safe-area-inset-top) + 4.5rem)) 1rem max(1.25rem, env(safe-area-inset-bottom));
-    background: radial-gradient(ellipse at 15% 15%, rgba(255, 230, 133, .5), transparent 35%), linear-gradient(145deg, #fff9e6 0%, #fce9a9 45%, #f7d7a5 100%);
-    color: #533e24;
+    position:fixed; z-index:30; inset:0; display:grid; place-items:center; overflow-y:auto;
+    padding:max(5rem,calc(env(safe-area-inset-top) + 4.5rem)) 1rem max(1.25rem,env(safe-area-inset-bottom));
+    background:radial-gradient(ellipse at 12% 8%,rgba(239,217,155,.34),transparent 38%),linear-gradient(145deg,#fbf7ee,#f3eadb 58%,#eadcc9);
+    color:#51483e; font-family:'DM Sans',Arial,sans-serif;
 }
-.love-page[hidden] { display: none; }
+.love-page[hidden] { display:none; }
 .love-back-button {
-    position: fixed;
-    z-index: 2;
-    top: max(1rem, env(safe-area-inset-top));
-    left: max(1rem, env(safe-area-inset-left));
-    min-height: 2.75rem;
-    padding: .65rem 1rem;
-    border: 1px solid rgba(111, 94, 30, .3);
-    border-radius: 2rem;
-    background: rgba(255, 255, 255, .8);
-    color: #604719;
-    cursor: pointer;
-    font-weight: 700;
+    position:fixed; z-index:2; top:max(1rem,env(safe-area-inset-top)); left:max(1rem,env(safe-area-inset-left));
+    min-height:2.7rem; padding:.65rem 1.05rem; border:1px solid rgba(125,103,72,.2); border-radius:2rem;
+    background:rgba(255,255,255,.82); color:#66563f; cursor:pointer; font:700 .78rem 'DM Sans',Arial,sans-serif;
+    box-shadow:0 5px 18px rgba(91,72,42,.06);
 }
 .love-card {
-    width: min(100%, 42rem);
-    margin: auto;
-    padding: clamp(1.4rem, 5vw, 3rem);
-    border: 1px solid rgba(255, 255, 255, .85);
-    border-radius: 1.5rem;
-    background: rgba(255, 255, 255, .74);
-    box-shadow: 0 1rem 3rem rgba(99, 64, 16, .15);
-    text-align: center;
+    width:min(100%,44rem); margin:auto; padding:clamp(1.5rem,5vw,3.2rem);
+    border:1px solid rgba(138,117,83,.15); border-radius:1.35rem; background:rgba(255,255,255,.78);
+    box-shadow:0 14px 38px rgba(91,72,42,.07); text-align:center;
 }
-.love-heart { display: block; margin-bottom: .4rem; font-size: 2.5rem; }
-.love-eyebrow { margin: 0 0 .5rem; color: #9b741d; font-size: .8rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
-.love-card h2 { margin: 0 auto 1.25rem; color: #8a5a13; font-family: Georgia, serif; font-size: clamp(1.8rem, 5vw, 2.7rem); line-height: 1.15; }
-.love-message { max-width: 34rem; margin: 0 auto 1.75rem; font-size: clamp(1rem, 2.5vw, 1.1rem); line-height: 1.8; white-space: normal; }
-.together-counter { margin: 0 auto; padding: 1.2rem .8rem; border-radius: 1rem; background: rgba(255, 222, 120, .3); }
-.together-label { margin: 0 0 .5rem; font-weight: 800; }
-.counter-value { margin: 0; color: #8a5a13; font-family: Georgia, serif; font-size: clamp(2.4rem, 10vw, 4rem); font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: .04em; }
-.counter-caption { margin: .25rem 0 0; color: #80643a; font-size: .85rem; }
-.love-signature { margin: 1.5rem 0 0; color: #8a5a13; font-family: Georgia, serif; font-style: italic; }
+.love-heart { display:block; margin-bottom:.55rem; font-size:2.3rem; }
+.love-eyebrow { margin:0 0 .65rem; color:#a68a55; font:700 .65rem 'DM Sans',Arial,sans-serif; letter-spacing:.2em; text-transform:uppercase; }
+.love-card h2 { margin:0 auto 1.2rem; color:#51473c; font:500 clamp(1.9rem,5vw,2.8rem)/1.15 'Playfair Display',Georgia,serif; }
+.love-message { max-width:35rem; margin:0 auto 1.7rem; color:#82786c; font:400 clamp(.95rem,2.5vw,1.05rem)/1.85 'DM Sans',Arial,sans-serif; white-space:normal; }
+.together-counter { margin:0 auto; padding:1.2rem .8rem; border:1px solid rgba(138,117,83,.12); border-radius:1rem; background:#f7f0e2; }
+.together-label { margin:0 0 .5rem; color:#82786c; font:600 .8rem 'DM Sans',Arial,sans-serif; }
+.counter-value { margin:0; color:#bd9445; font:600 clamp(2.4rem,10vw,4rem) 'Playfair Display',Georgia,serif; font-variant-numeric:tabular-nums; letter-spacing:.04em; }
+.counter-caption { margin:.25rem 0 0; color:#9a8d7c; font:400 .75rem 'DM Sans',Arial,sans-serif; }
+.love-signature { margin:1.5rem 0 0; color:#a47e37; font:italic 500 1.05rem 'Playfair Display',Georgia,serif; }
 .garden.love-page-open { visibility: hidden; }
 body.love-route-open { overflow: hidden; }
 
-.love-page.night-mode { background: linear-gradient(145deg, #11162d, #242b4c 55%, #3c3150); color: #fff4d1; }
-.love-page.night-mode .love-card { border-color: rgba(255, 244, 173, .18); background: rgba(13, 20, 43, .86); }
+.love-page.night-mode { background:linear-gradient(145deg,#22283b,#30354c); color:#fff4d1; }
+.love-page.night-mode .love-card { border-color:rgba(255,244,173,.18); background:rgba(13,20,43,.86); }
 .love-page.night-mode .love-card h2,
 .love-page.night-mode .counter-value,
 .love-page.night-mode .love-signature { color: #ffdf7a; }
@@ -892,3 +876,18 @@ body.love-route-open { overflow: hidden; }
 
 
 /* Las páginas individuales de recuerdos usan fondos temáticos definidos en album.css. */
+
+
+/* Portal y navegación: coherencia visual con Home. */
+.intro { background: radial-gradient(ellipse at 15% 15%, rgba(239,217,155,.42), transparent 36%), linear-gradient(145deg,#fbf7ee 0%,#f5eddd 55%,#eee2d0 100%); color:#51483e; padding:1.5rem; }
+.intro-content { width:min(100%,34rem); padding:clamp(2rem,6vw,3.5rem); border:1px solid rgba(138,117,83,.16); border-radius:1.5rem; background:rgba(255,255,255,.72); box-shadow:0 1rem 3rem rgba(91,72,42,.08); }
+.intro .intro-eyebrow { margin:0 0 1rem; color:#a68a55; font:700 .65rem 'DM Sans',Arial,sans-serif; letter-spacing:.2em; }
+.intro .small-text { color:#8d8274; font:500 1rem 'DM Sans',Arial,sans-serif; letter-spacing:.02em; }
+.intro h1 { margin:.1rem 0 .5rem; font-size:clamp(4rem,13vw,5.5rem); }
+.intro h2 { margin:0 0 1.6rem; color:#51473c; font:500 clamp(1.8rem,5vw,2.4rem) 'Playfair Display',Georgia,serif; }
+#openButton { padding:.85rem 2.2rem; border:1px solid #d9c79e; border-radius:2rem; background:#f2e8cf; color:#80612d; font:700 .95rem 'DM Sans',Arial,sans-serif; box-shadow:0 5px 16px rgba(91,72,42,.07); }
+#openButton:hover { transform:translateY(-2px); box-shadow:0 9px 20px rgba(91,72,42,.12); }
+#openButton:focus-visible,.garden-home-button:focus-visible { outline:3px solid #d7b55f; outline-offset:4px; }
+.garden-home-button { position:absolute; z-index:20; top:max(1rem,env(safe-area-inset-top)); left:max(1rem,env(safe-area-inset-left)); display:inline-flex; align-items:center; min-height:2.65rem; padding:.65rem 1.05rem; border:1px solid rgba(125,103,72,.2); border-radius:2rem; background:rgba(251,247,238,.88); color:#66563f; font:700 .78rem 'DM Sans',Arial,sans-serif; text-decoration:none; box-shadow:0 5px 18px rgba(40,50,30,.08); backdrop-filter:blur(10px); }
+.garden-home-button:hover { background:#fffdf8; transform:translateY(-1px); }
+.garden:not(.show) .garden-home-button { opacity:0; pointer-events:none; }

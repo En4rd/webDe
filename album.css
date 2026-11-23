@@ -12,3 +12,11 @@ body[data-album="romantic"]{--paper:#fff9e9;--ink:#49391e;--muted:#806b48;--acce
 body[data-album="travel"]{--paper:#eaf4ef;--ink:#263f3c;--muted:#54736b;--accent:#397d70;--glow:rgba(117,190,165,.42);background-image:radial-gradient(ellipse at 85% 10%,var(--glow),transparent 40%),linear-gradient(145deg,#eaf4ef,#d4e8e1 55%,#e9e5cf)}
 body[data-album="birthday"]{--paper:#fff0f1;--ink:#503344;--muted:#8b6477;--accent:#bd668d;--glow:rgba(241,163,190,.45);background-image:radial-gradient(ellipse at 15% 8%,var(--glow),transparent 40%),linear-gradient(145deg,#fff0f1,#f8dce8 55%,#f9edcf)}
 body[data-album="anniversary"]{--paper:#f5efff;--ink:#392d50;--muted:#76658c;--accent:#8a65ad;--glow:rgba(187,159,222,.42);background-image:radial-gradient(ellipse at 80% 5%,var(--glow),transparent 40%),linear-gradient(145deg,#f5efff,#e7ddf5 55%,#f8e9d8)}
+
+
+/* Navegación coherente con la página principal. */
+.album-back { border-color:rgba(125,103,72,.2); border-radius:2rem; background:rgba(255,255,255,.82); color:#66563f; font:700 .78rem 'DM Sans',Arial,sans-serif; box-shadow:0 5px 18px rgba(91,72,42,.06); transition:transform .2s,background .2s; }
+.album-back:hover { transform:translateY(-2px); background:#fff; }
+.album-header { color:#51483e; }
+.album-kicker { color:#a68a55; }
+.album-date,.album-description,.album-footer { color:#8d8274; }

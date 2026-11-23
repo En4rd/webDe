@@ -7,8 +7,6 @@ const insectsContainer = document.getElementById("insects");
 const message = document.querySelector(".message");
 const hideMessageButton = document.getElementById("hideMessageButton");
 const settingsToggle = document.getElementById("settingsToggle");
-const storyToggle = document.getElementById("storyToggle");
-const memoriesToggle = document.getElementById("memoriesToggle");
 const memoriesPage = document.getElementById("memoriesPage");
 const memoriesBackButton = document.getElementById("memoriesBackButton");
 const memoryAlbumGrid = document.getElementById("memoryAlbumGrid");
@@ -181,7 +179,6 @@ function hideMemoriesPage(updateHistory = true) {
     if (updateHistory && window.location.hash.startsWith("#recuerdos")) {
         history.replaceState({ page: "garden" }, "", window.location.pathname + window.location.search);
     }
-    memoriesToggle.focus();
 }
 
 function syncMemoriesRoute() {
@@ -425,7 +422,6 @@ function hideLovePage(updateHistory = true) {
     if (updateHistory && window.location.hash === "#nuestro-tiempo") {
         history.replaceState({ page: "garden" }, "", window.location.pathname + window.location.search);
     }
-    storyToggle.focus();
 }
 
 function syncPageWithRoute() {
@@ -441,11 +437,12 @@ function syncPageWithRoute() {
     }
 }
 
-function openGarden() {
+function openGarden({ skipIntro = false } = {}) {
     if (isOpen) return;
     isOpen = true;
     button.disabled = true;
     intro.classList.add("is-hidden");
+    if (skipIntro) intro.remove();
     garden.classList.add("show");
     createField();
     createInsects();
@@ -453,8 +450,6 @@ function openGarden() {
     hideMessageButton.hidden = false;
     hideMessageButton.textContent = "Ver el paisaje";
     settingsToggle.hidden = false;
-    storyToggle.hidden = false;
-    memoriesToggle.hidden = false;
     settingsMenu.hidden = true;
     startBackgroundMusic();
     typeMessage();
@@ -463,17 +458,19 @@ function openGarden() {
     } else if (window.location.hash === "#nuestro-tiempo") {
         syncPageWithRoute();
     }
-    window.setTimeout(() => intro.remove(), 1200);
+    if (!skipIntro) window.setTimeout(() => intro.remove(), 1200);
 }
 
 button.addEventListener("click", openGarden, { once: true });
 hideMessageButton.addEventListener("click", hideMessage);
-storyToggle.addEventListener("click", showLovePage);
-loveBackButton.addEventListener("click", () => hideLovePage());
+loveBackButton.addEventListener("click", () => {
+    window.location.href = "index.html";
+});
 window.addEventListener("popstate", () => { syncPageWithRoute(); syncMemoriesRoute(); });
 window.addEventListener("hashchange", () => { syncPageWithRoute(); syncMemoriesRoute(); });
-memoriesToggle.addEventListener("click", showMemoriesPage);
-memoriesBackButton.addEventListener("click", () => hideMemoriesPage());
+memoriesBackButton.addEventListener("click", () => {
+    window.location.href = "index.html";
+});
 memoryGalleryBack.addEventListener("click", () => {
     memoryGallery.hidden = true;
     memoryAlbumGrid.hidden = false;
@@ -564,3 +561,11 @@ window.addEventListener("pagehide", () => {
     backgroundMusic.pause();
 }, { once: true });
 createStars();
+
+// Las rutas de recuerdos y nuestro tiempo abren directamente su sección.
+// La introducción queda reservada para entrar al jardín desde la página principal.
+if (window.location.hash === "#recuerdos" ||
+    window.location.hash.startsWith("#recuerdos/") ||
+    window.location.hash === "#nuestro-tiempo") {
+    openGarden({ skipIntro: true });
+}
